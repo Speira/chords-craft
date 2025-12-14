@@ -1,0 +1,50 @@
+{
+  "name": "@speira/chordschart-contexts-chart",
+  "version": "1.0.0",
+  "description": "The ChordsChart Context",
+  "main": "./build/esm/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Speira/chordschart.git",
+    "directory": "packages/bounded-contexts/chart"
+  },
+  "exports": {
+    ".": {
+      "types": "./build/dts/index.d.ts",
+      "import": "./build/esm/index.js"
+    }
+  },
+  "types": "./build/dts/index.d.ts",
+  "scripts": {
+    "check": "tsc -b tsconfig.json --noEmit",
+    "test": "vitest",
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean --outDir build"
+  },
+  "keywords": [],
+  "author": "Speira",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.948.0",
+    "@aws-sdk/lib-dynamodb": "^3.948.0",
+    "@speira/chordschart-shared": "workspace:*",
+    "effect": "^3.19.3",
+    "ulid": "^3.0.2"
+  },
+  "effect": {
+    "generateExports": {
+      "include": [
+        "**/*.ts"
+      ]
+    },
+    "generateIndex": {
+      "include": [
+        "**/*.ts"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.159",
+    "tsup": "^8.5.1",
+    "vitest": "^4.0.9"
+  }
+}
