@@ -30,6 +30,7 @@ const config: ViteUserConfig = {
     alias: {
       ...alias("boundedContexts/chart"),
       ...alias("shared"),
+      "~/": path.join(__dirname, "./src/"),
     },
   },
 };

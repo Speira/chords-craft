@@ -26,7 +26,7 @@ export class Chart extends Data.Class<{
   readonly root: Note.Note;
   readonly author: string;
   readonly title: string;
-  readonly sections: Record<Section.Section, ReadonlyArray<Chord>>;
+  readonly sections: Partial<Record<Section.Section, ReadonlyArray<Chord>>>;
   readonly plan: ReadonlyArray<Section.Section>;
   readonly links: ReadonlyArray<string>;
   readonly tags: ReadonlyArray<string>;

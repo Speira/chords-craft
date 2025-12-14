@@ -22,7 +22,7 @@ export class ChartCreated extends Schema.TaggedClass<ChartCreated>()(
     root: Note.schema,
     tags: Schema.Array(Schema.String),
     sections: Schema.Record({
-      key: Section.schema,
+      key: Schema.String,
       value: Schema.Array(Chord),
     }),
     title: Schema.String,
