@@ -1,9 +1,0 @@
-export * as Quality from "./Quality";
-export * as Addition from "./Addition";
-export { Chord } from "./Chord";
-export * as Extension from "./Extension";
-export * as Modifier from "./Modifier";
-export * as Section from "./Section";
-export * as Note from "./Note";
-export * as Scale from "./Scale";
-export { ChartID } from "./ChartID";
