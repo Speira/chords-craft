@@ -1,10 +1,11 @@
 {
-  "name": "chords-craft",
+  "name": "@speira/chordscraft",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.14.0",
   "workspaces": [
-    "packages/*"
+    "packages/shared",
+    "packages/boundedContexts/*"
   ],
   "scripts": {
     "clean": "node scripts/clean.mjs",
@@ -15,9 +16,7 @@
     "lint": "eslint \"**/{src,test,examples,scripts,dtslint}/**/*.{ts,mjs}\"",
     "lint-fix": "pnpm lint --fix",
     "test": "vitest",
-    "coverage": "vitest --coverage",
-    "changeset-version": "changeset version && node scripts/version.mjs",
-    "changeset-publish": "pnpm build && TEST_DIST= pnpm vitest && changeset publish"
+    "coverage": "vitest --coverage"
   },
   "devDependencies": {
     "@babel/cli": "^7.25.9",
@@ -49,10 +48,5 @@
     "typescript": "^5.6.3",
     "vitest": "^3.2.0"
   },
-  "pnpm": {
-    "patchedDependencies": {
-      "@changesets/get-github-info@0.6.0": "patches/@changesets__get-github-info@0.6.0.patch",
-      "@changesets/assemble-release-plan@6.0.9": "patches/@changesets__assemble-release-plan@6.0.9.patch"
-    }
-  }
+  "pnpm": {}
 }
