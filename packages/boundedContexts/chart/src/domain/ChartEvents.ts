@@ -1,9 +1,11 @@
 import { Schema } from "effect";
 
-import { ChartID, Chord, Note, Section } from "./valueObjects";
+import { Chord, Note, Section } from "@speira/chordschart-shared";
+
+import { ChartID } from "./valueObjects/ChartID";
 
 const BaseEvent = Schema.Struct({
-  aggregateId: ChartID.ChartID,
+  aggregateId: ChartID,
   tenantId: Schema.String,
   occuredAt: Schema.Date,
   version: Schema.Number,
