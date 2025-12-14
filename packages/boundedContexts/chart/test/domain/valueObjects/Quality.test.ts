@@ -1,6 +1,8 @@
 import { Effect } from "effect";
-import { Quality } from "../../../src/domain/value-objects";
+
 import { describe, expect, it } from "vitest";
+
+import { Quality } from "../../../src/domain/valueObjects";
 
 describe("Quality tests suite", () => {
   it("Should have all the quality values", () => {

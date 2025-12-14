@@ -2,7 +2,7 @@ import { Context, type Effect } from "effect";
 
 import type { ChartError } from "./ChartErrors";
 import type { ChartEvent } from "./ChartEvents";
-import { type ChartID } from "./value-objects";
+import { type ChartID } from "./valueObjects";
 
 export interface ChartRepository {
   readonly save: (

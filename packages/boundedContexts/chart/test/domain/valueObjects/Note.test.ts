@@ -1,7 +1,8 @@
+import { Cause, Effect, Exit } from "effect";
+
 import { describe, expect, it } from "vitest";
 
-import { Note } from "../../../src/domain/value-objects";
-import { Cause, Effect, Exit } from "effect";
+import { Note } from "../../../src/domain/valueObjects";
 
 describe("Note test suite", () => {
   it("Should have all notes available", () => {

@@ -1,6 +1,8 @@
-import { expect, describe, it } from "vitest";
-import { Addition } from "../../../src/domain/value-objects";
 import { Effect, Exit } from "effect";
+
+import { describe, expect, it } from "vitest";
+
+import { Addition } from "../../../src/domain/valueObjects";
 
 describe("Addition tests suite", () => {
   it("Should have additions values", () => {

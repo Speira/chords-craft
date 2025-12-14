@@ -1,6 +1,8 @@
-import { expect, describe, it } from "vitest";
-import { Modifier } from "../../../src/domain/value-objects";
 import { Effect, Exit } from "effect";
+
+import { describe, expect, it } from "vitest";
+
+import { Modifier } from "../../../src/domain/valueObjects";
 
 describe("Modifier tests suite", () => {
   it("Should have modifiers values", () => {

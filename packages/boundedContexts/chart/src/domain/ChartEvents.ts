@@ -1,6 +1,6 @@
 import { Schema } from "effect";
 
-import { ChartID, Chord, Note, Section } from "./value-objects";
+import { ChartID, Chord, Note, Section } from "./valueObjects";
 
 const BaseEvent = Schema.Struct({
   aggregateId: ChartID.ChartID,

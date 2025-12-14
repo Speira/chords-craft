@@ -2,7 +2,7 @@ import { Context, type Effect } from "effect";
 
 import type { Chart } from "./Chart";
 import type { ChartError } from "./ChartErrors";
-import type { ChartID } from "./value-objects";
+import type { ChartID } from "./valueObjects";
 
 export interface ChartProjection {
   readonly findById: (

@@ -1,0 +1,35 @@
+
+type Chart {
+  id: ID!
+  tenantId: String!
+  root: String!
+  author: String!
+  title: String!
+  sections: AWSJSON!
+  plan: [String!]!
+  links: [String!]!
+  tags: [String!]!
+  isActive: Boolean!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+input CreateChartInput {
+  root: String!
+  tenantId: String!
+  title: String!
+  author: String
+  sections: AWSJSON!
+  plan: [String!]!
+  links: [String!]
+  tags: [String!]
+}
+
+type Query {
+  getChart(chartId: ID!, tenantId: String!): Chart
+  listCharts(tenantId: String!): [Chart!]!
+}
+
+type Mutation {
+  createChart(input: CreateChartInput!): Chart!
+}

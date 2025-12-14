@@ -5,6 +5,7 @@
     "noEmit": true,
     "baseUrl": "./src",
     "rootDir": "./src",
+    "types": ["node"],
     "paths": {
       "~/*": ["./*"]
     }

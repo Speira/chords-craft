@@ -4,7 +4,7 @@ import { TenantID } from "@speira/chordschart-shared";
 
 import { type CreateChartCommand } from "../application/commands/CreateChart/CreateChartCommand";
 
-import { generateChartId } from "./value-objects/ChartID";
+import { generateChartId } from "./valueObjects/ChartID";
 import { Chart } from "./Chart";
 import { type ChartError, ChartValidationError } from "./ChartErrors";
 import { ChartArchived, ChartCreated, type ChartEvent } from "./ChartEvents";

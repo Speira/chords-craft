@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import { Note, Scale as ScaleRoot } from "../../../src/domain/value-objects";
+import { Note, Scale as ScaleRoot } from "../../../src/domain/valueObjects";
 
-const { Scale, CHROMATIC_SCALE } = ScaleRoot;
+const { CHROMATIC_SCALE, Scale } = ScaleRoot;
 
 describe("Scale tests suite", () => {
   it("Should have a complete chromatic scale const", () => {

@@ -1,4 +1,3 @@
-// infrastructure/layers.ts
 import { Context, Effect, Layer } from "effect";
 
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
@@ -8,16 +7,12 @@ import { ChartRepository } from "~/domain/ChartRepository";
 
 import { DynamoDBChartProjection, DynamoDBChartRepository } from "./dynamodb";
 
-// ===== AWS Clients =====
-
 const DynamoDBClientTag = Context.GenericTag<DynamoDBClient>("DynamoDBClient");
 
 export const DynamoDBClientLive = Layer.succeed(
   DynamoDBClientTag,
-  new DynamoDBClient({ region: process.env.AWS_REGION || "us-east-1" })
+  new DynamoDBClient({ region: process.env.AWS_REGION || "eu-west-1" })
 );
-
-// ===== Chart Services =====
 
 export const ChartRepositoryLive = Layer.effect(
   ChartRepository,
@@ -35,35 +30,9 @@ export const ChartProjectionLive = Layer.effect(
   })
 ).pipe(Layer.provide(DynamoDBClientLive));
 
-// ===== Composed Layers =====
-
-/**
- * All Chart-related services
- */
 export const ChartServicesLive = Layer.mergeAll(
   ChartRepositoryLive,
   ChartProjectionLive
 );
 
-/**
- * All application services - add more as you grow
- */
-export const AppServicesLive = Layer.mergeAll(
-  ChartServicesLive
-  // UserServicesLive,  // Future
-  // NotificationServicesLive,  // Future
-);
-
-// ===== Test Layers =====
-
-/**
- * Mock layers for testing
- */
-export const ChartServicesTest = Layer.mergeAll(
-  Layer.succeed(ChartRepository, {
-    /* mock implementation */
-  } as any),
-  Layer.succeed(ChartProjection, {
-    /* mock implementation */
-  } as any)
-);
+// TODO: Add ChartServicesLiveTest

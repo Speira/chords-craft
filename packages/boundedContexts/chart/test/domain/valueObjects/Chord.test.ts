@@ -7,7 +7,7 @@ import {
   Extension,
   Note,
   Quality,
-} from "../../../src/domain/value-objects";
+} from "../../../src/domain/valueObjects";
 
 describe("Chord tests suite", () => {
   it("Should create chord", () => {

@@ -3,7 +3,7 @@ import { Data, Effect, Schema } from "effect";
 import { Chord, Note, Section, TenantID } from "@speira/chordschart-shared";
 
 import { type ChartError, ChartParseError } from "./ChartErrors";
-import { ChartID } from "./value-objects";
+import { ChartID } from "./valueObjects";
 
 const ChartRecordSchema = Schema.Struct({
   id: ChartID.ChartID,

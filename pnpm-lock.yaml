@@ -34,7 +34,7 @@ importers:
         version: 0.3.2
       '@effect/language-service':
         specifier: latest
-        version: 0.62.1
+        version: 0.62.3
       '@effect/vitest':
         specifier: latest
         version: 0.27.0(effect@3.19.11)(vitest@3.2.4(@types/node@22.19.2)(tsx@4.21.0))
@@ -141,6 +141,9 @@ importers:
       '@types/aws-lambda':
         specifier: ^8.10.159
         version: 8.10.159
+      '@types/node':
+        specifier: ^22.19.2
+        version: 22.19.2
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(postcss@8.5.6)(tsx@4.21.0)(typescript@5.9.3)
@@ -483,8 +486,8 @@ packages:
   '@effect/eslint-plugin@0.3.2':
     resolution: {integrity: sha512-c4Vs9t3r54A4Zpl+wo8+PGzZz3JWYsip41H+UrebRLjQ2Hk/ap63IeCgN/HWcYtxtyhRopjp7gW9nOQ2Snbl+g==}
 
-  '@effect/language-service@0.62.1':
-    resolution: {integrity: sha512-K78mPtNpHqArLTXpYNASoqiqYUmPASrdnntSBVInMYmI39hyLkmTqk78bclzkfsIvJZBBS4vvsuWx7Etmz8rkA==}
+  '@effect/language-service@0.62.3':
+    resolution: {integrity: sha512-YL+YI2BbMcnSUtgESHrXWChByQH7SMhQ5DoQVhXQo2ahY9/NQGSjJ59S9Hizlfe4VneIcmpk2FkCrUZ9VwyA2Q==}
     hasBin: true
 
   '@effect/vitest@0.27.0':
@@ -4154,7 +4157,7 @@ snapshots:
       '@dprint/typescript': 0.91.8
       prettier-linter-helpers: 1.0.0
 
-  '@effect/language-service@0.62.1': {}
+  '@effect/language-service@0.62.3': {}
 
   '@effect/vitest@0.27.0(effect@3.19.11)(vitest@3.2.4(@types/node@22.19.2)(tsx@4.21.0))':
     dependencies:

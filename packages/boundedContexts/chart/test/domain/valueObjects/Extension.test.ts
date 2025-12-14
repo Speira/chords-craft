@@ -1,6 +1,8 @@
-import { describe, expect, it } from "vitest";
-import { Extension } from "../../../src/domain/value-objects";
 import { Effect, Exit } from "effect";
+
+import { describe, expect, it } from "vitest";
+
+import { Extension } from "../../../src/domain/valueObjects";
 
 describe("Extension tests suite", () => {
   it("Should have extensions defined", () => {
