@@ -1,0 +1,47 @@
+{
+  "name": "@speira/chordschart-shared",
+  "version": "1.0.0",
+  "author": "Speira",
+  "keywords": [
+    "utilities",
+    "shared",
+    "typescript"
+  ],
+  "license": "ISC",
+  "description": "Shared utilities for chordschart",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc"
+  },
+  "packageManager": "pnpm@10.14.0",
+  "devDependencies": {
+    "@effect/vitest": "^0.27.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "effect": "^3.19.11"
+  },
+  "effect": {
+    "generateExports": {
+      "include": [
+        "**/*.ts"
+      ]
+    },
+    "generateIndex": {
+      "include": [
+        "**/*.ts"
+      ]
+    }
+  }
+}
