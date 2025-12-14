@@ -77,7 +77,22 @@ export default [
       "import/no-duplicates": "error",
       "import/no-unresolved": "off",
       "import/order": "off",
-      "simple-import-sort/imports": "off",
+      "simple-import-sort/imports": [
+        "error",
+        {
+          groups: [
+            ["effect", "^react$"],
+            ["^react", "^@?\\w"],
+            ["^@telek-software", "@speira"],
+            ["^~"],
+            ["^\\u0000"],
+            ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+            ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+            ["^.+\\.?(css|scss)$"],
+          ],
+        },
+      ],
+      "simple-import-sort/exports": "error",
       "sort-destructure-keys/sort-destructure-keys": "error",
 
       "@typescript-eslint/array-type": [
@@ -93,7 +108,14 @@ export default [
       "@typescript-eslint/ban-types": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-empty-interface": "off",
-      "@typescript-eslint/consistent-type-imports": "warn",
+      "@typescript-eslint/consistent-type-imports": [
+        "warn",
+        {
+          prefer: "type-imports",
+          disallowTypeAnnotations: false,
+          fixStyle: "inline-type-imports",
+        },
+      ],
 
       "@typescript-eslint/no-unused-vars": [
         "error",
