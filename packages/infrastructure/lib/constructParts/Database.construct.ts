@@ -8,40 +8,46 @@ export interface DatabaseProps {
 }
 
 export class DatabaseConstruct extends Construct {
-  public readonly metadataTable: dynamodb.Table;
+  public readonly eventsTable: dynamodb.Table;
+  public readonly projectionTable: dynamodb.Table;
 
   constructor(scope: Construct, id: string, props: DatabaseProps) {
     super(scope, id);
 
     const removalPolicy = props.removalPolicy ?? cdk.RemovalPolicy.DESTROY;
 
-    this.metadataTable = new dynamodb.Table(this, "MetadataTable", {
-      tableName: `${props.stackName.toLowerCase()}-metadata`,
-
+    this.eventsTable = new dynamodb.Table(this, "ChartsEventsTable", {
+      tableName: `${props.stackName.toLowerCase()}-charts_events`,
       partitionKey: { name: "PK", type: dynamodb.AttributeType.STRING },
       sortKey: { name: "SK", type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      stream: dynamodb.StreamViewType.NEW_AND_OLD_IMAGES,
+      removalPolicy,
+      pointInTimeRecovery: true,
+    });
 
+    this.projectionTable = new dynamodb.Table(this, "ChartsProjectionTable", {
+      tableName: `${props.stackName.toLowerCase()}-charts_projection`,
+      partitionKey: { name: "PK", type: dynamodb.AttributeType.STRING },
+      sortKey: { name: "SK", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy,
-      encryption: dynamodb.TableEncryption.AWS_MANAGED,
-      timeToLiveAttribute: "ttl",
-      stream: dynamodb.StreamViewType.NEW_AND_OLD_IMAGES, // For auditing/data pipeline
+      pointInTimeRecovery: true,
     });
 
-    this.metadataTable.addGlobalSecondaryIndex({
+    this.projectionTable.addGlobalSecondaryIndex({
       indexName: "GSI1",
-
-      partitionKey: { name: "GSI1_PK", type: dynamodb.AttributeType.STRING },
-      sortKey: { name: "GSI1_SK", type: dynamodb.AttributeType.STRING },
-
-      projectionType: dynamodb.ProjectionType.ALL,
+      partitionKey: { name: "GSI1PK", type: dynamodb.AttributeType.STRING },
+      sortKey: { name: "GSI1SK", type: dynamodb.AttributeType.STRING },
     });
 
-    // Output the table name for consumption by Lambda environments
-    new cdk.CfnOutput(this, "MetadataTableName", {
-      value: this.metadataTable.tableName,
-      description: "Name of the primary DynamoDB metadata table.",
-      exportName: `${props.stackName}-metadata-table-name`,
+    // Outputs
+    new cdk.CfnOutput(this, "EventsTableName", {
+      value: this.eventsTable.tableName,
+    });
+
+    new cdk.CfnOutput(this, "ProjectionTableName", {
+      value: this.projectionTable.tableName,
     });
   }
 }
