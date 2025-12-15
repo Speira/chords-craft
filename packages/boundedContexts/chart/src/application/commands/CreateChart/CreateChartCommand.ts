@@ -10,7 +10,7 @@ export class CreateChartCommand extends Schema.Class<CreateChartCommand>(
   title: Schema.NonEmptyString.pipe(Schema.maxLength(255), Schema.minLength(2)),
   author: Schema.optional(Schema.NonEmptyString.pipe(Schema.maxLength(255))),
   sections: Schema.Record({
-    key: Section.schema,
+    key: Schema.String,
     value: Schema.NonEmptyArray(Chord),
   }),
   plan: Schema.NonEmptyArray(Section.schema).pipe(Schema.maxItems(50)),

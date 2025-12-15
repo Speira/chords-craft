@@ -5,8 +5,10 @@ const config: ViteUserConfig = {
   esbuild: {
     target: "es2020",
   },
-  optimizeDeps: {
-    exclude: ["bun:sqlite"],
+  resolve: {
+    alias: {
+      "~": path.resolve(__dirname, "src"),
+    },
   },
   test: {
     setupFiles: [path.join(__dirname, "setupTests.ts")],
@@ -17,9 +19,6 @@ const config: ViteUserConfig = {
       concurrent: true,
     },
     include: ["test/**/*.test.ts"],
-    alias: {
-      "~/*": "./src/",
-    },
   },
 };
 
