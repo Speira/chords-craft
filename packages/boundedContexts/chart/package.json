@@ -18,7 +18,7 @@
   "scripts": {
     "check": "tsc -b tsconfig.json --noEmit",
     "test": "vitest",
-    "build": "tsup src/index.ts --format esm,cjs --dts --clean --outDir build"
+    "build": "tsup ./src/**/*.ts --format esm,cjs --dts --clean --outDir build"
   },
   "keywords": [],
   "author": "Speira",
@@ -29,6 +29,12 @@
     "@speira/chordschart-shared": "workspace:*",
     "effect": "^3.19.3",
     "ulid": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.159",
+    "@types/node": "^22.19.2",
+    "tsup": "^8.5.1",
+    "vitest": "^4.0.9"
   },
   "effect": {
     "generateExports": {
@@ -41,11 +47,5 @@
         "**/*.ts"
       ]
     }
-  },
-  "devDependencies": {
-    "@types/aws-lambda": "^8.10.159",
-    "@types/node": "^22.19.2",
-    "tsup": "^8.5.1",
-    "vitest": "^4.0.9"
   }
 }
