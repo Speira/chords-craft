@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib/core";
 
-import { ChordsCraftStack } from "../lib/chordscraft-stack";
+import { ChordsChartStack } from "../lib/chordschart-stack";
 
 const app = new cdk.App();
 const env = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
   region: "eu-west-3",
 };
-new ChordsCraftStack(app, "ChordsCraftStack", {
+new ChordsChartStack(app, "ChordsChartStack", {
   env,
   tags: {
-    Project: "ChordsCraftStack",
+    Project: "ChordsChartStack",
     Environment: "Production",
     ManagedBy: "CDK",
   },

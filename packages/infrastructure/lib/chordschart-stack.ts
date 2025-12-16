@@ -9,7 +9,7 @@ import {
 } from "./constructParts";
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
-export class ChordsCraftStack extends cdk.Stack {
+export class ChordsChartStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     const environment = this.node.tryGetContext("env") || "dev";

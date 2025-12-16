@@ -93,32 +93,15 @@ importers:
         specifier: ^3.2.0
         version: 3.2.4(@types/node@22.19.2)(tsx@4.21.0)
 
-  packages/bounded-contexts/chart:
+  packages/apps/api/chart:
     dependencies:
-      '@aws-sdk/client-dynamodb':
-        specifier: ^3.948.0
-        version: 3.948.0
-      '@aws-sdk/lib-dynamodb':
-        specifier: ^3.948.0
-        version: 3.948.0(@aws-sdk/client-dynamodb@3.948.0)
-      '@speira/chordschart-shared':
-        specifier: workspace:*
-        version: link:../../shared
       effect:
-        specifier: ^3.19.3
-        version: 3.19.11
-      ulid:
-        specifier: ^3.0.2
-        version: 3.0.2
+        specifier: ^3.19.12
+        version: 3.19.12
     devDependencies:
-      tsup:
-        specifier: ^8.5.1
-        version: 8.5.1(postcss@8.5.6)(tsx@4.21.0)(typescript@5.9.3)
-      vitest:
-        specifier: ^4.0.9
-        version: 4.0.15(@types/node@22.19.2)(tsx@4.21.0)
-
-  packages/bounded-contexts/users: {}
+      '@types/aws-lambda':
+        specifier: ^8.10.159
+        version: 8.10.159
 
   packages/boundedContexts/chart:
     dependencies:
@@ -151,7 +134,7 @@ importers:
         specifier: ^4.0.9
         version: 4.0.15(@types/node@22.19.2)(tsx@4.21.0)
 
-  packages/boundedContexts/users: {}
+  packages/boundedContexts/user: {}
 
   packages/shared:
     dependencies:
@@ -1870,6 +1853,9 @@ packages:
 
   effect@3.19.11:
     resolution: {integrity: sha512-UTEj3c1s41Ha3uzSPKKvFBZaDjZ8ez00Q2NYWVm2mKh2LXeX8j6LTg1HcQHnmdUhOjr79KHmhVWYB/zbegLO1A==}
+
+  effect@3.19.12:
+    resolution: {integrity: sha512-7F9RGTrCTC3D7nh9Zw+3VlJWwZgo5k33KA+476BAaD0rKIXKZsY/jQ+ipyhR/Avo239Fi6GqAVFs1mqM1IJ7yg==}
 
   electron-to-chromium@1.5.267:
     resolution: {integrity: sha512-0Drusm6MVRXSOJpGbaSVgcQsuB4hEkMpHXaVstcPmhu5LIedxs1xNK/nIxmQIU/RPC0+1/o0AVZfBTkTNJOdUw==}
@@ -5479,6 +5465,11 @@ snapshots:
   eastasianwidth@0.2.0: {}
 
   effect@3.19.11:
+    dependencies:
+      '@standard-schema/spec': 1.0.0
+      fast-check: 3.23.2
+
+  effect@3.19.12:
     dependencies:
       '@standard-schema/spec': 1.0.0
       fast-check: 3.23.2

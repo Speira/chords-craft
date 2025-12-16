@@ -1,5 +1,5 @@
 {
-  "name": "@speira/chordscraft-infrastructure",
+  "name": "@speira/chordschart-infrastructure",
   "version": "0.1.0",
   "description": "Infrastructure using aws for chordscraft",
   "bin": {
