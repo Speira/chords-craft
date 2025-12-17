@@ -4,8 +4,7 @@ import type * as cognito from "aws-cdk-lib/aws-cognito";
 import type * as lambda from "aws-cdk-lib/aws-lambda";
 import * as logs from "aws-cdk-lib/aws-logs";
 import { Construct } from "constructs";
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
+import path from "path";
 
 export interface AppSyncApiProps {
   readonly chartFunction: lambda.IFunction;
@@ -18,11 +17,11 @@ export class AppSynConstruct extends Construct {
   constructor(scope: Construct, id: string, props: AppSyncApiProps) {
     super(scope, id);
 
-    // Resolve the schema file path from the schema package
-    const schemaPackagePath = dirname(
-      fileURLToPath(require.resolve("@speira/chordschart-context-chart"))
+    // File Automatically generated on build/synth command
+    const schemaFilePath = path.join(
+      __dirname,
+      "../graphql/merged-schema.graphql"
     );
-    const schemaFilePath = join(schemaPackagePath, "graphql/schema.graphql");
 
     // AppSync GraphQL API with Cognito authentication
     const authConfig: appsync.AuthorizationConfig = props.userPool

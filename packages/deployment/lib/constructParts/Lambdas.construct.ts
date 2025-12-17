@@ -6,6 +6,7 @@ import * as logs from "aws-cdk-lib/aws-logs";
 import type * as s3 from "aws-cdk-lib/aws-s3";
 import * as sqs from "aws-cdk-lib/aws-sqs";
 import { Construct } from "constructs";
+import path from "path";
 
 export interface ILambdasConstruct {
   readonly vpc: ec2.IVpc;
@@ -22,13 +23,6 @@ export class LambdasConstruct extends Construct {
 
   constructor(scope: Construct, id: string, props: ILambdasConstruct) {
     super(scope, id);
-    const lambdaLayer = new lambda.LayerVersion(this, "LambdaLayer", {
-      code: lambda.Code.fromCustomCommand("@speira/chordschart-api-chart", [
-        "node",
-      ]),
-      compatibleRuntimes: [lambda.Runtime.NODEJS_18_X],
-      description: "Dependencies for ChordsChart Lambda functions",
-    });
 
     this.chartsDLQ = new sqs.Queue(this, "ChartsDLQ", {
       queueName: "charts-lambda-dlq",
@@ -37,7 +31,10 @@ export class LambdasConstruct extends Construct {
     });
 
     this.chartFunction = new lambda.Function(this, "ChartFunction", {
-      code: lambda.Code.fromAsset("lambda/functions/orders"),
+      code: lambda.Code.fromAsset(
+        path.join(__dirname, "../../../apps/api/chart/build")
+      ),
+      handler: "index.handler",
       deadLetterQueue: this.chartsDLQ,
       deadLetterQueueEnabled: true,
       retryAttempts: 2,
@@ -50,8 +47,6 @@ export class LambdasConstruct extends Construct {
         EVENTS_TABLE: props.eventsTable.tableName,
         PROJECTION_TABLE: props.projectionTable.tableName,
       },
-      handler: "dist/index.handler",
-      layers: [lambdaLayer],
       logRetention: logs.RetentionDays.ONE_WEEK,
       memorySize: 1024,
       runtime: lambda.Runtime.NODEJS_18_X,

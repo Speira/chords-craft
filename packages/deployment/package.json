@@ -9,10 +9,11 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
+    "merge-schemas": "ts-node ./bin/mergeSchemas.ts",
+    "synth": "pnpm merge-schemas && cdk synth",
     "cdk": "cdk",
-    "synth": "cdk synth",
-    "deploy:dev": "cdk deploy",
-    "deploy:prod": "cdk deploy --context env=prod "
+    "deploy:dev": "pnpm merge-schemas && cdk deploy",
+    "deploy:prod": "pnpm merge-schemas && cdk deploy --context env=prod "
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

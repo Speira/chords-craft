@@ -109,7 +109,7 @@ export class ChordsChartStack extends cdk.Stack {
       exportName: `${this.stackName}-projection-table`,
     });
 
-    new cdk.CfnOutput(this, "OrdersDLQName", {
+    new cdk.CfnOutput(this, "chartsDLQName", {
       value: lambdas.chartsDLQ.queueName,
       description: "SQS Chart DLQ name",
       exportName: `${this.stackName}-charts-dlq`,
