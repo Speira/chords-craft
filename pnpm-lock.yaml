@@ -143,7 +143,18 @@ importers:
         specifier: ^4.0.9
         version: 4.0.15(@types/node@22.19.2)(tsx@4.21.0)
 
-  packages/boundedContexts/user: {}
+  packages/boundedContexts/user:
+    dependencies:
+      effect:
+        specifier: ^3.19.12
+        version: 3.19.12
+    devDependencies:
+      '@effect/vitest':
+        specifier: ^0.27.0
+        version: 0.27.0(effect@3.19.12)(vitest@4.0.16(@types/node@24.10.4)(tsx@4.21.0))
+      vitest:
+        specifier: ^4.0.16
+        version: 4.0.16(@types/node@24.10.4)(tsx@4.21.0)
 
   packages/deployment:
     dependencies:
@@ -5075,6 +5086,11 @@ snapshots:
     dependencies:
       effect: 3.19.11
       vitest: 3.2.4(@types/node@24.10.4)(tsx@4.21.0)
+
+  '@effect/vitest@0.27.0(effect@3.19.12)(vitest@4.0.16(@types/node@24.10.4)(tsx@4.21.0))':
+    dependencies:
+      effect: 3.19.12
+      vitest: 4.0.16(@types/node@24.10.4)(tsx@4.21.0)
 
   '@emnapi/core@1.7.1':
     dependencies:

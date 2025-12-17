@@ -1,5 +1,5 @@
 {
-  "name": "@speira/chordscraft-contexts-user",
+  "name": "@speira/chordschart-contexts-user",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,5 +8,12 @@
   },
   "keywords": [],
   "author": "Speira",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@effect/vitest": "^0.27.0",
+    "vitest": "^4.0.16"
+  },
+  "dependencies": {
+    "effect": "^3.19.12"
+  }
 }
