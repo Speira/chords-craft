@@ -1,20 +1,33 @@
 {
-  "name": "speira/chordschart-api-chart",
+  "name": "@speira/chordschart-api-chart",
+  "author": "Speira",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.js",
+      "require": "./build/index.js"
+    }
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "check": "tsc -b tsconfig.json --noEmit",
+    "test": "vitest",
+    "build": "tsc -p tsconfig.build.json"
   },
   "keywords": [],
   "author": "Speira",
   "license": "ISC",
   "packageManager": "pnpm@10.14.0",
   "dependencies": {
+    "@speira/chordschart-contexts-chart": "workspace:*",
+    "@speira/chordschart-shared": "workspace:*",
     "effect": "^3.19.12"
   },
   "devDependencies": {
-    "@speira/chordschart-shared": "workspace:*",
-    "@types/aws-lambda": "^8.10.159"
+    "@types/aws-lambda": "^8.10.159",
+    "vitest": "^4.0.16"
   }
 }
