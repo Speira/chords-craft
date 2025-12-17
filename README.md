@@ -60,12 +60,13 @@ packages/
 
 - `dynamodb/DynamoDBChartRepository.ts` - Event store (writes)
 - `dynamodb/DynamoDBChartProjection.ts` - Read model (queries)
-- `projectors/ChartProjector.ts` - Sync events → projection
-- `layers.ts` - Effect layers for DI
+- `dynamodb/DynamoDBChartService.ts` - Expose service from DynamoDB
+- `cli.ts` - Run action with infrastructure implementations (ex: rerun DynamoDB projector events)
 
 **Interface Layer** (system boundaries, Effect.runPromise here):
 
 - `graphql/resolvers/` - AppSync resolvers
+- `graphql/schema.graphql` - GraphQL schema for this context
 - `http/` - API Gateway handlers
 
 ## DynamoDB Tables
