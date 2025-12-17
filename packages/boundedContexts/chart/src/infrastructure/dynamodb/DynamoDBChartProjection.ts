@@ -12,7 +12,7 @@ import {
 import {
   Chart,
   type ChartError,
-  type ChartID,
+  type ChartIDType,
   type ChartProjection,
   ChartReadError,
   ChartWriteError,
@@ -28,7 +28,10 @@ export class DynamoDBChartProjection implements ChartProjection {
     this.client = DynamoDBDocument.from(client);
   }
 
-  findById(id: ChartID, tenantId: string): Effect.Effect<Chart, ChartError> {
+  findById(
+    id: ChartIDType,
+    tenantId: string
+  ): Effect.Effect<Chart, ChartError> {
     return Effect.tryPromise({
       try: () =>
         this.client.send(

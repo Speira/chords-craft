@@ -1,17 +1,17 @@
 import { Context, type Effect } from "effect";
 
+import { type ChartIDType } from "./valueObjects/ChartID";
 import type { ChartError } from "./ChartErrors";
 import type { ChartEvent } from "./ChartEvents";
-import { type ChartID } from "./valueObjects";
 
 export interface ChartRepository {
   readonly save: (
-    id: ChartID.ChartID,
+    id: ChartIDType,
     events: Array<ChartEvent>
   ) => Effect.Effect<void, ChartError>;
 
   readonly load: (
-    id: ChartID.ChartID
+    id: ChartIDType
   ) => Effect.Effect<Array<ChartEvent>, ChartError>;
 }
 

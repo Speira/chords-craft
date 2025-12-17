@@ -1,16 +1,12 @@
 import { Effect, pipe, Schema } from "effect";
 
-import type { AppSyncResolverEvent } from "aws-lambda";
+import { GetChartHandler, GetChartQuery } from "~/application/queries";
+import { type Chart } from "~/domain";
+import { ChartServicesLive } from "~/infrastructure/dynamodb";
 
-import { GetChartHandler, GetChartQuery } from "~/application/queries/GetChart";
-import { ChartServicesLive } from "~/infrastructure/layers";
+import { type ResolverEvent } from "./types";
 
-type GetChartArgs = {
-  chartId: string;
-  tenantId: string;
-};
-
-export const handler = async (event: AppSyncResolverEvent<GetChartArgs>) => {
+export const getChart = async (event: ResolverEvent): Promise<Chart> => {
   const program = pipe(
     Schema.decodeUnknown(GetChartQuery)(event.arguments),
     Effect.flatMap((query) => GetChartHandler.execute(query)),

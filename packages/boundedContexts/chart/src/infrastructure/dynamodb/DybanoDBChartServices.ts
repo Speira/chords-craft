@@ -5,7 +5,8 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { ChartProjection } from "~/domain/ChartProjection";
 import { ChartRepository } from "~/domain/ChartRepository";
 
-import { DynamoDBChartProjection, DynamoDBChartRepository } from "./dynamodb";
+import { DynamoDBChartProjection } from "./DynamoDBChartProjection";
+import { DynamoDBChartRepository } from "./DynamoDBChartRepository";
 
 const DynamoDBClientTag = Context.GenericTag<DynamoDBClient>("DynamoDBClient");
 
@@ -34,5 +35,3 @@ export const ChartServicesLive = Layer.mergeAll(
   ChartRepositoryLive,
   ChartProjectionLive
 );
-
-// TODO: Add ChartServicesLiveTest

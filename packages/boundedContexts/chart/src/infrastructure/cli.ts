@@ -2,7 +2,7 @@ import { Effect } from "effect";
 
 import { ChartAggregate, ChartProjection, ChartRepository } from "~/domain";
 
-import { ChartServicesLive } from "../layers";
+import { ChartServicesLive } from "./dynamodb";
 
 export const rebuildChartProjections = async (tenantId: string) => {
   const program = Effect.gen(function* () {

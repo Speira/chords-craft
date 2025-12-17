@@ -16,7 +16,7 @@ import {
   ChartCreated,
   type ChartError,
   type ChartEvent,
-  type ChartID,
+  type ChartIDType,
   ChartParseError,
   ChartReadError,
   type ChartRepository,
@@ -35,7 +35,7 @@ export class DynamoDBChartRepository implements ChartRepository {
   }
 
   save(
-    id: ChartID,
+    id: ChartIDType,
     events: Array<ChartEvent>
   ): Effect.Effect<void, ChartWriteError> {
     return Effect.tryPromise({
@@ -64,7 +64,7 @@ export class DynamoDBChartRepository implements ChartRepository {
     });
   }
 
-  load(id: ChartID): Effect.Effect<Array<ChartEvent>, ChartError> {
+  load(id: ChartIDType): Effect.Effect<Array<ChartEvent>, ChartError> {
     return Effect.tryPromise({
       try: () =>
         this.client.send(

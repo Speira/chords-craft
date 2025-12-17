@@ -1,8 +1,12 @@
 import { Effect } from "effect";
 
-import { TenantID } from "@speira/chordschart-shared";
-
-import { type CreateChartCommand } from "../application/commands/CreateChart/CreateChartCommand";
+import {
+  type Chord,
+  type Note,
+  type Section,
+  TenantID,
+  type TenantIDType,
+} from "@speira/chordschart-shared";
 
 import { generateChartId } from "./valueObjects/ChartID";
 import { Chart } from "./Chart";
@@ -10,9 +14,16 @@ import { type ChartError, ChartValidationError } from "./ChartErrors";
 import { ChartArchived, ChartCreated, type ChartEvent } from "./ChartEvents";
 
 export class ChartAggregate {
-  static create(
-    data: CreateChartCommand
-  ): Effect.Effect<Array<ChartEvent>, ChartError> {
+  static create(data: {
+    root: Note.Note;
+    tenantId: TenantIDType;
+    title: string;
+    author?: string;
+    sections: Record<string, ReadonlyArray<Chord>>;
+    plan: ReadonlyArray<Section.Section>;
+    links: ReadonlyArray<string>;
+    tags: ReadonlyArray<string>;
+  }): Effect.Effect<Array<ChartEvent>, ChartError> {
     return Effect.succeed([
       new ChartCreated({
         ...data,

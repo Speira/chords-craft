@@ -1,12 +1,18 @@
 import { Data, Effect, Schema } from "effect";
 
-import { Chord, Note, Section, TenantID } from "@speira/chordschart-shared";
+import {
+  Chord,
+  Note,
+  Section,
+  TenantID,
+  type TenantIDType,
+} from "@speira/chordschart-shared";
 
+import { ChartID, type ChartIDType } from "./valueObjects/ChartID";
 import { type ChartError, ChartParseError } from "./ChartErrors";
-import { ChartID } from "./valueObjects";
 
 const ChartRecordSchema = Schema.Struct({
-  id: ChartID.ChartID,
+  id: ChartID,
   tenantId: TenantID,
   root: Note.schema,
   author: Schema.String,
@@ -21,8 +27,8 @@ const ChartRecordSchema = Schema.Struct({
 });
 
 export class Chart extends Data.Class<{
-  readonly id: ChartID.ChartID;
-  readonly tenantId: TenantID;
+  readonly id: ChartIDType;
+  readonly tenantId: TenantIDType;
   readonly root: Note.Note;
   readonly author: string;
   readonly title: string;
