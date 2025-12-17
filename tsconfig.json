@@ -2,9 +2,10 @@
   "extends": "./tsconfig.base.json",
   "include": [],
   "references": [
-    { "path": "packages/boundedContexts/chart" },
+    { "path": "packages/contexts/chart" },
+    { "path": "packages/contexts/user" },
     { "path": "packages/shared" },
     { "path": "packages/deployment" },
-    { "path": "packages/apps/api/chart" }
+    { "path": "packages/api/chart-api" }
   ]
 }

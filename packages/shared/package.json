@@ -30,7 +30,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "effect": "^3.19.11"
+    "effect": "^3.19.12"
   },
   "effect": {
     "generateExports": {

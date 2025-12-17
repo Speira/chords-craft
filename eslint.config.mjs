@@ -39,7 +39,6 @@ export default [
       ecmaVersion: 2018,
       sourceType: "module",
     },
-
     settings: {
       "import/parsers": {
         "@typescript-eslint/parser": [".ts", ".tsx"],

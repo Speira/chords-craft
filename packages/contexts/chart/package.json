@@ -2,13 +2,14 @@
   "name": "@speira/chordschart-contexts-chart",
   "version": "1.0.0",
   "description": "The ChordsChart Context",
-  "main": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "keywords": [],
   "repository": {
     "type": "git",
     "url": "https://github.com/Speira/chordschart.git",
     "directory": "packages/bounded-contexts/chart"
   },
+  "license": "ISC",
+  "author": "Speira",
   "exports": {
     ".": {
       "types": "./build/index.d.ts",
@@ -16,19 +17,18 @@
       "require": "./build/index.js"
     }
   },
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
     "check": "tsc -b tsconfig.json --noEmit",
-    "test": "vitest",
-    "build": "tsc -p tsconfig.build.json"
+    "test": "vitest"
   },
-  "keywords": [],
-  "author": "Speira",
-  "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.948.0",
     "@aws-sdk/lib-dynamodb": "^3.948.0",
     "@speira/chordschart-shared": "workspace:*",
-    "effect": "^3.19.3",
+    "effect": "^3.19.12",
     "ulid": "^3.0.2"
   },
   "devDependencies": {

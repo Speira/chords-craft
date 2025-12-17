@@ -1,5 +1,7 @@
 packages:
-  - packages/boundedContexts/*
+  - packages/contexts/*
   - packages/shared
-  - packages/apps/api/*
   - packages/deployment
+  - packages/api/*
+  - packages/apps/web/*
+  - packages/apps/mobile/*

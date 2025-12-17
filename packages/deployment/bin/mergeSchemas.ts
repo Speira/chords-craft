@@ -1,12 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
 
-const BOUNDED_CONTEXTS = [
-  "../../boundedContexts/chart",
-  // "../../boundedContexts/user",
+const CONTEXTS = [
+  "../../contexts/chart",
+  // "../../contexts/user",
 ];
 
-const schemas = BOUNDED_CONTEXTS.map((context) => {
+const schemas = CONTEXTS.map((context) => {
   const schemaPath = path.join(
     __dirname,
     context,

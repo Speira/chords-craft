@@ -14,7 +14,10 @@ const BaseEvent = Schema.Struct({
 export class ChartCreated extends Schema.TaggedClass<ChartCreated>()(
   "ChartCreated",
   {
-    ...BaseEvent.fields,
+  aggregateId: ChartID,
+   tenantId: Schema.String,
+  occuredAt: Schema.Date,
+  version: Schema.Number,
     author: Schema.String,
     isActive: Schema.Boolean,
     links: Schema.Array(Schema.String),
