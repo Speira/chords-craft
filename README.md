@@ -21,12 +21,23 @@ SaaS platform for SMEs to visualize and track their KPIs through automated workf
 
 ```
 packages/
-├── charts/                   # Bounded context
-│   ├── domain/               # Entities, aggregates, events (pure TS)
-│   ├── application/          # Commands, queries, handlers (Effect programs)
-│   ├── infrastructure/       # DynamoDB repos, projections, layers
-│   └── interface/            # GraphQL/Lambda adapters
-├── users/                    # User management (planned)
+├── api/
+│   ├── chart-api/            # A dedicated lambda api
+├── apps/
+│   ├── web/                  # browser apps
+│   │   ├── admin/
+│   │   └── users/
+│   └── mobile/               # mobile apps
+│   │   ├── android/
+│   │   └── ios/
+├── contexts/                 # Bounded contexts (contains domain, application, infrastructure and interface)
+│   ├── chart/                # Chart management
+│   │   ├── domain/           # Entities, aggregates, events (pure TS)
+│   │   ├── application/      # Commands, queries, handlers (Effect programs)
+│   │   ├── infrastructure/   # DynamoDB repos, projections, layers
+│   │   └── interface/        # GraphQL/Lambda adapters
+│   └── user/                 # User management (planned)
+├── deployment/               # Deployment (Infra as Code) via AWS CDK with Appsync
 └── shared/                   # Common types, value objects
 ```
 
@@ -88,4 +99,12 @@ To test all packages in the monorepo:
 
 ```sh
 pnpm test
+```
+
+**Clean**
+
+To clean all packages in the monorepo:
+
+```sh
+pnpm clean
 ```
