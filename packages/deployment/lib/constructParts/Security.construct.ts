@@ -1,19 +1,19 @@
 import * as wafv2 from "aws-cdk-lib/aws-wafv2";
 import { Construct } from "constructs";
 
-export class Security extends Construct {
+export class SecurityConstruct extends Construct {
   public readonly webAcl: wafv2.CfnWebACL;
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
     // WAF Web ACL for AppSync protection
-    this.webAcl = new wafv2.CfnWebACL(this, "MyKPIWebACL", {
+    this.webAcl = new wafv2.CfnWebACL(this, "ChordsChartWebACL", {
       defaultAction: { allow: {} },
       scope: "REGIONAL",
       visibilityConfig: {
         cloudWatchMetricsEnabled: true,
-        metricName: "MyKPIWebACLMetric",
+        metricName: "ChordsChartWebACLMetric",
         sampledRequestsEnabled: true,
       },
       rules: [

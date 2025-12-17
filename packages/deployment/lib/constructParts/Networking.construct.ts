@@ -14,7 +14,7 @@ export class NetworkingConstruct extends Construct {
     super(scope, id);
 
     // VPC with Public and Private Subnets
-    this.vpc = new ec2.Vpc(this, "MyKpiVPC", {
+    this.vpc = new ec2.Vpc(this, "ChordsChartVPC", {
       maxAzs: props?.maxAzs ?? 2,
       natGateways: props?.natGateways ?? 0, // Cost optimization
       subnetConfiguration: [

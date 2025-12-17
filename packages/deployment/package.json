@@ -1,15 +1,16 @@
 {
-  "name": "@speira/chordschart-infrastructure",
+  "name": "@speira/chordschart-deployment",
   "version": "0.1.0",
-  "description": "Infrastructure using aws for chordscraft",
+  "description": "Infrastructure as code using AWS CDK for chordschart",
   "bin": {
-    "infrastructure": "bin/infrastructure.js"
+    "app": "bin/app.js"
   },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
+    "synth": "cdk synth",
     "deploy:dev": "cdk deploy",
     "deploy:prod": "cdk deploy --context env=prod "
   },
@@ -23,6 +24,8 @@
     "typescript": "~5.9.3"
   },
   "dependencies": {
+    "@speira/chordschart-contexts-chart": "workspace:*",
+    "@speira/chordschart-api-chart": "workspace:*",
     "aws-cdk-lib": "2.215.0",
     "constructs": "^10.0.0"
   }

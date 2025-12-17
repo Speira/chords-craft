@@ -3,6 +3,7 @@
   "include": [],
   "references": [
     { "path": "packages/boundedContexts/chart/tsconfig.build.json" },
-    { "path": "packages/shared/tsconfig.build.json" }
+    { "path": "packages/shared/tsconfig.build.json" },
+    { "path": "packages/apps/api/chart/tsconfig.build.json" }
   ]
 }

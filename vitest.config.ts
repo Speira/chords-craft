@@ -28,7 +28,9 @@ const config: ViteUserConfig = {
     projects: [{ test: { name: "shared", root: "packages/shared" } }],
     include: ["test/**/*.test.ts"],
     alias: {
+      ...alias("apps/api/chart"),
       ...alias("boundedContexts/chart"),
+      ...alias("deployment"),
       ...alias("shared"),
       "~/": path.join(__dirname, "./src/"),
     },

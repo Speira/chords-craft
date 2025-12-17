@@ -50,8 +50,8 @@ export class AppSynConstruct extends Construct {
           },
         };
 
-    this.graphqlApi = new appsync.GraphqlApi(this, "Chordscraft", {
-      name: "Chordscraft GraphQL API",
+    this.graphqlApi = new appsync.GraphqlApi(this, "ChordsChart", {
+      name: "ChordsChart GraphQL API",
       definition: appsync.Definition.fromFile(schemaFilePath),
       authorizationConfig: authConfig,
       xrayEnabled: true,

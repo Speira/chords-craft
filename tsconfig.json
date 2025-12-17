@@ -3,6 +3,8 @@
   "include": [],
   "references": [
     { "path": "packages/boundedContexts/chart" },
-    { "path": "packages/shared" }
+    { "path": "packages/shared" },
+    { "path": "packages/deployment" },
+    { "path": "packages/apps/api/chart" }
   ]
 }
