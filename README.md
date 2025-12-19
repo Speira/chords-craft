@@ -1,6 +1,7 @@
 # Chords Chart
 
-SaaS platform for Musicians to help building their chords chart and share with others. Built with event sourcing, DDD, and serverless architecture.
+SaaS platform for Musicians to help building their chords chart and share with others. Built with event sourcing, DDD, and serverless architecture
+(find more details about the architecture design in the [High level design document](HIGH_LEVEL_DESIGN.md)).
 
 ## Overview
 
