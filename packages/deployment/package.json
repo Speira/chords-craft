@@ -8,8 +8,8 @@
   "scripts": {
     "build": "tsc",
     "cdk": "cdk",
-    "deploy:dev": "pnpm merge-schemas && cdk deploy",
-    "deploy:prod": "pnpm merge-schemas && cdk deploy --context env=prod ",
+    "deploy:dev": "pnpm merge-schemas && cdk deploy --require-approval never",
+    "deploy:prod": "pnpm merge-schemas && cdk deploy --context env=prod --require-approval never",
     "merge-schemas": "ts-node ./bin/mergeSchemas.ts",
     "synth": "pnpm merge-schemas && cdk synth",
     "test": "jest",
