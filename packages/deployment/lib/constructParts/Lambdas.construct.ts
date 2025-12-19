@@ -32,7 +32,7 @@ export class LambdasConstruct extends Construct {
 
     this.chartFunction = new lambda.Function(this, "ChartFunction", {
       code: lambda.Code.fromAsset(
-        path.join(__dirname, "../../../apps/api/chart/build")
+        path.join(__dirname, "../../../apps/api/chart-api/build")
       ),
       handler: "index.handler",
       deadLetterQueue: this.chartsDLQ,
