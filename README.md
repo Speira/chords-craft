@@ -45,7 +45,7 @@ packages/
 
 ## Key Patterns
 
-**Domain Layer** (no dependencies, pure TS):
+**Domain Layer**:
 
 - `Chart.ts` - Rich entity with business methods
 - `ChartAggregate.ts` - Validates commands, emits events
@@ -53,7 +53,7 @@ packages/
 - `ChartRepository.ts` - Interface for event store
 - `ChartProjection.ts` - Interface for read model
 
-**Application Layer** (Effect programs, no runPromise):
+**Application Layer** (Effect programs):
 
 - `commands/CreateChart/` - Command + Handler
 - `queries/GetChart/` - Query + Handler
@@ -65,7 +65,7 @@ packages/
 - `dynamodb/DynamoDBChartService.ts` - Expose service from DynamoDB
 - `cli.ts` - Run action with infrastructure implementations (ex: rerun DynamoDB projector events)
 
-**Interface Layer** (system boundaries, Effect.runPromise here):
+**Interface Layer** (system boundaries, executions):
 
 - `graphql/resolvers/` - AppSync resolvers
 - `graphql/schema.graphql` - GraphQL schema for this context
