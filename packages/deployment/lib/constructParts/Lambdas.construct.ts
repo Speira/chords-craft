@@ -53,7 +53,7 @@ export class LambdasConstruct extends Construct {
       securityGroups: [props.securityGroup],
       timeout: cdk.Duration.seconds(30),
       tracing: lambda.Tracing.ACTIVE,
-      reservedConcurrentExecutions: 100,
+      reservedConcurrentExecutions: 5,
       vpc: props.vpc,
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
     });
