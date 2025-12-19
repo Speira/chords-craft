@@ -1,14 +1,16 @@
-# MyKPI - Multi-tenant KPI Dashboard
+# Chords Chart
 
-SaaS platform for SMEs to visualize and track their KPIs through automated workflows. Built with event sourcing, DDD, and serverless architecture.
+SaaS platform for Musicians to help building their chords chart and share with others. Built with event sourcing, DDD, and serverless architecture.
 
 ## Overview
 
-**Problem:** Small businesses struggle to centralize and visualize their key metrics from multiple sources (Stripe, Google Sheets, etc.)
+**Problem:** Musicians struggle to create and share their music chords chart in a standard way.
 
-**Solution:** Secure dashboard that ingests data via n8n webhooks and displays real-time KPIs with historical trends (7 days).
+**Solution:** Intuitive App to create chords chart and share with groups/friends
 
-**Target:** 500+ SME subscriptions with strict multi-tenant data isolation.## Stack
+**Target:** 500+ Musicians and groups in Europe.
+
+## Stack
 
 - **Runtime:** AWS Lambda (Node.js/TypeScript)
 - **Framework:** Effect TS for functional error handling

@@ -3,7 +3,7 @@
 **Author:** Speira
 **Version:** 1.0 (MVP)  
 **Date:** December 2025  
-**Region:** `eu-west-1` (Ireland)  
+**Region:** `eu-west-3`
 **Status:** Approved for Implementation
 
 ---
