@@ -23,6 +23,7 @@ jobs:
     timeout-minutes: 20
     environment: ${{ inputs.environment || 'prod' }}
     permissions:
+      id-token: write
       contents: read
     steps:
       - uses: actions/checkout@v4
