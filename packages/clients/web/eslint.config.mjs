@@ -35,6 +35,13 @@ const eslintConfig = defineConfig([
         },
       ],
       "simple-import-sort/exports": "error",
+      "@typescript-eslint/array-type": [
+        "warn",
+        {
+          default: "generic",
+          readonly: "generic",
+        },
+      ],
     },
   },
 ]);
