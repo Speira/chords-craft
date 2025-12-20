@@ -42,6 +42,14 @@ const eslintConfig = defineConfig([
           readonly: "generic",
         },
       ],
+      "@typescript-eslint/consistent-type-imports": [
+        "warn",
+        {
+          prefer: "type-imports",
+          disallowTypeAnnotations: false,
+          fixStyle: "inline-type-imports",
+        },
+      ],
     },
   },
 ]);

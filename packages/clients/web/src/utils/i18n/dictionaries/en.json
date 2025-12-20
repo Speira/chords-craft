@@ -1,0 +1,91 @@
+{
+  "general": {
+    "allRightsReserved": "All rights reserved",
+    "back": "Back",
+    "cancel": "Cancel",
+    "close": "Close",
+    "confirm": "Confirm",
+    "connect": "Connect",
+    "copyright": "Copyright",
+    "create": "Create",
+    "delete": "Delete",
+    "description": "Your trusted online shopping destination",
+    "edit": "Edit",
+    "error": "Error",
+    "faq": "FAQ",
+    "filter": "Filter",
+    "help": "Help",
+    "loading": "Loading...",
+    "next": "Next",
+    "open": "Open",
+    "previous": "Previous",
+    "remove": "Delete",
+    "save": "Save",
+    "search": "Search",
+    "shop": "Shop",
+    "sort": "Sort",
+    "success": "Success",
+    "title": "Chords Craft"
+  },
+  "auth": {
+    "confirmPassword": "Confirm Password",
+    "email": "Email",
+    "error": {
+      "emailExists": "This email address is already registered.",
+      "invalidCredentials": "Invalid credentials. Please check your email and password.",
+      "invalidPassword": "Invalid password. Please try again.",
+      "logoutFailed": "Logout failed. Please try again.",
+      "missingInformation": "Please fill in all required fields.",
+      "passwordTooShort": "Password must be at least 6 characters long.",
+      "userNotFound": "User not found. Please check your email address."
+    },
+    "forgotPassword": "Forgot Password?",
+    "hasAccount": "Already have an account?",
+    "login": "Login",
+    "loginFailed": "Login failed. Please try again.",
+    "loginSuccess": "Login successful",
+    "logout": "Logout",
+    "logoutFailed": "Logout failed. Please try again.",
+    "logoutSuccess": "Logout successful",
+    "name": "Name",
+    "noAccount": "Don't have an account?",
+    "password": "Password",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "rememberMe": "Remember Me",
+    "signup": "Sign Up",
+    "signupFailed": "Signup failed. Please try again.",
+    "signupSuccess": "Sign up successful",
+    "title": "Auth"
+  },
+  "chart": {
+    "create": "Create a Chart",
+    "remove": "Delete the Chart"
+  },
+  "contact": {
+    "address": "Address",
+    "email": "Email",
+    "phone": "Phone",
+    "title": "Contact"
+  },
+  "error": {
+    "badRequest": "Bad request",
+    "forbidden": "Forbidden",
+    "networkError": "Network error",
+    "notFound": "Page not found",
+    "notFoundDescription": "Could not find requested resource",
+    "serverError": "Server error",
+    "serverErrorDescription": "An unexpected error occurred. Please try again later.",
+    "tryAgain": "Try again",
+    "unauthorized": "Unauthorized"
+  },
+  "home": {
+    "subtitle": "Design your Chords Chart intituively"
+  },
+  "social": {
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "title": "Follow Us",
+    "twitter": "Twitter",
+    "snapchat": "Snapchat"
+  }
+}
