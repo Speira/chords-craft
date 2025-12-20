@@ -4,6 +4,7 @@ import js from "@eslint/js";
 import tsParser from "@typescript-eslint/parser";
 import codegen from "eslint-plugin-codegen";
 import _import from "eslint-plugin-import";
+import prettier from "eslint-plugin-prettier";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import sortDestructureKeys from "eslint-plugin-sort-destructure-keys";
 import path from "node:path";
@@ -24,14 +25,17 @@ export default [
   ...compat.extends(
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
   ),
+
   {
     plugins: {
       import: fixupPluginRules(_import),
       "sort-destructure-keys": sortDestructureKeys,
       "simple-import-sort": simpleImportSort,
       codegen,
+      prettier,
     },
 
     languageOptions: {
@@ -43,7 +47,6 @@ export default [
       "import/parsers": {
         "@typescript-eslint/parser": [".ts", ".tsx"],
       },
-
       "import/resolver": {
         typescript: {
           alwaysTryTypes: true,
@@ -52,6 +55,7 @@ export default [
     },
 
     rules: {
+      "prettier/prettier": "error",
       "codegen/codegen": "error",
       "no-fallthrough": "off",
       "no-irregular-whitespace": "off",

@@ -5,7 +5,7 @@ export default {
   plugins: ["prettier-plugin-jsdoc", "prettier-plugin-packagejson"],
   printWidth: 90,
   semi: true,
-  singleQuote: true,
+  singleQuote: false,
   tabWidth: 2,
   trailingComma: "all",
 };

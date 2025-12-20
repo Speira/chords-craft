@@ -3,5 +3,4 @@ packages:
   - packages/shared
   - packages/deployment
   - packages/api/*
-  - packages/apps/web/*
-  - packages/apps/mobile/*
+  - packages/clients/*
