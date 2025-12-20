@@ -18,7 +18,6 @@ export class CognitoConstruct extends Construct {
 
   constructor(scope: Construct, id: string, props: CognitoAuthProps) {
     super(scope, id);
-
     // User Pool with social sign-in support
     this.userPool = new cognito.UserPool(this, "UserPool", {
       userPoolName: `${props.stackName}-users`,
@@ -62,7 +61,7 @@ export class CognitoConstruct extends Construct {
       },
       accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
       removalPolicy: cdk.RemovalPolicy.RETAIN, // Retain users even if stack is deleted
-      deletionProtection: false, // Set to true for production
+      deletionProtection: props.isProduction, // Set to true for production
     });
 
     let googleClientSecretValue: cdk.SecretValue | undefined;

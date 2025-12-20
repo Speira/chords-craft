@@ -42,6 +42,7 @@ export class ChordsChartStack extends cdk.Stack {
       stackName: this.stackName,
       callbackUrls: [
         "http://localhost:3000/auth/callback",
+        "http://localhost:5173/auth/callback",
         // Add production URLs here when deploying
       ],
       logoutUrls: [

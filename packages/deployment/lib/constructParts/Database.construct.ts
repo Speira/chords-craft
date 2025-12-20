@@ -23,7 +23,9 @@ export class DatabaseConstruct extends Construct {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       stream: dynamodb.StreamViewType.NEW_AND_OLD_IMAGES,
       removalPolicy,
-      pointInTimeRecovery: true,
+      pointInTimeRecoverySpecification: {
+        pointInTimeRecoveryEnabled: true
+      }
     });
 
     this.projectionTable = new dynamodb.Table(this, "ChartsProjectionTable", {
@@ -32,7 +34,9 @@ export class DatabaseConstruct extends Construct {
       sortKey: { name: "SK", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy,
-      pointInTimeRecovery: true,
+      pointInTimeRecoverySpecification: {
+        pointInTimeRecoveryEnabled: true
+      }
     });
 
     this.projectionTable.addGlobalSecondaryIndex({
