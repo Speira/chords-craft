@@ -25,14 +25,9 @@ SaaS platform for Musicians to help building their chords chart and share with o
 ```
 packages/
 ├── api/
-│   ├── chart-api/            # A dedicated lambda api
-├── apps/
-│   ├── web/                  # browser apps
-│   │   ├── admin/
-│   │   └── users/
-│   └── mobile/               # mobile apps
-│   │   ├── android/
-│   │   └── ios/
+│   ├── chart-api/            # A dedicated AWS lambda api
+├── clients/
+│   ├── web/                  # browser app using Next.js
 ├── contexts/                 # Bounded contexts (contains domain, application, infrastructure and interface)
 │   ├── chart/                # Chart management
 │   │   ├── domain/           # Entities, aggregates, events (pure TS)
