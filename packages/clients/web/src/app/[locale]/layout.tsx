@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
-import { I18nProvider } from "~/utils/i18n";
+import { I18nProvider } from "~/lib/next-intl";
 
 import "./globals.css";
 
