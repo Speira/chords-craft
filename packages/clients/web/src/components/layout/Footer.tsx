@@ -12,8 +12,8 @@ export async function Footer() {
   return (
     <footer className="bg-secondary text-secondary-foreground">
       <div className="mx-auto max-w-7xl px-6 py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          <div>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="mx-auto">
             <Typography
               as="h3"
               label="general.title"
@@ -26,7 +26,7 @@ export async function Footer() {
             />
           </div>
 
-          <div>
+          <div className="mx-auto">
             <Typography as="h4" label="general.help" className="mb-4  font-semibold" />
             <ul className="space-y-2 text-sm">
               <li>
@@ -38,7 +38,7 @@ export async function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="flex-col flex mx-auto">
             <Typography as="h4" label="social.title" className="mb-4 font-semibold" />
             <div className="mb-4 flex gap-4">
               <Link href={K.SOCIAL.FACEBOOK} target="_blank" title={t("social.facebook")}>

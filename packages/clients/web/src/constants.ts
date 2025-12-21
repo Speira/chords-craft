@@ -18,7 +18,7 @@ export default {
     PROFILE: "/profile",
   },
   CONTACT: {
-    EMAIL: "contact@speira-ecommerce.com",
+    EMAIL: "contact@speira-chordscraft.com",
     PHONE: "+1 234 567 890",
   },
   SOCIAL: {
