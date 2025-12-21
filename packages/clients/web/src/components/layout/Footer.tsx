@@ -10,7 +10,7 @@ export async function Footer() {
   const t = await getAppTranslations();
 
   return (
-    <footer className="bg-secondary text-secondary-foreground">
+    <footer className="bg-primary text-primary-foreground">
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div className="mx-auto">

@@ -1,5 +1,3 @@
-import { getAppTranslations } from "~/lib/next-intl/getAppTranslation";
-
 import { LinkButton } from "../Link";
 import {
   NavigationMenu,
@@ -8,9 +6,7 @@ import {
 } from "../ui/navigation-menu";
 
 export async function HeaderNavigation() {
-  const t = await getAppTranslations();
-
-  const navItems = [{ href: "/", label: t("home.title") }];
+  const navItems: Array<{ href: string; label: string }> = [];
 
   return (
     <NavigationMenu className="justify-self-center">
