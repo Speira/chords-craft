@@ -3,8 +3,8 @@ import { Mail, Phone } from "lucide-react";
 import K from "~/constants";
 import { getAppTranslations } from "~/lib/next-intl/getAppTranslation";
 
-import { Link } from "../Link";
-import { Typography } from "../Typography";
+import { Link } from "./Link";
+import { Typography } from "./Typography";
 
 export async function Footer() {
   const t = await getAppTranslations();
@@ -12,8 +12,8 @@ export async function Footer() {
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="mx-auto max-w-7xl px-6 py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          <div className="mx-auto">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 [&>div]:mx-auto">
+          <div>
             <Typography
               as="h3"
               label="general.title"
@@ -26,19 +26,22 @@ export async function Footer() {
             />
           </div>
 
-          <div className="mx-auto">
-            <Typography as="h4" label="general.help" className="mb-4  font-semibold" />
+          <div>
+            <Typography as="h4" label="general.legal" className="mb-4 font-semibold" />
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href={K.PATHS.CONTACT} label="contact.title" />
+                <Link href={K.PATHS.PRIVACY} label="general.privacy" />
               </li>
               <li>
-                <Link href={K.PATHS.FAQ} label="general.faq" />
+                <Link href={K.PATHS.TERMS} label="general.terms" />
+              </li>
+              <li>
+                <Link href={K.PATHS.LICENSE} label="general.license" />
               </li>
             </ul>
           </div>
 
-          <div className="flex-col flex mx-auto">
+          <div className="flex-col flex">
             <Typography as="h4" label="social.title" className="mb-4 font-semibold" />
             <div className="mb-4 flex gap-4">
               <Link href={K.SOCIAL.FACEBOOK} target="_blank" title={t("social.facebook")}>

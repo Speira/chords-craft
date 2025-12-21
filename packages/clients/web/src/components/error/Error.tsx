@@ -1,8 +1,8 @@
 "use client";
 import K from "~/constants";
 
-import { Main } from "../layout/Main";
 import { LinkButton } from "../Link";
+import { Main } from "../Main";
 import { Typography } from "../Typography";
 import { Button } from "../ui/button";
 

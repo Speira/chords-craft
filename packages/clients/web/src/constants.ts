@@ -12,10 +12,15 @@ export default {
   },
   PATHS: {
     CONTACT: "/contact",
+    CHART: "/charts",
     FAQ: "/faq",
     HOME: "/",
+    LICENSE: "/license",
     LOGIN: "/login",
+    PRIVACY: "/privacy",
     PROFILE: "/profile",
+    SUPPORT: "/supports",
+    TERMS: "/terms",
   },
   CONTACT: {
     EMAIL: "contact@speira-chordscraft.com",

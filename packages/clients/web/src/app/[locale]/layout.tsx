@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Alfa_Slab_One, Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Prosto_One } from "next/font/google";
 
 import { Footer, Header } from "~/components";
 import { I18nProvider } from "~/lib/next-intl";
@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const alphaSlabOne = Alfa_Slab_One({
-  variable: "--font-alpha-slab",
+const prostoOne = Prosto_One({
+  variable: "--font-prosto-one",
   subsets: ["latin"],
   weight: "400",
 });
@@ -39,7 +39,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${alphaSlabOne.variable} antialiased`}>
+        className={`${geistSans.variable} ${geistMono.variable} ${prostoOne.variable} antialiased`}>
         <I18nProvider locale={locale}>
           <Header />
           {children}

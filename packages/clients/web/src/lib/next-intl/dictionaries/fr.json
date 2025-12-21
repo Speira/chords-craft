@@ -15,14 +15,19 @@
     "faq": "FAQ",
     "filter": "Filtrer",
     "help": "Aide",
+    "legal": "Mentions légales",
+    "license": "Licence",
     "loading": "Chargement...",
     "next": "Suivant",
     "open": "Ouvrir",
     "previous": "Précédent",
+    "privacy": "Confidentialité",
     "save": "Enregistrer",
     "search": "Rechercher",
     "sort": "Trier",
     "success": "Succès",
+    "support": "Assistance",
+    "terms": "Conditions d'utilisation",
     "title": "Chords Craft"
   },
   "auth": {
@@ -50,13 +55,14 @@
     "password": "Mot de passe",
     "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
     "rememberMe": "Se souvenir de moi",
-    "signup": "S'inscrire",
+    "signup": "Inscription",
     "signupFailed": "Échec de l'inscription. Veuillez réessayer.",
     "signupSuccess": "Inscription réussie",
     "title": "Authentification"
   },
   "chart": {
     "title": "Grille musicale",
+    "myMusicalCharts": "Mes Grilles Musicale",
     "create": "Créer une grille",
     "remove": "Supprimer la grille"
   },
@@ -78,7 +84,7 @@
     "unauthorized": "Non autorisé"
   },
   "home": {
-    "subtitle": "Créez rapidement vos grilles musicales",
+    "subtitle": "Créez et partagez facilement vos grilles musicales",
     "title": "Accueil"
   },
   "social": {

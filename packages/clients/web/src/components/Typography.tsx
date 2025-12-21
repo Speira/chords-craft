@@ -14,22 +14,22 @@ interface TypographyProps extends React.HTMLAttributes<
 }
 
 const baseClasses: Record<Required<TypographyProps>["as"], ClassNameValue> = {
-  h1: "scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance",
-  h2: "scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0",
-  h3: "scroll-m-20 text-2xl font-semibold tracking-tight",
-  h4: "scroll-m-20 text-xl font-semibold tracking-tight",
+  h1: "font-prosto scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance",
+  h2: "font-prosto scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0",
+  h3: "font-prosto scroll-m-20 text-2xl font-semibold tracking-tight",
+  h4: "font-prosto scroll-m-20 text-xl font-semibold tracking-tight",
+  strong: "font-prosto font-semibold",
   p: "leading-7 [&:not(:first-child)]:mt-6",
   b: "font-bold",
   span: "inline-block text-sm",
   small: "text-sm leading-none font-medium",
-  strong: "font-semibold",
   blockquote: "mt-6 border-l-2 pl-6 italic",
 };
 
 /** Typography component to display translations */
 export async function Typography({
   after,
-  as = "p",
+  as = "span",
   before,
   className,
   label,

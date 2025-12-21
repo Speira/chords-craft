@@ -128,7 +128,8 @@
 @layer utilities {
   .font-alpha {
     font-family: var(--font-alpha-slab);
-    letter-spacing: 1.3px;
-    font-weight: 400;
+  }
+  .font-prosto {
+    font-family: var(--font-prosto-one);
   }
 }
