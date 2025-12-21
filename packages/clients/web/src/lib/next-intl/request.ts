@@ -1,4 +1,5 @@
 import { hasLocale } from "next-intl";
+import { createNavigation } from "next-intl/navigation";
 import { defineRouting } from "next-intl/routing";
 import { getRequestConfig, type GetRequestConfigParams } from "next-intl/server";
 
@@ -28,3 +29,8 @@ const request = getRequestConfig(async (params: GetRequestConfigParams) => {
 });
 
 export default request;
+
+// Lightweight wrappers around Next.js' navigation
+// APIs that consider the routing configuration
+export const { Link, getPathname, redirect, usePathname, useRouter } =
+  createNavigation(routing);

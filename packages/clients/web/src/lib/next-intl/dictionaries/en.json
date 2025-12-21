@@ -9,7 +9,7 @@
     "copyright": "Copyright",
     "create": "Create",
     "delete": "Delete",
-    "description": "Your trusted online shopping destination",
+    "description": "Chords charts creation",
     "edit": "Edit",
     "error": "Error",
     "faq": "FAQ",
@@ -19,10 +19,8 @@
     "next": "Next",
     "open": "Open",
     "previous": "Previous",
-    "remove": "Delete",
     "save": "Save",
     "search": "Search",
-    "shop": "Shop",
     "sort": "Sort",
     "success": "Success",
     "title": "Chords Craft"
@@ -79,7 +77,8 @@
     "unauthorized": "Unauthorized"
   },
   "home": {
-    "subtitle": "Design your Chords Chart intituively"
+    "subtitle": "Design your Chords Chart intituively",
+    "title": "Home"
   },
   "social": {
     "facebook": "Facebook",

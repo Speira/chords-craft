@@ -1,0 +1,91 @@
+{
+  "general": {
+    "allRightsReserved": "Tous droits réservés",
+    "back": "Retour",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "confirm": "Confirmer",
+    "connect": "Connexion",
+    "copyright": "Copyright",
+    "create": "Créer",
+    "delete": "Supprimer",
+    "description": "Création de grilles musicales",
+    "edit": "Modifier",
+    "error": "Erreur",
+    "faq": "FAQ",
+    "filter": "Filtrer",
+    "help": "Aide",
+    "loading": "Chargement...",
+    "next": "Suivant",
+    "open": "Ouvrir",
+    "previous": "Précédent",
+    "save": "Enregistrer",
+    "search": "Rechercher",
+    "sort": "Trier",
+    "success": "Succès",
+    "title": "Chords Craft"
+  },
+  "auth": {
+    "error": {
+      "emailExists": "Cette adresse e-mail est déjà enregistrée.",
+      "invalidCredentials": "Identifiants invalides. Veuillez vérifier votre e-mail et mot de passe.",
+      "invalidPassword": "Mot de passe invalide. Veuillez réessayer.",
+      "logoutFailed": "Échec de la déconnexion. Veuillez réessayer.",
+      "missingInformation": "Veuillez remplir tous les champs requis.",
+      "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères.",
+      "userNotFound": "Utilisateur introuvable. Veuillez vérifier votre adresse e-mail."
+    },
+    "confirmPassword": "Confirmer le mot de passe",
+    "email": "Email",
+    "forgotPassword": "Mot de passe oublié ?",
+    "hasAccount": "Vous avez déjà un compte ?",
+    "login": "Connexion",
+    "loginFailed": "Échec de la connexion. Veuillez réessayer.",
+    "loginSuccess": "Connexion réussie",
+    "logout": "Déconnexion",
+    "logoutFailed": "Échec de la déconnexion. Veuillez réessayer.",
+    "logoutSuccess": "Déconnexion réussie",
+    "name": "Nom",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "password": "Mot de passe",
+    "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+    "rememberMe": "Se souvenir de moi",
+    "signup": "S'inscrire",
+    "signupFailed": "Échec de l'inscription. Veuillez réessayer.",
+    "signupSuccess": "Inscription réussie",
+    "title": "Authentification"
+  },
+  "chart": {
+    "title": "Grille musicale",
+    "create": "Créer une grille",
+    "remove": "Supprimer la grille"
+  },
+  "contact": {
+    "address": "Adresse",
+    "email": "Email",
+    "phone": "Téléphone",
+    "title": "Contact"
+  },
+  "error": {
+    "badRequest": "Mauvaise requête",
+    "forbidden": "Interdit",
+    "networkError": "Erreur réseau",
+    "notFound": "Page non trouvée",
+    "notFoundDescription": "La page demandée n'a pas été trouvée",
+    "serverError": "Erreur serveur",
+    "serverErrorDescription": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard.",
+    "tryAgain": "Réessayer",
+    "unauthorized": "Non autorisé"
+  },
+  "home": {
+    "subtitle": "Créez rapidement vos grilles musicales",
+    "title": "Accueil"
+  },
+  "social": {
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "title": "Suivez-nous",
+    "twitter": "Twitter",
+    "snapchat": "Snapchat"
+  }
+}
