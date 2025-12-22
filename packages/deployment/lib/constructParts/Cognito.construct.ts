@@ -195,12 +195,6 @@ export class CognitoConstruct extends Construct {
       exportName: `${props.stackName}-user-pool-client-id`,
     });
 
-    new cdk.CfnOutput(this, "UserPoolClientName", {
-      value: this.userPoolClient.userPoolClientName,
-      description: "Cognito User Pool Client ID",
-      exportName: `${props.stackName}-user-pool-client-name`,
-    });
-
     new cdk.CfnOutput(this, "UserPoolArn", {
       value: this.userPool.userPoolArn,
       description: "Cognito User Pool ARN",
