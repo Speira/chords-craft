@@ -16,36 +16,28 @@ describe("Quality tests suite", () => {
 
   it("Should build from Chord after note correclty", async () => {
     const afterNote = "7add9";
-    const [quality, afterQuality] = await Effect.runPromise(
-      Quality.build(afterNote)
-    );
+    const [quality, afterQuality] = await Effect.runPromise(Quality.build(afterNote));
     expect(quality).toBe(Quality.Major);
     expect(afterQuality).toBe("7add9");
   });
 
   it("Should build from minor Chord after note correclty", async () => {
     const afterNote = "m7";
-    const [quality, afterQuality] = await Effect.runPromise(
-      Quality.build(afterNote)
-    );
+    const [quality, afterQuality] = await Effect.runPromise(Quality.build(afterNote));
     expect(quality).toBe(Quality.Minor);
     expect(afterQuality).toBe("7");
   });
 
   it("Should build from diminished Chord after note correclty", async () => {
     const afterNote = "°";
-    const [quality, afterQuality] = await Effect.runPromise(
-      Quality.build(afterNote)
-    );
+    const [quality, afterQuality] = await Effect.runPromise(Quality.build(afterNote));
     expect(quality).toBe(Quality.Diminished);
     expect(afterQuality).toBe("");
   });
 
   it("Should build from sus4 Chord after note correclty", async () => {
     const afterNote = "sus4";
-    const [quality, afterQuality] = await Effect.runPromise(
-      Quality.build(afterNote)
-    );
+    const [quality, afterQuality] = await Effect.runPromise(Quality.build(afterNote));
     expect(quality).toBe(Quality.Sus4);
     expect(afterQuality).toBe("");
   });

@@ -1,38 +1,39 @@
-import * as path from 'node:path';
-import type { ViteUserConfig } from 'vitest/config';
+import * as path from "node:path";
+import type { ViteUserConfig } from "vitest/config";
 
 const alias = (name: string) => {
-  const target = process.env.TEST_DIST !== undefined ? 'dist/dist/esm' : 'src';
+  const target = process.env.TEST_DIST !== undefined ? "dist/dist/esm" : "src";
   return {
-    [`${name}/test`]: path.join(__dirname, 'packages', name, 'test'),
-    [`${name}`]: path.join(__dirname, 'packages', name, target),
+    [`${name}/test`]: path.join(__dirname, "packages", name, "test"),
+    [`${name}`]: path.join(__dirname, "packages", name, target),
   };
 };
 
 // This is a workaround, see https://github.com/vitest-dev/vitest/issues/4744
 const config: ViteUserConfig = {
   esbuild: {
-    target: 'es2020',
+    target: "es2020",
   },
   optimizeDeps: {
-    exclude: ['bun:sqlite'],
+    exclude: ["bun:sqlite"],
   },
   test: {
-    setupFiles: [path.join(__dirname, 'setupTests.ts')],
+    setupFiles: [path.join(__dirname, "setupTests.ts")],
     fakeTimers: {
       toFake: undefined,
     },
     sequence: {
       concurrent: true,
     },
-    projects: [{ test: { name: 'shared', root: 'packages/shared' } }],
-    include: ['test/**/*.test.ts'],
+    projects: [{ test: { name: "shared", root: "packages/shared" } }],
+    include: ["test/**/*.test.ts"],
     alias: {
-      ...alias('api/chart-api'),
-      ...alias('contexts/chart'),
-      ...alias('deployment'),
-      ...alias('shared'),
-      '~/': path.join(__dirname, './src/'),
+      ...alias("api/chart-api"),
+      ...alias("contexts/chart"),
+      ...alias("deployment"),
+      ...alias("shared"),
+      ...alias("clients/web"),
+      "~/": path.join(__dirname, "./src/"),
     },
   },
 };

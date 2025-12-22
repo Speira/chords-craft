@@ -2,10 +2,10 @@
   "extends": "./tsconfig.base.json",
   "include": [],
   "references": [
-    { "path": "packages/contexts/*" },
+    { "path": "packages/contexts/chart" },
     { "path": "packages/shared" },
     { "path": "packages/deployment" },
-    { "path": "packages/api/*" },
-    { "path": "packages/clients/*" }
+    { "path": "packages/api/chart-api" },
+    { "path": "packages/clients/web" }
   ]
 }

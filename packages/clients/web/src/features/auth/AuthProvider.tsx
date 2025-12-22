@@ -18,7 +18,7 @@ interface AuthContextType {
     password: string;
     givenName?: string;
     familyName?: string;
-  }) => Promise<HandledResponse>;
+  }) => Promise<void>;
   confirmSignUp: (email: string, code: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<HandledResponse>;
   signInWithGoogle: () => void;
