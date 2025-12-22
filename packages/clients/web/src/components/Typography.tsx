@@ -1,15 +1,15 @@
 import { type ClassNameValue } from "tailwind-merge";
 
-import { type AppTranslation } from "~/lib/next-intl";
-import { getAppTranslations } from "~/lib/next-intl/getAppTranslation";
 import { cn } from "~/lib/shadcn";
 
-interface TypographyProps extends React.HTMLAttributes<
-  HTMLHeadingElement | HTMLParagraphElement | HTMLSpanElement | HTMLQuoteElement
-> {
-  label?: AppTranslation;
-  before?: React.ReactNode;
-  after?: React.ReactNode;
+import { type ITextualComponent, TextualComponent } from "./composites/TextualComponent";
+
+interface TypographyProps
+  extends
+    React.HTMLAttributes<
+      HTMLHeadingElement | HTMLParagraphElement | HTMLSpanElement | HTMLQuoteElement
+    >,
+    ITextualComponent {
   as?: "h1" | "h2" | "h3" | "h4" | "p" | "b" | "span" | "small" | "strong" | "blockquote";
 }
 
@@ -26,25 +26,32 @@ const baseClasses: Record<Required<TypographyProps>["as"], ClassNameValue> = {
   blockquote: "mt-6 border-l-2 pl-6 italic",
 };
 
-/** Typography component to display translations */
-export async function Typography({
-  after,
-  as = "span",
-  before,
-  className,
-  label,
-  ...props
-}: TypographyProps) {
-  const t = await getAppTranslations();
+/** @warning: Add "isServer" props when called inside a Client component */
+export function Typography(props: TypographyProps) {
+  const {
+    as = "span",
+    children,
+    className,
+    endNode,
+    isServer,
+    label,
+    startNode,
+    ...rest
+  } = props;
 
   const TypographyComponent = as;
+
   return (
     <TypographyComponent
       className={cn(baseClasses[as], "flex items-center gap-2", className)}
-      {...props}>
-      {before}
-      {!!label && t(label)}
-      {after}
+      {...rest}>
+      <TextualComponent
+        isServer={isServer}
+        label={label}
+        endNode={endNode}
+        startNode={startNode}>
+        {children}
+      </TextualComponent>
     </TypographyComponent>
   );
 }

@@ -15,11 +15,13 @@ export async function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 [&>div]:mx-auto">
           <div>
             <Typography
+              isServer
               as="h3"
               label="general.title"
               className="mb-4 text-lg font-semibold"
             />
             <Typography
+              isServer
               className="text-muted-foreground mb-4 text-sm"
               as="p"
               label="general.description"
@@ -27,24 +29,38 @@ export async function Footer() {
           </div>
 
           <div>
-            <Typography as="h4" label="general.legal" className="mb-4 font-semibold" />
+            <Typography
+              isServer
+              as="h4"
+              label="general.legal"
+              className="mb-4 font-semibold"
+            />
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href={K.PATHS.PRIVACY} label="general.privacy" />
+                <Link isServer href={K.PATHS.PRIVACY} label="general.privacy" />
               </li>
               <li>
-                <Link href={K.PATHS.TERMS} label="general.terms" />
+                <Link isServer href={K.PATHS.TERMS} label="general.terms" />
               </li>
               <li>
-                <Link href={K.PATHS.LICENSE} label="general.license" />
+                <Link isServer href={K.PATHS.LICENSE} label="general.license" />
               </li>
             </ul>
           </div>
 
           <div className="flex-col flex">
-            <Typography as="h4" label="social.title" className="mb-4 font-semibold" />
+            <Typography
+              isServer
+              as="h4"
+              label="social.title"
+              className="mb-4 font-semibold"
+            />
             <div className="mb-4 flex gap-4">
-              <Link href={K.SOCIAL.FACEBOOK} target="_blank" title={t("social.facebook")}>
+              <Link
+                isServer
+                href={K.SOCIAL.FACEBOOK}
+                target="_blank"
+                title={t("social.facebook")}>
                 <img
                   height="32"
                   width="32"
@@ -52,6 +68,7 @@ export async function Footer() {
                 />
               </Link>
               <Link
+                isServer
                 href={K.SOCIAL.INSTAGRAM}
                 target="_blank"
                 title={t("social.instagram")}>
@@ -61,14 +78,22 @@ export async function Footer() {
                   src="https://unpkg.com/simple-icons/icons/instagram.svg"
                 />
               </Link>
-              <Link href={K.SOCIAL.X} target="_blank" title={t("social.twitter")}>
+              <Link
+                isServer
+                href={K.SOCIAL.X}
+                target="_blank"
+                title={t("social.twitter")}>
                 <img
                   height="32"
                   width="32"
                   src="https://unpkg.com/simple-icons/icons/x.svg"
                 />
               </Link>
-              <Link href={K.SOCIAL.SNAPCHAT} target="_blank" title={t("social.snapchat")}>
+              <Link
+                isServer
+                href={K.SOCIAL.SNAPCHAT}
+                target="_blank"
+                title={t("social.snapchat")}>
                 <img
                   height="32"
                   width="32"
@@ -78,14 +103,18 @@ export async function Footer() {
             </div>
             <div className="text-muted-foreground flex flex-col gap-2 text-sm">
               <Link
+                isServer
                 href={`mailto:${K.CONTACT.EMAIL}`}
                 className="flex items-center gap-2">
                 <Mail size={18} />
-                <Typography as="span" before={K.CONTACT.EMAIL} />
+                <Typography isServer as="span" startNode={K.CONTACT.EMAIL} />
               </Link>
-              <Link href={`tel:${K.CONTACT.PHONE}`} className="flex items-center gap-2">
+              <Link
+                isServer
+                href={`tel:${K.CONTACT.PHONE}`}
+                className="flex items-center gap-2">
                 <Phone size={18} />
-                <Typography as="span" before={K.CONTACT.PHONE} />
+                <Typography isServer as="span" startNode={K.CONTACT.PHONE} />
               </Link>
             </div>
           </div>

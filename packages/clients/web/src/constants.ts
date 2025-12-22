@@ -12,11 +12,12 @@ export default {
   },
   PATHS: {
     CONTACT: "/contact",
-    CHART: "/charts",
+    CHARTS: "/charts",
     FAQ: "/faq",
     HOME: "/",
     LICENSE: "/license",
     LOGIN: "/login",
+    LOGOUT: "/logout",
     PRIVACY: "/privacy",
     PROFILE: "/profile",
     SUPPORT: "/supports",

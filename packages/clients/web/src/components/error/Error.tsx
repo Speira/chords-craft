@@ -14,15 +14,17 @@ interface ErrorProps {
 export function Error({ error, reset }: ErrorProps) {
   return (
     <Main>
-      <Typography as="h1" className="text-destructive text-6xl font-bold">
+      <Typography isServer as="h1" className="text-destructive text-6xl font-bold">
         500
       </Typography>
       <Typography
+        isServer
         as="h2"
         className="text-foreground mt-4 text-2xl font-semibold"
         label="error.serverError"
       />
       <Typography
+        isServer
         as="p"
         className="text-muted-foreground mt-2 text-center"
         label="error.serverErrorDescription"
@@ -36,7 +38,12 @@ export function Error({ error, reset }: ErrorProps) {
         <Button onClick={reset} variant="default">
           <Typography as="span" label="error.tryAgain" />
         </Button>
-        <LinkButton href={K.PATHS.HOME} variant="secondary" label="general.back" />
+        <LinkButton
+          isServer
+          href={K.PATHS.HOME}
+          variant="secondary"
+          label="general.back"
+        />
       </div>
     </Main>
   );

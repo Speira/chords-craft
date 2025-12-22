@@ -2,36 +2,56 @@ import { type HTMLAttributes } from "react";
 
 import { type LinkProps as NextLinkProps } from "next/link";
 
-import { type AppTranslation, Link as NextLink } from "~/lib/next-intl";
-import { getAppTranslations } from "~/lib/next-intl/getAppTranslation";
+import { Link as NextLink } from "~/lib/next-intl";
 
+import { type ITextualComponent, TextualComponent } from "./composites/TextualComponent";
 import { Button, type ButtonProps } from "./ui/button";
 
 interface LinkProps
-  extends HTMLAttributes<HTMLAnchorElement>, Omit<NextLinkProps, "locale"> {
+  extends
+    HTMLAttributes<HTMLAnchorElement>,
+    Omit<NextLinkProps, "locale">,
+    ITextualComponent {
   children?: React.ReactNode;
   target?: "_blank" | "_self" | "_parent" | "_top";
-  label?: AppTranslation;
 }
-export async function Link({ children, label, ...props }: LinkProps) {
-  const t = await getAppTranslations();
+/** @warning: Add "isServer" props when called inside a Client component */
+export function Link(props: LinkProps) {
+  const { children, endNode, isServer, label, startNode, ...rest } = props;
   return (
-    <NextLink {...props}>
-      {!!label && t(label)}
-      {children}
+    <NextLink {...rest}>
+      <TextualComponent
+        isServer={isServer}
+        label={label}
+        endNode={endNode}
+        startNode={startNode}>
+        {children}
+      </TextualComponent>
     </NextLink>
   );
 }
 
 interface LinkButtonProps
-  extends ButtonProps, Pick<LinkProps, "href" | "target" | "label"> {
+  extends
+    ButtonProps,
+    Pick<LinkProps, "href" | "target" | "label" | "startNode" | "endNode">,
+    ITextualComponent {
   children?: React.ReactNode;
 }
-export async function LinkButton({ children, href, label, ...props }: LinkButtonProps) {
-  const t = await getAppTranslations();
+/** @warning: Add "isServer" props when called inside a Client component */
+export function LinkButton(props: LinkButtonProps) {
+  const { children, endNode, href, isServer, label, startNode, ...rest } = props;
   return (
-    <Button asChild {...props}>
-      <NextLink href={href}>{label ? t(label) : children}</NextLink>
+    <Button asChild {...rest}>
+      <NextLink href={href}>
+        <TextualComponent
+          isServer={isServer}
+          endNode={endNode}
+          label={label}
+          startNode={startNode}>
+          {children}
+        </TextualComponent>
+      </NextLink>
     </Button>
   );
 }
