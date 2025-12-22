@@ -27,7 +27,7 @@ describe("CreateChartHandler", () => {
 
     const TestLayer = Layer.merge(
       Layer.succeed(ChartRepository, mockRepository),
-      Layer.succeed(ChartProjection, mockProjection)
+      Layer.succeed(ChartProjection, mockProjection),
     );
 
     const command = {
@@ -43,11 +43,11 @@ describe("CreateChartHandler", () => {
 
     const program = pipe(
       CreateChartHandler.execute(new CreateChartCommand(command)),
-      Effect.provide(TestLayer)
+      Effect.provide(TestLayer),
     );
 
     const chart = await Effect.runPromise(
-      program as Effect.Effect<Chart, ChartError, never>
+      program as Effect.Effect<Chart, ChartError, never>,
     );
 
     expect(chart.title).toBe("Test Chart");

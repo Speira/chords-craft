@@ -51,16 +51,12 @@ describe("ChartAggregate", () => {
           plan: [Section.Verse] as const,
           links: [],
           tags: [],
-        })
+        }),
       );
 
-      const chart = await Effect.runPromise(
-        ChartAggregate.fromEvents(createdEvents)
-      );
+      const chart = await Effect.runPromise(ChartAggregate.fromEvents(createdEvents));
 
-      const archiveEvents = await Effect.runPromise(
-        ChartAggregate.archive(chart)
-      );
+      const archiveEvents = await Effect.runPromise(ChartAggregate.archive(chart));
 
       expect(archiveEvents).toHaveLength(1);
       expect(archiveEvents[0]).toBeInstanceOf(ChartArchived);
@@ -76,18 +72,14 @@ describe("ChartAggregate", () => {
           plan: [Section.Verse],
           links: [],
           tags: [],
-        })
+        }),
       );
 
-      const chart = await Effect.runPromise(
-        ChartAggregate.fromEvents(createdEvents)
-      );
+      const chart = await Effect.runPromise(ChartAggregate.fromEvents(createdEvents));
 
       const archivedChart = chart.archiveChart(new Date());
 
-      const result = await Effect.runPromiseExit(
-        ChartAggregate.archive(archivedChart)
-      );
+      const result = await Effect.runPromiseExit(ChartAggregate.archive(archivedChart));
 
       expect(Exit.isFailure(result)).toBe(true);
       if (Exit.isFailure(result)) {
@@ -112,7 +104,7 @@ describe("ChartAggregate", () => {
           plan: [Section.Verse],
           links: ["http://example.com"],
           tags: ["jazz"],
-        })
+        }),
       );
 
       const chart = await Effect.runPromise(ChartAggregate.fromEvents(events));
@@ -131,7 +123,7 @@ describe("ChartAggregate", () => {
         version: 1,
       });
       const result = await Effect.runPromiseExit(
-        ChartAggregate.fromEvents([archiveEvent])
+        ChartAggregate.fromEvents([archiveEvent]),
       );
       expect(Exit.isFailure(result)).toBe(true);
     });
@@ -146,19 +138,15 @@ describe("ChartAggregate", () => {
           plan: [Section.Verse] as const,
           links: [],
           tags: [],
-        })
+        }),
       );
 
-      const chart = await Effect.runPromise(
-        ChartAggregate.fromEvents(createEvents)
-      );
+      const chart = await Effect.runPromise(ChartAggregate.fromEvents(createEvents));
 
-      const archiveEvents = await Effect.runPromise(
-        ChartAggregate.archive(chart)
-      );
+      const archiveEvents = await Effect.runPromise(ChartAggregate.archive(chart));
 
       const archivedChart = await Effect.runPromise(
-        ChartAggregate.fromEvents([...createEvents, ...archiveEvents])
+        ChartAggregate.fromEvents([...createEvents, ...archiveEvents]),
       );
 
       expect(archivedChart.isActive).toBe(false);
