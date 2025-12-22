@@ -71,12 +71,12 @@ export class CognitoConstruct extends Construct {
         // PRODUCTION: Retrieve secret securely from Secrets Manager
         // NOTE: Must have previously stored the secret under this name.
         googleClientSecretValue = cdk.SecretValue.secretsManager(
-          `${props.stackName}/google-client-secret`
+          `${props.stackName}/google-client-secret`,
         );
       } else {
         // DEVELOPMENT: Use plaintext value passed via environment variables
         googleClientSecretValue = cdk.SecretValue.unsafePlainText(
-          props.googleClientSecret
+          props.googleClientSecret,
         );
       }
     }
@@ -100,7 +100,7 @@ export class CognitoConstruct extends Construct {
             familyName: cognito.ProviderAttribute.GOOGLE_FAMILY_NAME,
             profilePicture: cognito.ProviderAttribute.GOOGLE_PICTURE,
           },
-        }
+        },
       );
     }
 
@@ -108,10 +108,7 @@ export class CognitoConstruct extends Construct {
     // Note: Domain prefix must be globally unique across all AWS accounts
     const domainPrefix = `${props.stackName
       .toLowerCase()
-      .replace(/[^a-z0-9-]/g, "-")}-${cdk.Stack.of(this).account.substring(
-      0,
-      8
-    )}`;
+      .replace(/[^a-z0-9-]/g, "-")}-${cdk.Stack.of(this).account.substring(0, 8)}`;
 
     this.userPoolDomain = this.userPool.addDomain("CognitoDomain", {
       cognitoDomain: {
@@ -196,6 +193,12 @@ export class CognitoConstruct extends Construct {
       value: this.userPoolClient.userPoolClientId,
       description: "Cognito User Pool Client ID",
       exportName: `${props.stackName}-user-pool-client-id`,
+    });
+
+    new cdk.CfnOutput(this, "UserPoolClientName", {
+      value: this.userPoolClient.userPoolClientName,
+      description: "Cognito User Pool Client ID",
+      exportName: `${props.stackName}-user-pool-client-name`,
     });
 
     new cdk.CfnOutput(this, "UserPoolArn", {
