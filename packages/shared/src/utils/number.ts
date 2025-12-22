@@ -9,10 +9,8 @@ export type UnsafePrice = Brand<number, "UnsafePrice">;
  * Methods include:
  *
  * - FormatPrice: Formats a number as a currency string.
- * - ToIntPrice: Converts a price to an integer price to make precise
- *   calculations.
- * - ToFloatPrice: Converts an integer price to a price to be displayed to the
- *   user.
+ * - ToIntPrice: Converts a price to an integer price to make precise calculations.
+ * - ToFloatPrice: Converts an integer price to a price to be displayed to the user.
  * - FormatNumber: Formats a number as a string.
  * - FormatPercent: Formats a number as a percentage string.
  * - Round: Rounds a number to a specified number of decimal places.
@@ -31,11 +29,7 @@ export class NumberUtils {
    * @example
    *   NumberUtils.formatPrice(100); // $100.00
    */
-  static formatPrice(
-    amount: number,
-    currency = "USD",
-    locale = "en-US"
-  ): string {
+  static formatPrice(amount: number, currency = "USD", locale = "en-US"): string {
     return new Intl.NumberFormat(locale, {
       style: "currency",
       currency,
@@ -45,8 +39,8 @@ export class NumberUtils {
   }
 
   /**
-   * Converts a price to an integer price to make precise calculations. The
-   * result is an integer number.
+   * Converts a price to an integer price to make precise calculations. The result is an
+   * integer number.
    *
    * @example
    *   NumberUtils.toIntPrice(100.123456); // 10012
@@ -58,8 +52,8 @@ export class NumberUtils {
   }
 
   /**
-   * Converts an integer price to a price to be displayed to the user. The
-   * result is a float number with two decimal places.
+   * Converts an integer price to a price to be displayed to the user. The result is a
+   * float number with two decimal places.
    *
    * @example
    *   NumberUtils.toFloatPrice(10012); // 100.123456

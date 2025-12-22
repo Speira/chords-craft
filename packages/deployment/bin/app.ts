@@ -8,7 +8,7 @@ const env = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
   region: "eu-west-3",
 };
-const environment = app.node.tryGetContext('env') || 'dev';
+const environment = app.node.tryGetContext("env") || "dev";
 const stackName = `ChordsChart-${environment}`; // ChordsChart_dev, ChordsChart_prod
 new ChordsChartStack(app, stackName, {
   env,

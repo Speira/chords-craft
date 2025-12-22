@@ -10,12 +10,12 @@ import type { DeepPartial, PlainObject } from "./types";
  *   // keysToString
  *   const object1 = { header: true, blue: 3, warning: false };
  *   const result1 = ObjectUtils.keysToString(object1); // "header blue"
- *   const options = { prefix: 'pre_', suffix: '_suf' };
+ *   const options = { prefix: "pre_", suffix: "_suf" };
  *   const result2 = ObjectUtils.keysToString(object1, options); // "pre_header_suf pre_blue_suf"
  *
  *   // displayValue
- *   const item = { name: 'Alice', age: 30, active: true, admin: false };
- *   ObjectUtils.displayValue(item, 'name'); // "Alice"
+ *   const item = { name: "Alice", age: 30, active: true, admin: false };
+ *   ObjectUtils.displayValue(item, "name"); // "Alice"
  *
  *   // mergeDeep
  *   const a = { foo: { bar: 1, baz: 2 }, arr: [1, 2] };
@@ -42,7 +42,7 @@ export default class ObjectUtils {
       prefix?: string;
       suffix?: string;
       join?: string;
-    }
+    },
   ) {
     return Object.keys(obj)
       .reduce(
@@ -50,7 +50,7 @@ export default class ObjectUtils {
           obj[cur]
             ? acc + ` ${options?.prefix || ""}${cur}${options?.suffix || ""}`
             : acc,
-        ""
+        "",
       )
       .trim();
   }
@@ -59,12 +59,12 @@ export default class ObjectUtils {
    * Displays the value of an object key.
    *
    * @example
-   *   ObjectUtils.displayValue({ a: 1, b: 2 }, 'a'); // 1
+   *   ObjectUtils.displayValue({ a: 1, b: 2 }, "a"); // 1
    */
   static displayValue(
     item: object,
     key: string,
-    booleanAsValue: [string, string] = ["yes", "no"]
+    booleanAsValue: [string, string] = ["yes", "no"],
   ): string {
     if (Typeguards.checkIsKeyof(item, key)) {
       const value = item[key];
@@ -82,12 +82,9 @@ export default class ObjectUtils {
    * Picks the keys from an object.
    *
    * @example
-   *   ObjectUtils.pick({ a: 1, b: 2 }, ['a']); // { a: 1 }
+   *   ObjectUtils.pick({ a: 1, b: 2 }, ["a"]); // { a: 1 }
    */
-  static pick<T extends object = object>(
-    obj: T,
-    keys: Array<keyof T>
-  ): Partial<T> {
+  static pick<T extends object = object>(obj: T, keys: Array<keyof T>): Partial<T> {
     return keys.reduce((acc, key) => {
       if (Typeguards.checkIsKeyof(obj, key)) {
         acc[key] = obj[key];
@@ -97,16 +94,12 @@ export default class ObjectUtils {
   }
 
   /**
-   * Merges multiple objects deeply, only updating the target object with the
-   * values from the modifiers.
+   * Merges multiple objects deeply, only updating the target object with the values from
+   * the modifiers.
    *
    * @example
    *   ObjectUtils.mergeDeepPartial({ a: 1, b: 2 }, { a: 3, c: 4 }); // { a: 3, b: 2, c: 4 }
-   *   ObjectUtils.mergeDeepPartial(
-   *     { a: 1, b: 2 },
-   *     { a: 3, c: 4 },
-   *     { a: 5, d: 6 },
-   *   ); // { a: 5, b: 2, c: 4, d: 6 }
+   *   ObjectUtils.mergeDeepPartial({ a: 1, b: 2 }, { a: 3, c: 4 }, { a: 5, d: 6 }); // { a: 5, b: 2, c: 4, d: 6 }
    */
   static mergeDeepPartial<T extends object = object, K extends object = object>(
     target: T,
@@ -128,10 +121,7 @@ export default class ObjectUtils {
               if (Typeguards.checkIsPlainObject(targetValue)) {
                 result = {
                   ...result,
-                  [key]: ObjectUtils.mergeDeepPartial(
-                    targetValue,
-                    modifierValue
-                  ),
+                  [key]: ObjectUtils.mergeDeepPartial(targetValue, modifierValue),
                 };
               } else {
                 result = {

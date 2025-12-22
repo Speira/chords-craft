@@ -10,7 +10,7 @@ const schemas = CONTEXTS.map((context) => {
   const schemaPath = path.join(
     __dirname,
     context,
-    "src/interface/graphql/schema.graphql"
+    "src/interface/graphql/schema.graphql",
   );
   if (!fs.existsSync(schemaPath)) return "";
   return fs.readFileSync(schemaPath, "utf-8");

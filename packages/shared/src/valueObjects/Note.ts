@@ -40,23 +40,21 @@ export const ALL: Array<Note> = [AFlat, A, ASharp, BFlat, B, C, CSharp, DFlat, D
 export const schema = Schema.Literal(...ALL);
 export const checkNote = (a: string): a is Note => ALL.some((v) => a === v);
 
-export const parse = (
-  a: string
-): Effect.Effect<Note, ParseResult.ParseError> => {
+export const parse = (a: string): Effect.Effect<Note, ParseResult.ParseError> => {
   const str = sanitize(a);
   if (checkNote(str)) return Effect.succeed(str);
   return Effect.fail(
     new ParseError({
       issue: new Unexpected(
         a,
-        `the string "${a}" is not a note (ex: ${A}, ${AFlat}, ${ASharp}, ...)`
+        `the string "${a}" is not a note (ex: ${A}, ${AFlat}, ${ASharp}, ...)`,
       ),
-    })
+    }),
   );
 };
 
 export const build = (
-  str: string
+  str: string,
 ): Effect.Effect<[Note, string], ParseResult.ParseError> => {
   return Effect.gen(function* () {
     const [noteStr, ...afterNote] = str;

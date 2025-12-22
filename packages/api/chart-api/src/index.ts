@@ -2,9 +2,7 @@ import type { AppSyncResolverEvent } from "aws-lambda";
 
 import { ChartInterface } from "@speira/chordschart-contexts-chart";
 
-export const handler = async (
-  event: AppSyncResolverEvent<Record<string, unknown>>
-) => {
+export const handler = async (event: AppSyncResolverEvent<Record<string, unknown>>) => {
   const { fieldName } = event.info;
   switch (fieldName) {
     case "createChart":

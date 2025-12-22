@@ -10,6 +10,7 @@
     "cdk": "cdk",
     "deploy:dev": "pnpm merge-schemas && cdk deploy",
     "deploy:prod": "pnpm merge-schemas && cdk deploy --context env=prod",
+    "format": "prettier --write ./bin ./lib/ ./test/ && eslint --fix ./bin/ ./lib/ ./test/",
     "merge-schemas": "ts-node ./bin/mergeSchemas.ts",
     "synth": "pnpm merge-schemas && cdk synth",
     "test": "jest",

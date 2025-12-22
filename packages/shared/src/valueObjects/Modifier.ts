@@ -24,5 +24,4 @@ export const ALL: Array<Modifier> = [
   Sharp13,
 ];
 export const schema = Schema.Literal(...ALL);
-export const parse = (m: string) =>
-  Schema.decodeUnknown(schema)(Note.sanitize(m));
+export const parse = (m: string) => Schema.decodeUnknown(schema)(Note.sanitize(m));

@@ -18,10 +18,7 @@ export class AppSynConstruct extends Construct {
     super(scope, id);
 
     // File Automatically generated on build/synth command
-    const schemaFilePath = path.join(
-      __dirname,
-      "../graphql/merged-schema.graphql"
-    );
+    const schemaFilePath = path.join(__dirname, "../graphql/merged-schema.graphql");
 
     // AppSync GraphQL API with Cognito authentication
     const authConfig: appsync.AuthorizationConfig = props.userPool

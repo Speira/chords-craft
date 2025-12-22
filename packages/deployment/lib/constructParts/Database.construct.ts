@@ -24,8 +24,8 @@ export class DatabaseConstruct extends Construct {
       stream: dynamodb.StreamViewType.NEW_AND_OLD_IMAGES,
       removalPolicy,
       pointInTimeRecoverySpecification: {
-        pointInTimeRecoveryEnabled: true
-      }
+        pointInTimeRecoveryEnabled: true,
+      },
     });
 
     this.projectionTable = new dynamodb.Table(this, "ChartsProjectionTable", {
@@ -35,8 +35,8 @@ export class DatabaseConstruct extends Construct {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy,
       pointInTimeRecoverySpecification: {
-        pointInTimeRecoveryEnabled: true
-      }
+        pointInTimeRecoveryEnabled: true,
+      },
     });
 
     this.projectionTable.addGlobalSecondaryIndex({

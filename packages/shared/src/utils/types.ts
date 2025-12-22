@@ -38,17 +38,17 @@ export type ItemOf<T> = T extends AnyArray<infer U> ? U : never;
 export type Nullable<T> = T | null;
 
 /** Define the type of the function */
-export type FunctionType<
-  In extends Array<unknown> = Array<unknown>,
-  Out = unknown
-> = (...args: In) => Out;
+export type FunctionType<In extends Array<unknown> = Array<unknown>, Out = unknown> = (
+  ...args: In
+) => Out;
 
 /** Deep array type */
-export type DeepArrayType<T> = T extends Array<infer U>
-  ? ItemOf<U>
-  : T extends PlainObject
-  ? { [K in keyof T]: DeepArrayType<T[K]> }
-  : T;
+export type DeepArrayType<T> =
+  T extends Array<infer U>
+    ? ItemOf<U>
+    : T extends PlainObject
+      ? { [K in keyof T]: DeepArrayType<T[K]> }
+      : T;
 
 /** Non-empty array */
 export type NonEmptyArray<T> = [T, ...Array<T>];
@@ -68,21 +68,21 @@ export type DeepPartial<T> =
   T extends (...args: Array<unknown>) => unknown
     ? T
     : // common built-ins unchanged (add more if you use them)
-    T extends
-        | Date
-        | RegExp
-        | Map<unknown, unknown>
-        | Set<unknown>
-        | WeakMap<WeakKey, unknown>
-        | WeakSet<WeakKey>
-    ? T
-    : // arrays / tuples: make element DeepPartial, keep readonly
-    T extends ReadonlyArray<infer U>
-    ? ReadonlyArray<DeepPartial<U>>
-    : // plain objects
-    T extends PlainObject
-    ? { [K in keyof T]?: DeepPartial<T[K]> }
-    : T;
+      T extends
+          | Date
+          | RegExp
+          | Map<unknown, unknown>
+          | Set<unknown>
+          | WeakMap<WeakKey, unknown>
+          | WeakSet<WeakKey>
+      ? T
+      : // arrays / tuples: make element DeepPartial, keep readonly
+        T extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepPartial<U>>
+        : // plain objects
+          T extends PlainObject
+          ? { [K in keyof T]?: DeepPartial<T[K]> }
+          : T;
 
 /**
  * Define the nested key of the object
@@ -95,19 +95,19 @@ export type NestedKey<T, Prefix extends string = ""> = {
   [K in StringKeyOf<T>]: T[K] extends ReadonlyArray<unknown>
     ? `${Prefix}${K}` // stop at arrays
     : T[K] extends (...args: Array<unknown>) => unknown
-    ? `${Prefix}${K}` // stop at functions
-    : T[K] extends
-        | Date
-        | RegExp
-        | Map<unknown, unknown>
-        | Set<unknown>
-        | WeakMap<WeakKey, unknown>
-        | WeakSet<WeakKey>
-        | Promise<unknown>
-    ? `${Prefix}${K}` // stop at common built-ins
-    : T[K] extends PlainObject
-    ? `${Prefix}${K}` | NestedKey<T[K], `${Prefix}${K}.`>
-    : `${Prefix}${K}`;
+      ? `${Prefix}${K}` // stop at functions
+      : T[K] extends
+            | Date
+            | RegExp
+            | Map<unknown, unknown>
+            | Set<unknown>
+            | WeakMap<WeakKey, unknown>
+            | WeakSet<WeakKey>
+            | Promise<unknown>
+        ? `${Prefix}${K}` // stop at common built-ins
+        : T[K] extends PlainObject
+          ? `${Prefix}${K}` | NestedKey<T[K], `${Prefix}${K}.`>
+          : `${Prefix}${K}`;
 }[StringKeyOf<T>];
 
 /**
@@ -128,8 +128,8 @@ export type NestedKeyOf<T> = T extends object
 /**
  * Branded type (nominal-ish typing)
  *
- * - Using a unique symbol avoids accidental structural compatibility. Example:
- *   type UserId = Brand<string, "UserId">
+ * - Using a unique symbol avoids accidental structural compatibility. Example: type UserId
+ *   = Brand<string, "UserId">
  */
 declare const __brand: unique symbol;
 export type Brand<T, BrandName extends string> = T & {

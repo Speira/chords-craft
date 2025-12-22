@@ -39,14 +39,10 @@ export class NetworkingConstruct extends Construct {
     });
 
     // Security Groups
-    this.lambdaSecurityGroup = new ec2.SecurityGroup(
-      this,
-      "LambdaSecurityGroup",
-      {
-        vpc: this.vpc,
-        description: "Security group for Lambda functions",
-        allowAllOutbound: true,
-      }
-    );
+    this.lambdaSecurityGroup = new ec2.SecurityGroup(this, "LambdaSecurityGroup", {
+      vpc: this.vpc,
+      description: "Security group for Lambda functions",
+      allowAllOutbound: true,
+    });
   }
 }

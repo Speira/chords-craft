@@ -23,7 +23,7 @@ export const ALL: Array<Extension> = [...DOMINANTS, ...MAJORS];
 export const schema = Schema.Literal(...ALL);
 export const parse = (e: string) => Schema.decodeUnknown(schema)(e);
 export const build = (
-  str: string
+  str: string,
 ): Effect.Effect<[Extension | undefined, string], ParseResult.ParseError> => {
   const extension = ALL.find((ex) => toDelta(str).startsWith(ex));
   if (!extension) return Effect.succeed([undefined, str]);

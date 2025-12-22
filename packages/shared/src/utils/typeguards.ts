@@ -29,24 +29,20 @@ export class Typeguards {
     return typeof arg === "boolean";
   }
 
-  static checkIsClass(
-    item: unknown
-  ): item is new (...args: Array<unknown>) => unknown {
+  static checkIsClass(item: unknown): item is new (...args: Array<unknown>) => unknown {
     return (
       typeof item === "function" &&
       /^class\s/.test(Function.prototype.toString.call(item))
     );
   }
 
-  static checkIsFunction(
-    item: unknown
-  ): item is (...args: Array<unknown>) => unknown {
+  static checkIsFunction(item: unknown): item is (...args: Array<unknown>) => unknown {
     return typeof item === "function" && !this.checkIsClass(item);
   }
 
   static checkIsKeyof<T extends object = object>(
     obj: T,
-    key: PropertyKey
+    key: PropertyKey,
   ): key is keyof T {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }

@@ -49,7 +49,7 @@ export class MonitoringConstruct extends Construct {
             period: cdk.Duration.minutes(5),
           }),
         ],
-      })
+      }),
     );
 
     // SNS topic for alerts
@@ -83,8 +83,6 @@ export class MonitoringConstruct extends Construct {
       alarmName: "charts-lambda-throttles",
     });
 
-    throttleAlarm.addAlarmAction(
-      new cloudwatchActions.SnsAction(this.alertTopic)
-    );
+    throttleAlarm.addAlarmAction(new cloudwatchActions.SnsAction(this.alertTopic));
   }
 }
