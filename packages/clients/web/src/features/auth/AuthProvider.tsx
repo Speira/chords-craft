@@ -2,8 +2,11 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
+import { CognitoIdentityProviderServiceException } from "@aws-sdk/client-cognito-identity-provider";
+
 import { cognitoClient, oauth } from "~/lib/aws-cognito";
 import { Logger } from "~/lib/logger";
+import { type HandledResponse } from "~/types";
 
 import * as authStorage from "./storage";
 
@@ -15,9 +18,9 @@ interface AuthContextType {
     password: string;
     givenName?: string;
     familyName?: string;
-  }) => Promise<void>;
+  }) => Promise<HandledResponse>;
   confirmSignUp: (email: string, code: string) => Promise<void>;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<HandledResponse>;
   signInWithGoogle: () => void;
   signOut: () => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
@@ -52,10 +55,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await cognitoClient.confirmSignUp(email, code);
   };
 
-  const signIn = async (email: string, password: string) => {
-    const tokens = await cognitoClient.signIn({ email, password });
-    authStorage.setTokens(tokens.accessToken, tokens.idToken, tokens.refreshToken);
-    setIsAuthenticated(true);
+  const signIn = async (email: string, password: string): Promise<HandledResponse> => {
+    try {
+      const tokens = await cognitoClient.signIn({ email, password });
+      authStorage.setTokens(tokens.accessToken, tokens.idToken, tokens.refreshToken);
+      setIsAuthenticated(true);
+      return [null, null];
+    } catch (err) {
+      Logger.error("AuthProvider.signin:", err);
+      if (err instanceof CognitoIdentityProviderServiceException) {
+        if (err.name === "ResourceNotFoundException") {
+          return ["auth.error.userNotFound", null];
+        }
+      }
+      return ["auth.error.invalidCredentials", null];
+    }
   };
 
   const signInWithGoogle = () => {

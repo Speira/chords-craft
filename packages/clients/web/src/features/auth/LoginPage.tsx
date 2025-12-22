@@ -5,11 +5,12 @@ import { useState } from "react";
 import { LogIn } from "lucide-react";
 
 import { Button, Input, Typography } from "~/components";
-import { Logger } from "~/lib/logger";
+import { useAppTranslations } from "~/lib/next-intl/useAppTranslation";
 
 import { useAuth } from "./AuthProvider";
 
 export function LoginPage() {
+  const t = useAppTranslations();
   const { signIn, signInWithGoogle } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,13 +19,8 @@ export function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
-    try {
-      await signIn(email, password);
-    } catch (err) {
-      Logger.error("LoginPage.handleSubmit: ", err);
-      setError("Invalid email or password");
-    }
+    const [authError] = await signIn(email, password);
+    if (authError) setError(t(authError));
   };
 
   return (
