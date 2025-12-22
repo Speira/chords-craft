@@ -62,13 +62,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsAuthenticated(true);
       return [null, null];
     } catch (err) {
-      Logger.error("AuthProvider.signin:", err);
+      Logger.error("AuthProvider.signin:", { err });
       if (err instanceof CognitoIdentityProviderServiceException) {
         if (err.name === "ResourceNotFoundException") {
           return ["auth.error.userNotFound", null];
         }
+        if (err.name === "NotAuthorizedException") {
+          return ["auth.error.invalidCredentials", null];
+        }
       }
-      return ["auth.error.invalidCredentials", null];
+      return ["error.networkError", null];
     }
   };
 

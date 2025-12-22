@@ -15,9 +15,9 @@ interface TypographyProps
 
 const baseClasses: Record<Required<TypographyProps>["as"], ClassNameValue> = {
   h1: "font-prosto scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance",
-  h2: "font-prosto scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0",
-  h3: "font-prosto scroll-m-20 text-2xl font-semibold tracking-tight",
-  h4: "font-prosto scroll-m-20 text-xl font-semibold tracking-tight",
+  h2: "scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0",
+  h3: "scroll-m-20 text-2xl font-semibold tracking-tight",
+  h4: "scroll-m-20 text-xl font-semibold tracking-tight",
   strong: "font-prosto font-semibold",
   p: "leading-7 [&:not(:first-child)]:mt-6",
   b: "font-bold",
