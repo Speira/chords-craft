@@ -12,7 +12,7 @@ const DynamoDBClientTag = Context.GenericTag<DynamoDBClient>("DynamoDBClient");
 
 export const DynamoDBClientLive = Layer.succeed(
   DynamoDBClientTag,
-  new DynamoDBClient({ region: process.env.AWS_REGION || "eu-west-1" })
+  new DynamoDBClient({ region: process.env.AWS_REGION || "eu-west-1" }),
 );
 
 export const ChartRepositoryLive = Layer.effect(
@@ -20,7 +20,7 @@ export const ChartRepositoryLive = Layer.effect(
   Effect.gen(function* () {
     const client = yield* DynamoDBClientTag;
     return new DynamoDBChartRepository(client);
-  })
+  }),
 ).pipe(Layer.provide(DynamoDBClientLive));
 
 export const ChartProjectionLive = Layer.effect(
@@ -28,10 +28,7 @@ export const ChartProjectionLive = Layer.effect(
   Effect.gen(function* () {
     const client = yield* DynamoDBClientTag;
     return new DynamoDBChartProjection(client);
-  })
+  }),
 ).pipe(Layer.provide(DynamoDBClientLive));
 
-export const ChartServicesLive = Layer.mergeAll(
-  ChartRepositoryLive,
-  ChartProjectionLive
-);
+export const ChartServicesLive = Layer.mergeAll(ChartRepositoryLive, ChartProjectionLive);

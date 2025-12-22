@@ -6,7 +6,7 @@ import { type ListChartQuery } from "./ListChartQuery";
 
 export class ListChartHandler {
   static execute(
-    query: ListChartQuery
+    query: ListChartQuery,
   ): Effect.Effect<ReadonlyArray<Chart>, ChartError, ChartProjection> {
     return Effect.gen(function* () {
       const projection = yield* ChartProjection;

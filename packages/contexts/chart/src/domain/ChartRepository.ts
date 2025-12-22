@@ -7,13 +7,10 @@ import type { ChartEvent } from "./ChartEvents";
 export interface ChartRepository {
   readonly save: (
     id: ChartIDType,
-    events: Array<ChartEvent>
+    events: Array<ChartEvent>,
   ) => Effect.Effect<void, ChartError>;
 
-  readonly load: (
-    id: ChartIDType
-  ) => Effect.Effect<Array<ChartEvent>, ChartError>;
+  readonly load: (id: ChartIDType) => Effect.Effect<Array<ChartEvent>, ChartError>;
 }
 
-export const ChartRepository =
-  Context.GenericTag<ChartRepository>("ChartRepository");
+export const ChartRepository = Context.GenericTag<ChartRepository>("ChartRepository");

@@ -7,11 +7,11 @@ import type { ChartError } from "./ChartErrors";
 export interface ChartProjection {
   readonly findById: (
     id: ChartIDType,
-    tenantId: string
+    tenantId: string,
   ) => Effect.Effect<Chart, ChartError>;
 
   readonly findByTenant: (
-    tenantId: string
+    tenantId: string,
   ) => Effect.Effect<ReadonlyArray<Chart>, ChartError>;
 
   readonly upsert: (chart: Chart) => Effect.Effect<void, ChartError>;
@@ -19,5 +19,4 @@ export interface ChartProjection {
   readonly delete: (chart: Chart) => Effect.Effect<void, ChartError>;
 }
 
-export const ChartProjection =
-  Context.GenericTag<ChartProjection>("ChartProjection");
+export const ChartProjection = Context.GenericTag<ChartProjection>("ChartProjection");

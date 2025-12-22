@@ -10,7 +10,7 @@ export const getChart = async (event: ResolverEvent): Promise<Chart> => {
   const program = pipe(
     Schema.decodeUnknown(GetChartQuery)(event.arguments),
     Effect.flatMap((query) => GetChartHandler.execute(query)),
-    Effect.provide(ChartServicesLive)
+    Effect.provide(ChartServicesLive),
   );
 
   try {

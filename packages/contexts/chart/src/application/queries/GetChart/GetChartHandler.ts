@@ -11,7 +11,7 @@ import { type GetChartQuery } from "./GetChartQuery";
 
 export class GetChartHandler {
   static execute(
-    query: GetChartQuery
+    query: GetChartQuery,
   ): Effect.Effect<Chart, ChartError, ChartRepository | ChartProjection> {
     return Effect.gen(function* () {
       const projection = yield* ChartProjection;

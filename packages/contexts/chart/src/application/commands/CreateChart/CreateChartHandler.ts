@@ -12,7 +12,7 @@ import { type CreateChartCommand } from "./CreateChartCommand";
 
 export class CreateChartHandler {
   static execute(
-    command: CreateChartCommand
+    command: CreateChartCommand,
   ): Effect.Effect<Chart, ChartError, ChartRepository | ChartProjection> {
     return Effect.gen(function* () {
       const events = yield* ChartAggregate.create({

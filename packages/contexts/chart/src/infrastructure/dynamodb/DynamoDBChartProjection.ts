@@ -28,10 +28,7 @@ export class DynamoDBChartProjection implements ChartProjection {
     this.client = DynamoDBDocument.from(client);
   }
 
-  findById(
-    id: ChartIDType,
-    tenantId: string
-  ): Effect.Effect<Chart, ChartError> {
+  findById(id: ChartIDType, tenantId: string): Effect.Effect<Chart, ChartError> {
     return Effect.tryPromise({
       try: () =>
         this.client.send(
@@ -41,7 +38,7 @@ export class DynamoDBChartProjection implements ChartProjection {
               PK: this.withTenantKey(tenantId),
               SK: this.withChartKey(id),
             },
-          })
+          }),
         ),
       catch: (error) => new ChartReadError({ reason: error }),
     }).pipe(
@@ -50,13 +47,11 @@ export class DynamoDBChartProjection implements ChartProjection {
           return new ChartReadError({ reason: "Chart not found (findById)" });
         }
         return Chart.fromRecord(result.Item);
-      })
+      }),
     );
   }
 
-  findByTenant(
-    tenantId: string
-  ): Effect.Effect<ReadonlyArray<Chart>, ChartError> {
+  findByTenant(tenantId: string): Effect.Effect<ReadonlyArray<Chart>, ChartError> {
     return Effect.tryPromise({
       try: () =>
         this.client.send(
@@ -66,14 +61,14 @@ export class DynamoDBChartProjection implements ChartProjection {
             ExpressionAttributeValues: {
               ":pk": this.withTenantKey(tenantId),
             },
-          })
+          }),
         ),
       catch: (error) => new ChartReadError({ reason: error }),
     }).pipe(
       Effect.flatMap((result) => {
         const items = result.Items ?? [];
         return Effect.all(items.map(Chart.fromRecord));
-      })
+      }),
     );
   }
 
@@ -88,11 +83,9 @@ export class DynamoDBChartProjection implements ChartProjection {
               PK: this.withTenantKey(chart.tenantId),
               SK: this.withChartKey(chart.id),
               GSI1PK: this.withTenantKey(chart.tenantId),
-              GSI1SK: `ACTIVE#${
-                chart.isActive
-              }#${chart.updatedAt.toISOString()}`,
+              GSI1SK: `ACTIVE#${chart.isActive}#${chart.updatedAt.toISOString()}`,
             },
-          })
+          }),
         );
       },
       catch: (error) => new ChartWriteError({ reason: error }),
@@ -109,7 +102,7 @@ export class DynamoDBChartProjection implements ChartProjection {
               PK: this.withTenantKey(chart.tenantId),
               SK: this.withChartKey(chart.id),
             },
-          })
+          }),
         );
       },
       catch: (error) => new ChartWriteError({ reason: error }),

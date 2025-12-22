@@ -3,7 +3,7 @@ import { Schema } from "effect";
 import { Chord, Note, Section, TenantID } from "@speira/chordschart-shared";
 
 export class CreateChartCommand extends Schema.Class<CreateChartCommand>(
-  "CreateChartCommand"
+  "CreateChartCommand",
 )({
   root: Note.schema,
   tenantId: TenantID,
@@ -15,9 +15,7 @@ export class CreateChartCommand extends Schema.Class<CreateChartCommand>(
   }),
   plan: Schema.NonEmptyArray(Section.schema).pipe(Schema.maxItems(50)),
   links: Schema.Array(Schema.String.pipe(Schema.maxLength(255))).pipe(
-    Schema.maxItems(12)
+    Schema.maxItems(12),
   ),
-  tags: Schema.Array(Schema.String.pipe(Schema.maxLength(255))).pipe(
-    Schema.maxItems(12)
-  ),
+  tags: Schema.Array(Schema.String.pipe(Schema.maxLength(255))).pipe(Schema.maxItems(12)),
 }) {}

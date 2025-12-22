@@ -34,10 +34,7 @@ export class DynamoDBChartRepository implements ChartRepository {
     this.client = DynamoDBDocument.from(client);
   }
 
-  save(
-    id: ChartIDType,
-    events: Array<ChartEvent>
-  ): Effect.Effect<void, ChartWriteError> {
+  save(id: ChartIDType, events: Array<ChartEvent>): Effect.Effect<void, ChartWriteError> {
     return Effect.tryPromise({
       try: async () => {
         const items: Array<{ PUT: PutCommandInput }> = events.map((evt) => ({
@@ -75,7 +72,7 @@ export class DynamoDBChartRepository implements ChartRepository {
               ":pk": this.withChartKey(id),
             },
             ScanIndexForward: true,
-          })
+          }),
         ),
       catch: (error) => new ChartReadError({ reason: error }),
     }).pipe(
@@ -85,12 +82,12 @@ export class DynamoDBChartRepository implements ChartRepository {
           throw new ChartReadError({ reason: "Not event found" });
         }
         return Effect.all(items.map((item) => this.deserializeEvent(item)));
-      })
+      }),
     );
   }
 
   private deserializeEvent(
-    item: Record<string, unknown>
+    item: Record<string, unknown>,
   ): Effect.Effect<ChartEvent, ChartParseError> {
     return Effect.gen(function* () {
       const eventType = item.eventType as string;
@@ -98,13 +95,11 @@ export class DynamoDBChartRepository implements ChartRepository {
         aggregateId: item.aggregateId,
         version: item.version,
         occuredAt:
-          typeof item.occuredAt === "string"
-            ? new Date(item.occuredAt)
-            : new Date(),
+          typeof item.occuredAt === "string" ? new Date(item.occuredAt) : new Date(),
       };
       if (!Typeguards.checkIsPlainObject(item.data)) {
         return yield* Effect.fail(
-          new ChartParseError({ reason: "item data could not parse" })
+          new ChartParseError({ reason: "item data could not parse" }),
         );
       }
       switch (eventType) {
@@ -112,25 +107,21 @@ export class DynamoDBChartRepository implements ChartRepository {
           return yield* Schema.decodeUnknown(ChartCreated)({
             ...baseData,
             ...item.data,
-          }).pipe(
-            Effect.mapError((error) => new ChartParseError({ reason: error }))
-          );
+          }).pipe(Effect.mapError((error) => new ChartParseError({ reason: error })));
         case "ChartUpdated":
           return yield* Schema.decodeUnknown(ChartUpdated)({
             ...baseData,
             ...item.data,
-          }).pipe(
-            Effect.mapError((error) => new ChartParseError({ reason: error }))
-          );
+          }).pipe(Effect.mapError((error) => new ChartParseError({ reason: error })));
 
         case "ChartArchived":
           return yield* Schema.decodeUnknown(ChartArchived)(baseData).pipe(
-            Effect.mapError((error) => new ChartParseError({ reason: error }))
+            Effect.mapError((error) => new ChartParseError({ reason: error })),
           );
 
         default:
           return yield* Effect.fail(
-            new ChartParseError({ reason: `Unknown event type: ${eventType}` })
+            new ChartParseError({ reason: `Unknown event type: ${eventType}` }),
           );
       }
     });

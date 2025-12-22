@@ -17,9 +17,9 @@ export const rebuildChartProjections = async (tenantId: string) => {
           const events = yield* repository.load(chart.id);
           const rebuilt = yield* ChartAggregate.fromEvents(events);
           yield* projection.upsert(rebuilt);
-        })
+        }),
       ),
-      { concurrency: 10 }
+      { concurrency: 10 },
     );
   });
 

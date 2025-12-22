@@ -10,7 +10,7 @@ export const createChart = async (event: ResolverEvent): Promise<Chart> => {
   const program = pipe(
     Schema.decodeUnknown(CreateChartCommand)(event.arguments),
     Effect.flatMap((command) => CreateChartHandler.execute(command)),
-    Effect.provide(ChartServicesLive)
+    Effect.provide(ChartServicesLive),
   );
   try {
     const chart = await Effect.runPromise(program);

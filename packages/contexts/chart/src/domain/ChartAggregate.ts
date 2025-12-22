@@ -39,7 +39,7 @@ export class ChartAggregate {
   static archive(chart: Chart): Effect.Effect<Array<ChartEvent>, ChartError> {
     if (!chart.isActive) {
       return Effect.fail(
-        new ChartValidationError({ reason: "Chart is already archived" })
+        new ChartValidationError({ reason: "Chart is already archived" }),
       );
     }
     return Effect.succeed([
@@ -52,15 +52,13 @@ export class ChartAggregate {
     ]);
   }
 
-  static fromEvents(
-    events: Array<ChartEvent>
-  ): Effect.Effect<Chart, ChartError> {
+  static fromEvents(events: Array<ChartEvent>): Effect.Effect<Chart, ChartError> {
     const [firstEvent, ...restEvents] = events;
     if (firstEvent._tag !== "ChartCreated") {
       return Effect.fail(
         new ChartValidationError({
           reason: "First event must be an event with a full chart",
-        })
+        }),
       );
     }
     const chart = new Chart({

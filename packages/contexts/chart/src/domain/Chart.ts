@@ -40,13 +40,11 @@ export class Chart extends Data.Class<{
   readonly createdAt: Date;
   readonly updatedAt: Date;
 }> {
-  static fromRecord(
-    record: Record<string, unknown>
-  ): Effect.Effect<Chart, ChartError> {
+  static fromRecord(record: Record<string, unknown>): Effect.Effect<Chart, ChartError> {
     return Effect.gen(function* () {
-      const decoded = yield* Schema.decodeUnknown(ChartRecordSchema)(
-        record
-      ).pipe(Effect.mapError((reason) => new ChartParseError({ reason })));
+      const decoded = yield* Schema.decodeUnknown(ChartRecordSchema)(record).pipe(
+        Effect.mapError((reason) => new ChartParseError({ reason })),
+      );
       return new Chart({
         ...decoded,
         createdAt: new Date(decoded.createdAt),
@@ -90,7 +88,7 @@ export class Chart extends Data.Class<{
 
   updateSections(
     sections: Record<Section.Section, ReadonlyArray<Chord>>,
-    occurredAt: Date
+    occurredAt: Date,
   ): Chart {
     return new Chart({ ...this, sections, updatedAt: occurredAt });
   }

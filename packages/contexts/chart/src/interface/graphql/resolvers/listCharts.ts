@@ -6,13 +6,11 @@ import { ChartServicesLive } from "~/infrastructure/dynamodb";
 
 import { type ResolverEvent } from "./types";
 
-export const listCharts = async (
-  event: ResolverEvent
-): Promise<ReadonlyArray<Chart>> => {
+export const listCharts = async (event: ResolverEvent): Promise<ReadonlyArray<Chart>> => {
   const program = pipe(
     Schema.decodeUnknown(ListChartQuery)(event.arguments),
     Effect.flatMap((query) => ListChartHandler.execute(query)),
-    Effect.provide(ChartServicesLive)
+    Effect.provide(ChartServicesLive),
   );
 
   try {
