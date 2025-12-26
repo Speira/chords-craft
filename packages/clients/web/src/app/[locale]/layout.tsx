@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Prosto_One } from "next/font/google";
 
@@ -25,7 +26,13 @@ const prostoOne = Prosto_One({
 
 export const metadata: Metadata = {
   title: "Chords Craft",
-  description: "Create your musical charts",
+  description: "Create and share musical chord charts",
+  manifest: "/manifest.webmanifest",
+  themeColor: "#556e84",
+  icons: {
+    icon: "/favicon/favicon.ico",
+    apple: "/favicon/favicon-apple-180x180.png",
+  },
 };
 
 export default async function RootLayout({
@@ -38,17 +45,19 @@ export default async function RootLayout({
   const { locale } = await params;
 
   return (
-    <html lang={locale}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${prostoOne.variable} antialiased`}>
-        <AuthProvider>
-          <I18nProvider locale={locale}>
-            <Header endNode={<AuthHeaderNav />} />
-            {children}
-            <Footer />
-          </I18nProvider>
-        </AuthProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang={locale}>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} ${prostoOne.variable} antialiased`}>
+          <AuthProvider>
+            <I18nProvider locale={locale}>
+              <Header endNode={<AuthHeaderNav />} />
+              {children}
+              <Footer />
+            </I18nProvider>
+          </AuthProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

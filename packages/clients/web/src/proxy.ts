@@ -1,10 +1,26 @@
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import createMiddleware from "next-intl/middleware";
 
 import { routing } from "~/lib/next-intl";
 
-export default createMiddleware(routing);
+const localePattern = `(${routing.locales.join("|")})`;
 
+const intlMiddleware = createMiddleware(routing);
+
+const isPublicRoute = createRouteMatcher([
+  "/",
+  `/:locale${localePattern}?`,
+  `/:locale${localePattern}?/auth/login`,
+  `/:locale${localePattern}?/auth/sign-up`,
+  `/:locale${localePattern}?/auth/callback`,
+]);
+
+export default clerkMiddleware(async (auth, req) => {
+  if (!isPublicRoute(req)) {
+    await auth.protect();
+  }
+  return intlMiddleware(req);
+});
 export const config = {
-  // Match only internationalized pathnames
-  matcher: ["/", "/(fr|en)/:path*", "/((?!api|_next|_vercel|\\.well-known|.*\\..*).*)"],
+  matcher: ["/", "/((?!api|_next|_vercel|trpc|\\.well-known|.*\\..*).*)"],
 };

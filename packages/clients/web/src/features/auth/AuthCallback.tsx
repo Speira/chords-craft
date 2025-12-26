@@ -4,7 +4,9 @@ import { useEffect } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 
+import K from "~/constants";
 import { oauth } from "~/lib/aws-cognito";
+import { Logger } from "~/lib/logger";
 
 import * as authStorage from "./storage";
 
@@ -14,9 +16,23 @@ export default function AuthCallback() {
 
   useEffect(() => {
     const code = searchParams.get("code");
+    const error = searchParams.get("error");
+    const errorDescription = searchParams.get("error_description");
+
+    Logger.error("AuthCallback");
+    if (error === "access_denied") {
+      router.push(`${K.PATHS.LOGIN}?error=cancelled`);
+      return;
+    }
+
+    if (error) {
+      Logger.error("OAuth error:", error, errorDescription);
+      router.push(`${K.PATHS.LOGIN}?error=${error}`);
+      return;
+    }
 
     if (!code) {
-      router.push("/login?error=no_code");
+      router.push(`${K.PATHS.LOGIN}?error=no_code`);
       return;
     }
 
@@ -27,8 +43,8 @@ export default function AuthCallback() {
         router.push("/");
       })
       .catch((error) => {
-        console.error("OAuth callback error:", error);
-        router.push("/login?error=oauth_failed");
+        Logger.error("Token exchange error:", error);
+        router.push(`${K.PATHS.LOGIN}?error=oauth_failed`);
       });
   }, [searchParams, router]);
 

@@ -1,27 +1,30 @@
 "use client";
 import { type PropsWithChildren } from "react";
 
-import { LinkButton, Skeleton } from "~/components";
-import K from "~/constants";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
 
-import { useAuth } from "./AuthProvider";
+import { Button } from "~/components";
 
 const AuthNavDiv = ({ children }: PropsWithChildren) => <div>{children}</div>;
 
 export function AuthHeaderNav() {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) {
-    return (
-      <AuthNavDiv>
-        <Skeleton className="w-12" />
-      </AuthNavDiv>
-    );
-  }
-
-  if (isAuthenticated) {
-    return <LinkButton href={K.PATHS.LOGOUT} label="auth.logout" />;
-  }
-
-  return <LinkButton href={K.PATHS.LOGIN} label="auth.login" />;
+  return (
+    <AuthNavDiv>
+      <SignedOut>
+        <SignInButton />
+        <SignUpButton>
+          <Button label="auth.signOut" />
+        </SignUpButton>
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+    </AuthNavDiv>
+  );
 }
