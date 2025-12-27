@@ -1,0 +1,31 @@
+{
+  "name": "@speira/chordschart-api-clerk",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "Speira",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.js",
+      "require": "./build/index.js"
+    }
+  },
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "check": "tsc -b tsconfig.json --noEmit",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.159",
+    "vitest": "^4.0.16"
+  },
+  "packageManager": "pnpm@10.14.0",
+  "dependencies": {
+    "@clerk/backend": "^2.29.0",
+    "effect": "^3.19.12"
+  }
+}
