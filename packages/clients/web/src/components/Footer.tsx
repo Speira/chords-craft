@@ -64,6 +64,7 @@ export async function Footer() {
                 <img
                   height="32"
                   width="32"
+                  alt="Facebook"
                   src="https://unpkg.com/simple-icons/icons/facebook.svg"
                 />
               </Link>
@@ -75,6 +76,7 @@ export async function Footer() {
                 <img
                   height="32"
                   width="32"
+                  alt="Instagram"
                   src="https://unpkg.com/simple-icons/icons/instagram.svg"
                 />
               </Link>
@@ -86,6 +88,7 @@ export async function Footer() {
                 <img
                   height="32"
                   width="32"
+                  alt="X"
                   src="https://unpkg.com/simple-icons/icons/x.svg"
                 />
               </Link>
@@ -97,6 +100,7 @@ export async function Footer() {
                 <img
                   height="32"
                   width="32"
+                  alt="Snapchat"
                   src="https://unpkg.com/simple-icons/icons/snapchat.svg"
                 />
               </Link>

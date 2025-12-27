@@ -1,0 +1,30 @@
+.n {
+  display: inline-flex;
+  opacity: 0.25;
+  animation: pop 900ms infinite ease-in-out;
+}
+.n2 {
+  animation-delay: 150ms;
+}
+.n3 {
+  animation-delay: 300ms;
+}
+
+@keyframes pop {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .n {
+    animation: none;
+    opacity: 0.7;
+  }
+}

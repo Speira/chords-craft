@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 import { Moon, Sun } from "lucide-react";
 
+import * as ShadCn from "~/lib/shadcn";
+
 import { Switch } from "../ui/switch";
 
 export function ThemeSwitcher() {
@@ -14,10 +16,10 @@ export function ThemeSwitcher() {
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
     if (storedTheme === "dark" || (!storedTheme && prefersDark)) {
-      document.documentElement.classList.add("dark");
+      ShadCn.toDarkMode();
       setIsDarkMode(true);
     } else {
-      document.documentElement.classList.remove("dark");
+      ShadCn.toLightMode();
       setIsDarkMode(false);
     }
   }, []);
@@ -25,7 +27,8 @@ export function ThemeSwitcher() {
   const toggleTheme = () => {
     const newTheme = isDarkMode ? "light" : "dark";
     setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle("dark", !isDarkMode);
+
+    ShadCn.toggleMode(!isDarkMode);
     localStorage.setItem("theme", newTheme);
   };
 

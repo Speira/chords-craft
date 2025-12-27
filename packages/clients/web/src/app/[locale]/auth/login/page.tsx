@@ -1,10 +1,13 @@
 import { Main } from "~/components";
 import { LoginPage } from "~/features/auth";
 
-export default function Login() {
+type IPage = PageProps<"/[locale]/auth/login">;
+
+export default async function Login(props: IPage) {
+  const { locale } = await props.params;
   return (
     <Main>
-      <LoginPage />
+      <LoginPage locale={locale} />
     </Main>
   );
 }

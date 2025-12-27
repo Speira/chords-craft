@@ -20,6 +20,7 @@ export default {
     LOGOUT: "/auth/logout",
     PRIVACY: "/privacy",
     PROFILE: "/auth/profile",
+    SIGNUP: "/auth/sign-up",
     SUPPORT: "/supports",
     TERMS: "/terms",
   },

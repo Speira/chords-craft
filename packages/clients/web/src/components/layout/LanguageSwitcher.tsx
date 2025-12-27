@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 import { Globe } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components";
-import { localeLabels, usePathname, useRouter } from "~/lib/next-intl";
+import { defaultLocale, localeLabels, usePathname, useRouter } from "~/lib/next-intl";
 
 export const LanguageSwitcher = () => {
   const router = useRouter();
@@ -20,9 +20,20 @@ export const LanguageSwitcher = () => {
   const params = useParams();
   const [isPending, startTransition] = useTransition();
 
-  const currentLocale = params.locale as string;
+  const paramLocale = (params?.locale as string | undefined) ?? undefined;
+
+  const [currentLocale, setCurrentLocale] = useState<string>(
+    paramLocale ?? defaultLocale,
+  );
+
+  useEffect(() => {
+    if (paramLocale && paramLocale !== currentLocale) {
+      setCurrentLocale(paramLocale);
+    }
+  }, [paramLocale, currentLocale]);
 
   const handleLocaleChange = (newLocale: string) => {
+    setCurrentLocale(newLocale);
     startTransition(() => {
       router.replace(pathname, { locale: newLocale });
     });
@@ -34,6 +45,7 @@ export const LanguageSwitcher = () => {
         <Globe className="mr-2 h-4 w-4" />
         <SelectValue placeholder="Language" />
       </SelectTrigger>
+
       <SelectContent>
         {Object.entries(localeLabels).map(([locale, label]) => (
           <SelectItem key={locale} value={locale}>

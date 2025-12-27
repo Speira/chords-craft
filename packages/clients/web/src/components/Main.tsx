@@ -7,7 +7,7 @@ export function Main({ children, className }: PropsWithChildren<{ className?: st
   return (
     <main
       className={cn(
-        "flex grow flex-col items-center justify-start gap-2 p-8 pb-20 font-sans sm:p-15",
+        "flex grow flex-col items-center justify-start gap-2 p-8 pb-20 font-sans sm:p-15 max-w-full",
         className,
       )}>
       {children}

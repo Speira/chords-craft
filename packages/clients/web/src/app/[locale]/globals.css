@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "@clerk/themes/shadcn.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -122,6 +123,9 @@
   }
   body {
     @apply flex flex-col bg-background text-foreground min-h-dvh max-w-dvw;
+  }
+  body * {
+    @apply box-border;
   }
 }
 

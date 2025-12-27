@@ -4,3 +4,7 @@ packages:
   - packages/deployment
   - packages/api/*
   - packages/clients/*
+
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver

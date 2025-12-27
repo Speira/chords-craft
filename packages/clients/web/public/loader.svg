@@ -1,0 +1,44 @@
+<svg width="120" height="32" viewBox="0 0 120 32" role="img" aria-label="Loading">
+  <g fill="currentColor">
+    <!-- Note 1 -->
+    <g transform="translate(12,18)">
+      <circle r="5" />
+      <rect x="4" y="-16" width="3" height="16" rx="1.5" />
+      <path d="M7 -16 C 16 -18, 18 -12, 7 -10 Z" />
+      <animateTransform
+        attributeName="transform"
+        type="translate"
+        values="12 18; 12 10; 12 18"
+        dur="0.9s"
+        repeatCount="indefinite" />
+    </g>
+
+    <!-- Note 2 -->
+    <g transform="translate(52,18)">
+      <circle r="5" />
+      <rect x="4" y="-16" width="3" height="16" rx="1.5" />
+      <path d="M7 -16 C 16 -18, 18 -12, 7 -10 Z" />
+      <animateTransform
+        attributeName="transform"
+        type="translate"
+        values="52 18; 52 10; 52 18"
+        dur="0.9s"
+        begin="0.15s"
+        repeatCount="indefinite" />
+    </g>
+
+    <!-- Note 3 -->
+    <g transform="translate(92,18)">
+      <circle r="5" />
+      <rect x="4" y="-16" width="3" height="16" rx="1.5" />
+      <path d="M7 -16 C 16 -18, 18 -12, 7 -10 Z" />
+      <animateTransform
+        attributeName="transform"
+        type="translate"
+        values="92 18; 92 10; 92 18"
+        dur="0.9s"
+        begin="0.3s"
+        repeatCount="indefinite" />
+    </g>
+  </g>
+</svg>

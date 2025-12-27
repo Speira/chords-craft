@@ -1,4 +1,3 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Prosto_One } from "next/font/google";
 
@@ -8,15 +7,9 @@ import { I18nProvider } from "~/lib/next-intl";
 
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 const prostoOne = Prosto_One({
   variable: "--font-prosto-one",
@@ -28,13 +21,14 @@ export const metadata: Metadata = {
   title: "Chords Craft",
   description: "Create and share musical chord charts",
   manifest: "/manifest.webmanifest",
-  themeColor: "#556e84",
   icons: {
     icon: "/favicon/favicon.ico",
     apple: "/favicon/favicon-apple-180x180.png",
   },
 };
-
+export const viewport = {
+  themeColor: "#556e84", // ✅ correct
+};
 export default async function RootLayout({
   children,
   params,
@@ -45,19 +39,17 @@ export default async function RootLayout({
   const { locale } = await params;
 
   return (
-    <ClerkProvider>
+    <AuthProvider locale={locale}>
       <html lang={locale}>
         <body
           className={`${geistSans.variable} ${geistMono.variable} ${prostoOne.variable} antialiased`}>
-          <AuthProvider>
-            <I18nProvider locale={locale}>
-              <Header endNode={<AuthHeaderNav />} />
-              {children}
-              <Footer />
-            </I18nProvider>
-          </AuthProvider>
+          <I18nProvider locale={locale}>
+            <Header endNode={<AuthHeaderNav />} />
+            {children}
+            <Footer />
+          </I18nProvider>
         </body>
       </html>
-    </ClerkProvider>
+    </AuthProvider>
   );
 }
