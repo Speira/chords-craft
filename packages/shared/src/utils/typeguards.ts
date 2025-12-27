@@ -13,6 +13,9 @@ import type { Primitive } from "./types";
  *   ``````ts
  *   Typeguards.checkIsNumber(1); // true
  *   ``````ts
+ *   Typeguards.checkIsObject({ key: 1 }); // true
+ *   ``````ts
+ *   ``````ts
  *   Typeguards.checkIsPlainObject({ key: 1 }); // true
  *   ``````ts
  *   Typeguards.checkIsPrimitive('string'); // true
@@ -49,6 +52,10 @@ export class Typeguards {
 
   static checkIsNumber(arg: unknown): arg is number {
     return typeof arg === "number" && !Number.isNaN(arg);
+  }
+
+  static checkIsObject(arg: unknown): arg is Record<PropertyKey, unknown> {
+    return typeof arg === "object" && arg !== null && !Array.isArray(arg);
   }
 
   static checkIsPlainObject(arg: unknown): arg is Record<PropertyKey, unknown> {
