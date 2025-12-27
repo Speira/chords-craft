@@ -1,6 +1,5 @@
 import * as cdk from "aws-cdk-lib";
 import * as appsync from "aws-cdk-lib/aws-appsync";
-import type * as cognito from "aws-cdk-lib/aws-cognito";
 import type * as lambda from "aws-cdk-lib/aws-lambda";
 import * as logs from "aws-cdk-lib/aws-logs";
 import { Construct } from "constructs";
@@ -8,7 +7,7 @@ import path from "path";
 
 export interface AppSyncApiProps {
   readonly chartFunction: lambda.IFunction;
-  readonly userPool?: cognito.IUserPool;
+  readonly authorizerFunction: lambda.IFunction;
 }
 
 export class AppSynConstruct extends Construct {
@@ -20,31 +19,15 @@ export class AppSynConstruct extends Construct {
     // File Automatically generated on build/synth command
     const schemaFilePath = path.join(__dirname, "../graphql/merged-schema.graphql");
 
-    // AppSync GraphQL API with Cognito authentication
-    const authConfig: appsync.AuthorizationConfig = props.userPool
-      ? {
-          defaultAuthorization: {
-            authorizationType: appsync.AuthorizationType.USER_POOL,
-            userPoolConfig: {
-              userPool: props.userPool,
-            },
-          },
-          // Secondary auth: API Key (for testing/development)
-          additionalAuthorizationModes: [
-            {
-              authorizationType: appsync.AuthorizationType.API_KEY,
-              apiKeyConfig: {
-                expires: cdk.Expiration.after(cdk.Duration.days(365)),
-              },
-            },
-          ],
-        }
-      : {
-          // Fallback to API Key only if no user pool
-          defaultAuthorization: {
-            authorizationType: appsync.AuthorizationType.API_KEY,
-          },
-        };
+    const authConfig: appsync.AuthorizationConfig = {
+      defaultAuthorization: {
+        authorizationType: appsync.AuthorizationType.LAMBDA,
+        lambdaAuthorizerConfig: {
+          handler: props.authorizerFunction,
+          resultsCacheTtl: cdk.Duration.minutes(5),
+        },
+      },
+    };
 
     this.graphqlApi = new appsync.GraphqlApi(this, "ChordsChart", {
       name: "ChordsChart GraphQL API",

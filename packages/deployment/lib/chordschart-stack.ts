@@ -3,7 +3,7 @@ import { type Construct } from "constructs";
 
 import {
   AppSynConstruct,
-  CognitoConstruct,
+  ClerkAuthorizerConstruct,
   DatabaseConstruct,
   LambdasConstruct,
   MonitoringConstruct,
@@ -38,22 +38,6 @@ export class ChordsChartStack extends cdk.Stack {
       removalPolicy,
       autoDeleteObjects: !IS_PRODUCTION,
     });
-    const cognito = new CognitoConstruct(this, "Cognito", {
-      stackName: this.stackName,
-      callbackUrls: [
-        "http://localhost:3000/auth/callback",
-        "http://localhost:5173/auth/callback",
-        // Add production URLs here when deploying
-      ],
-      logoutUrls: [
-        "http://localhost:3000",
-        "http://localhost:5173",
-        // Add production URLs here when deploying
-      ],
-      googleClientId: process.env.GOOGLE_CLIENT_ID,
-      googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      isProduction: IS_PRODUCTION,
-    });
     new SecurityConstruct(this, "Security");
 
     const lambdas = new LambdasConstruct(this, "Lambdas", {
@@ -69,9 +53,11 @@ export class ChordsChartStack extends cdk.Stack {
       chartFunction: lambdas.chartFunction,
     });
 
+    const clerkAuth = new ClerkAuthorizerConstruct(this, "ClerkAuth");
+
     const appSyncApi = new AppSynConstruct(this, "AppSync", {
       chartFunction: lambdas.chartFunction,
-      userPool: cognito.userPool,
+      authorizerFunction: clerkAuth.authorizerFunction,
     });
 
     new cdk.CfnOutput(this, "GraphQLApiUrl", {
