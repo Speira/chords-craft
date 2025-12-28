@@ -24,10 +24,24 @@ export class Chord extends Schema.Class<Chord>("Chord")({
   modifiers: Schema.optional(Schema.Array(Modifier.schema)),
   additions: Schema.optional(Schema.Array(Addition.schema)),
 }) {
+  /**
+   * Create a Chord
+   *
+   * ```ts
+   * Chord.create({ root, quality, extension }); // modifiers and additions not yet available
+   * ```
+   */
   static create(chordInput: ChordImput): Chord {
     return new Chord(chordInput);
   }
 
+  /**
+   * Parse a Chord
+   *
+   * ```ts
+   * Chord.parse("Cm7b5"); // modifiers and additions not yet available
+   * ```
+   */
   static parse(strChord: string): Effect.Effect<Chord, ParseResult.ParseError> {
     return Effect.gen(function* () {
       const [note, afterNote] = yield* Note.build(strChord);

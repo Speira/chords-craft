@@ -40,6 +40,7 @@ export const ALL: Array<Note> = [AFlat, A, ASharp, BFlat, B, C, CSharp, DFlat, D
 export const schema = Schema.Literal(...ALL);
 export const checkNote = (a: string): a is Note => ALL.some((v) => a === v);
 
+/** Is used to build a Note inside the build function */
 export const parse = (a: string): Effect.Effect<Note, ParseResult.ParseError> => {
   const str = sanitize(a);
   if (checkNote(str)) return Effect.succeed(str);
@@ -53,6 +54,10 @@ export const parse = (a: string): Effect.Effect<Note, ParseResult.ParseError> =>
   );
 };
 
+/**
+ * Try to build a Note from a string chart, this process is a part of a Chart Parse
+ * function
+ */
 export const build = (
   str: string,
 ): Effect.Effect<[Note, string], ParseResult.ParseError> => {
