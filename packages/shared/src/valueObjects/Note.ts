@@ -1,3 +1,5 @@
+// Note Management (Only notes A,A#,Bb,...)
+
 import { type Brand, Effect, type ParseResult, Schema } from "effect";
 import { ParseError, Unexpected } from "effect/ParseResult";
 
