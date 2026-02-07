@@ -4,7 +4,7 @@ export type ChartError =
   | ChartNotFound
   | ChartReadError
   | ChartValidationError
-  | InvalidSection
+  | InvalidStructure
   | InvalidRoot
   | ChartWriteError
   | InvalidPlan
@@ -19,8 +19,8 @@ export class ChartNotFound extends Schema.TaggedError<ChartNotFound>()("ChartNot
   id: Schema.Number,
 }) {}
 
-export class InvalidSection extends Schema.TaggedError<InvalidSection>()(
-  "InvalidSection",
+export class InvalidStructure extends Schema.TaggedError<InvalidStructure>()(
+  "InvalidStructure",
   { id: Schema.Number },
 ) {}
 

@@ -1,23 +1,23 @@
 import { Data, Effect, Schema } from "effect";
 
 import {
-  Chord,
   Note,
+  ObjectUtils,
   Section,
+  Structure,
   TenantID,
-  type TenantIDType,
 } from "@speira/chordschart-shared";
 
-import { ChartID, type ChartIDType } from "./valueObjects/ChartID";
-import { type ChartError, ChartParseError } from "./ChartErrors";
+import { type ChartError, ChartParseError } from "./errors";
+import { ChartID } from "./valueObjects";
 
 const ChartRecordSchema = Schema.Struct({
-  id: ChartID,
-  tenantId: TenantID,
+  id: ChartID.schema,
+  tenantId: TenantID.schema,
   root: Note.schema,
   author: Schema.String,
   title: Schema.String,
-  sections: Schema.Record({ key: Section.schema, value: Schema.Array(Chord) }),
+  structure: Structure.schema,
   plan: Schema.Array(Section.schema),
   links: Schema.Array(Schema.String),
   tags: Schema.Array(Schema.String),
@@ -26,13 +26,15 @@ const ChartRecordSchema = Schema.Struct({
   updatedAt: Schema.String,
 });
 
+export type ChartRecord = Omit<typeof ChartRecordSchema.Type, "id">;
+
 export class Chart extends Data.Class<{
-  readonly id: ChartIDType;
-  readonly tenantId: TenantIDType;
+  readonly id: ChartID.ChartID;
+  readonly tenantId: TenantID.TenantID;
   readonly root: Note.Note;
   readonly author: string;
   readonly title: string;
-  readonly sections: Partial<Record<Section.Section, ReadonlyArray<Chord>>>;
+  readonly structure: Structure.Structure;
   readonly plan: ReadonlyArray<Section.Section>;
   readonly links: ReadonlyArray<string>;
   readonly tags: ReadonlyArray<string>;
@@ -40,7 +42,7 @@ export class Chart extends Data.Class<{
   readonly createdAt: Date;
   readonly updatedAt: Date;
 }> {
-  static fromRecord(record: Record<string, unknown>): Effect.Effect<Chart, ChartError> {
+  static parse(record: Record<string, unknown>): Effect.Effect<Chart, ChartError> {
     return Effect.gen(function* () {
       const decoded = yield* Schema.decodeUnknown(ChartRecordSchema)(record).pipe(
         Effect.mapError((reason) => new ChartParseError({ reason })),
@@ -53,55 +55,29 @@ export class Chart extends Data.Class<{
     });
   }
 
-  static toRecord(chart: Chart): Partial<
-    Omit<Chart, "id" | "createdAt" | "updatedAt">
-  > & {
-    createdAt: string;
-    updatedAt: string;
-  } {
+  static toRecord(chart: Chart): ChartRecord {
     return {
-      root: chart.root,
-      title: chart.title,
-      author: chart.author,
-      plan: chart.plan,
-      sections: chart.sections,
-      links: chart.links,
-      tags: chart.tags,
-      isActive: chart.isActive,
-      tenantId: chart.tenantId,
+      ...ObjectUtils.pick<Chart>(chart, [
+        "author",
+        "isActive",
+        "links",
+        "plan",
+        "root",
+        "structure",
+        "tags",
+        "tenantId",
+        "title",
+      ]),
       createdAt: chart.createdAt.toISOString(),
       updatedAt: chart.updatedAt.toISOString(),
     };
   }
 
-  updateTitle(title: string, occurredAt: Date): Chart {
-    return new Chart({ ...this, title, updatedAt: occurredAt });
-  }
-
-  updateAuthor(author: string, occurredAt: Date): Chart {
-    return new Chart({ ...this, author, updatedAt: occurredAt });
-  }
-
-  updatePlan(plan: ReadonlyArray<Section.Section>, occurredAt: Date): Chart {
-    return new Chart({ ...this, plan, updatedAt: occurredAt });
-  }
-
-  updateSections(
-    sections: Record<Section.Section, ReadonlyArray<Chord>>,
-    occurredAt: Date,
-  ): Chart {
-    return new Chart({ ...this, sections, updatedAt: occurredAt });
-  }
-
-  updateTags(tags: ReadonlyArray<string>, occurredAt: Date): Chart {
-    return new Chart({ ...this, tags, updatedAt: occurredAt });
-  }
-
-  updateLinks(links: ReadonlyArray<string>, occurredAt: Date): Chart {
-    return new Chart({ ...this, links, updatedAt: occurredAt });
-  }
-
-  archiveChart(occurredAt: Date): Chart {
-    return new Chart({ ...this, isActive: false, updatedAt: occurredAt });
+  static update(chart: Chart, update: Partial<Chart>): Chart {
+    return new Chart({
+      ...chart,
+      ...update,
+      updatedAt: update.updatedAt ?? new Date(),
+    });
   }
 }

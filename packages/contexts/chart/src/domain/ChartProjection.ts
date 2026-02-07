@@ -1,12 +1,12 @@
 import { Context, type Effect } from "effect";
 
-import type { ChartIDType } from "./valueObjects/ChartID";
 import type { Chart } from "./Chart";
-import type { ChartError } from "./ChartErrors";
+import type { ChartError } from "./errors";
+import { type ChartID } from "./valueObjects";
 
 export interface ChartProjection {
   readonly findById: (
-    id: ChartIDType,
+    id: ChartID.ChartID,
     tenantId: string,
   ) => Effect.Effect<Chart, ChartError>;
 

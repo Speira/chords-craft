@@ -12,7 +12,7 @@ import {
 import {
   Chart,
   type ChartError,
-  type ChartIDType,
+  type ChartID,
   type ChartProjection,
   ChartReadError,
   ChartWriteError,
@@ -28,7 +28,7 @@ export class DynamoDBChartProjection implements ChartProjection {
     this.client = DynamoDBDocument.from(client);
   }
 
-  findById(id: ChartIDType, tenantId: string): Effect.Effect<Chart, ChartError> {
+  findById(id: ChartID.ChartID, tenantId: string): Effect.Effect<Chart, ChartError> {
     return Effect.tryPromise({
       try: () =>
         this.client.send(
@@ -43,9 +43,8 @@ export class DynamoDBChartProjection implements ChartProjection {
       catch: (error) => new ChartReadError({ reason: error }),
     }).pipe(
       Effect.flatMap((result) => {
-        if (!result.Item) {
+        if (!result.Item)
           return new ChartReadError({ reason: "Chart not found (findById)" });
-        }
         return Chart.fromRecord(result.Item);
       }),
     );

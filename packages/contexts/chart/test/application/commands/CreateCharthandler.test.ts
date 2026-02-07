@@ -2,14 +2,14 @@ import { Effect, Layer, pipe } from "effect";
 
 import { describe, expect, it, vi } from "vitest";
 
-import { Chord, Note, Section, TenantID } from "@speira/chordschart-shared";
+import { Note, TenantID } from "@speira/chordschart-shared";
 
-import { CreateChartCommand } from "../../../src/application/commands/CreateChart/CreateChartCommand";
-import { CreateChartHandler } from "../../../src/application/commands/CreateChart/CreateChartHandler";
+import {
+  CreateChartCommand,
+  CreateChartHandler,
+} from "../../../src/application/commands/CreateChart";
+import { type ChartError, ChartProjection, ChartRepository } from "../../../src/domain";
 import { type Chart } from "../../../src/domain/Chart";
-import { type ChartError } from "../../../src/domain/ChartErrors";
-import { ChartProjection } from "../../../src/domain/ChartProjection";
-import { ChartRepository } from "../../../src/domain/ChartRepository";
 
 describe("CreateChartHandler", () => {
   it("should create chart and save to repository and projection", async () => {
@@ -31,12 +31,16 @@ describe("CreateChartHandler", () => {
     );
 
     const command = {
-      root: Note.C,
+      root: "C",
       tenantId: TenantID.make("tenant-1"),
       title: "Test Chart",
       author: "John Doe",
-      sections: { [Section.Verse]: [new Chord({ root: Note.C })] as const },
-      plan: [Section.Verse] as const,
+      sectionRecord: {
+        Verse: {
+          default: ["C", "Am7", "F", "G"],
+        },
+      },
+      plan: ["Verse"],
       links: [],
       tags: [],
     };

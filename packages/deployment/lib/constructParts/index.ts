@@ -1,5 +1,5 @@
 export * from "./AppSync.construct";
-export * from "./ClerkAuthorizer.construct";
+export * from "./Authorizer.construct";
 export * from "./Database.construct";
 export * from "./Lambdas.construct";
 export * from "./Monitoring.construct";

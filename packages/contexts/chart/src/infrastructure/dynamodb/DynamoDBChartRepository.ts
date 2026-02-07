@@ -1,4 +1,4 @@
-import { Effect, Schema } from "effect";
+import { Effect } from "effect";
 
 import { type DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
@@ -9,19 +9,15 @@ import {
   TransactWriteCommand,
 } from "@aws-sdk/lib-dynamodb";
 
-import { Typeguards } from "@speira/chordschart-shared";
-
 import {
-  ChartArchived,
-  ChartCreated,
   type ChartError,
   type ChartEvent,
-  type ChartIDType,
-  ChartParseError,
+  type ChartID,
   ChartReadError,
   type ChartRepository,
-  ChartUpdated,
   ChartWriteError,
+  deserializeEvent,
+  serializeEvent,
 } from "~/domain";
 
 export class DynamoDBChartRepository implements ChartRepository {
@@ -34,7 +30,10 @@ export class DynamoDBChartRepository implements ChartRepository {
     this.client = DynamoDBDocument.from(client);
   }
 
-  save(id: ChartIDType, events: Array<ChartEvent>): Effect.Effect<void, ChartWriteError> {
+  save(
+    id: ChartID.ChartID,
+    events: Array<ChartEvent>,
+  ): Effect.Effect<void, ChartWriteError> {
     return Effect.tryPromise({
       try: async () => {
         const items: Array<{ PUT: PutCommandInput }> = events.map((evt) => ({
@@ -47,7 +46,7 @@ export class DynamoDBChartRepository implements ChartRepository {
               aggregateId: evt.aggregateId,
               occuredAdt: evt.occuredAt,
               createdAd: new Date().toISOString(),
-              data: this.serializeEvent(evt),
+              data: serializeEvent(evt),
             },
           },
         }));
@@ -61,7 +60,7 @@ export class DynamoDBChartRepository implements ChartRepository {
     });
   }
 
-  load(id: ChartIDType): Effect.Effect<Array<ChartEvent>, ChartError> {
+  load(id: ChartID.ChartID): Effect.Effect<Array<ChartEvent>, ChartError> {
     return Effect.tryPromise({
       try: () =>
         this.client.send(
@@ -81,77 +80,8 @@ export class DynamoDBChartRepository implements ChartRepository {
         if (!items) {
           throw new ChartReadError({ reason: "Not event found" });
         }
-        return Effect.all(items.map((item) => this.deserializeEvent(item)));
+        return Effect.all(items.map((item) => deserializeEvent(item)));
       }),
     );
-  }
-
-  private deserializeEvent(
-    item: Record<string, unknown>,
-  ): Effect.Effect<ChartEvent, ChartParseError> {
-    return Effect.gen(function* () {
-      const eventType = item.eventType as string;
-      const baseData = {
-        aggregateId: item.aggregateId,
-        version: item.version,
-        occuredAt:
-          typeof item.occuredAt === "string" ? new Date(item.occuredAt) : new Date(),
-      };
-      if (!Typeguards.checkIsPlainObject(item.data)) {
-        return yield* Effect.fail(
-          new ChartParseError({ reason: "item data could not parse" }),
-        );
-      }
-      switch (eventType) {
-        case "ChartCreated":
-          return yield* Schema.decodeUnknown(ChartCreated)({
-            ...baseData,
-            ...item.data,
-          }).pipe(Effect.mapError((error) => new ChartParseError({ reason: error })));
-        case "ChartUpdated":
-          return yield* Schema.decodeUnknown(ChartUpdated)({
-            ...baseData,
-            ...item.data,
-          }).pipe(Effect.mapError((error) => new ChartParseError({ reason: error })));
-
-        case "ChartArchived":
-          return yield* Schema.decodeUnknown(ChartArchived)(baseData).pipe(
-            Effect.mapError((error) => new ChartParseError({ reason: error })),
-          );
-
-        default:
-          return yield* Effect.fail(
-            new ChartParseError({ reason: `Unknown event type: ${eventType}` }),
-          );
-      }
-    });
-  }
-
-  private serializeEvent(event: ChartEvent): Record<string, unknown> {
-    switch (event._tag) {
-      case "ChartCreated":
-        return {
-          author: event.author,
-          isActive: event.isActive,
-          links: event.links,
-          plan: event.plan,
-          root: event.root,
-          sections: event.sections,
-          tags: event.tags,
-          title: event.title,
-        };
-      case "ChartUpdated":
-        return {
-          ...(event.author !== undefined && { author: event.author }),
-          ...(event.title !== undefined && { title: event.title }),
-          ...(event.root !== undefined && { root: event.root }),
-          ...(event.plan !== undefined && { plan: event.plan }),
-          ...(event.sections !== undefined && { sections: event.sections }),
-          ...(event.links !== undefined && { links: event.links }),
-          ...(event.tags !== undefined && { tags: event.tags }),
-        };
-      default:
-        return {};
-    }
   }
 }

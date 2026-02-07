@@ -6,6 +6,7 @@
     { "path": "packages/shared" },
     { "path": "packages/deployment" },
     { "path": "packages/api/chart-api" },
+    { "path": "packages/api/auth-api" },
     { "path": "packages/clients/web" }
   ]
 }

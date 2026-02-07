@@ -3,7 +3,6 @@ import { type Construct } from "constructs";
 
 import {
   AppSynConstruct,
-  ClerkAuthorizerConstruct,
   DatabaseConstruct,
   LambdasConstruct,
   MonitoringConstruct,
@@ -53,12 +52,12 @@ export class ChordsChartStack extends cdk.Stack {
       chartFunction: lambdas.chartFunction,
     });
 
-    const clerkAuth = new ClerkAuthorizerConstruct(this, "ClerkAuth");
-
     const appSyncApi = new AppSynConstruct(this, "AppSync", {
+      authorizerFunction: lambdas.authorizerFunction,
       chartFunction: lambdas.chartFunction,
-      authorizerFunction: clerkAuth.authorizerFunction,
     });
+
+    // Outputs:
 
     new cdk.CfnOutput(this, "GraphQLApiUrl", {
       value: appSyncApi.graphqlApi.graphqlUrl,

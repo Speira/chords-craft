@@ -17,7 +17,7 @@ export class CreateChartHandler {
     return Effect.gen(function* () {
       const events = yield* ChartAggregate.create({
         root: command.root,
-        sections: command.sections,
+        structure: command.structure,
         plan: command.plan,
         links: command.links,
         tenantId: command.tenantId,

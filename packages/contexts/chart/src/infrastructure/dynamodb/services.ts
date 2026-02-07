@@ -12,7 +12,7 @@ const DynamoDBClientTag = Context.GenericTag<DynamoDBClient>("DynamoDBClient");
 
 export const DynamoDBClientLive = Layer.succeed(
   DynamoDBClientTag,
-  new DynamoDBClient({ region: process.env.AWS_REGION || "eu-west-1" }),
+  new DynamoDBClient({ region: process.env.AWS_REGION || "eu-west-3" }),
 );
 
 export const ChartRepositoryLive = Layer.effect(

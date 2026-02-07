@@ -4,31 +4,36 @@ import { describe, expect, it } from "vitest";
 
 import { Chord, Note, Section, TenantID } from "@speira/chordschart-shared";
 
-import { ChartAggregate } from "../../src/domain/ChartAggregate";
-import { ChartValidationError } from "../../src/domain/ChartErrors";
-import { ChartArchived, ChartCreated } from "../../src/domain/ChartEvents";
-import { generateChartId } from "../../src/domain/valueObjects/ChartID";
+import {
+  ChartAggregate,
+  ChartArchived,
+  ChartCreated,
+  ChartID,
+  ChartValidationError,
+} from "../../src/domain";
 
 describe("ChartAggregate", () => {
-  const cChord = new Chord({ root: Note.C });
+  const cChord = Chord.create({ root: Note.C });
+  const command = {
+    root: Note.C,
+    tenantId: TenantID.schema.make("tenant-1"),
+    title: "My Chart",
+    author: "John Doe",
+    structure: { [Section.Verse]: { default: [cChord] as const } },
+    plan: [Section.Verse] as const,
+    links: [],
+    tags: [],
+  };
+
   describe("create", () => {
     it("should create ChartCreated event", async () => {
-      const command = {
-        root: Note.C,
-        tenantId: TenantID.make("tenant-1"),
-        title: "My Chart",
-        author: "John Doe",
-        sections: { [Section.Verse]: [cChord] as const },
-        plan: [Section.Verse] as const,
-        links: [],
-        tags: [],
-      };
-
       const events = await Effect.runPromise(ChartAggregate.create(command));
+
       expect(events[0]).toBeInstanceOf(ChartCreated);
       expect(events).toHaveLength(1);
       expect(events[0]._tag).toBe("ChartCreated");
       expect(events[0]).toBeInstanceOf(ChartCreated);
+
       if (events[0] instanceof ChartCreated) {
         expect(events[0].title).toBe("My Chart");
         expect(events[0].root).toBe(Note.C);
@@ -40,50 +45,26 @@ describe("ChartAggregate", () => {
 
   describe("archive", () => {
     it("should create ChartArchived event for active chart", async () => {
-      const tenantId = TenantID.make("tenant-1");
-
-      const createdEvents = await Effect.runPromise(
-        ChartAggregate.create({
-          root: Note.C,
-          tenantId,
-          title: "Test",
-          sections: { [Section.Verse]: [cChord] as const },
-          plan: [Section.Verse] as const,
-          links: [],
-          tags: [],
-        }),
-      );
-
+      const createdEvents = await Effect.runPromise(ChartAggregate.create(command));
       const chart = await Effect.runPromise(ChartAggregate.fromEvents(createdEvents));
-
       const archiveEvents = await Effect.runPromise(ChartAggregate.archive(chart));
 
       expect(archiveEvents).toHaveLength(1);
       expect(archiveEvents[0]).toBeInstanceOf(ChartArchived);
       expect(archiveEvents[0]._tag).toBe("ChartArchived");
     });
+
     it("should fail if chart already archived", async () => {
-      const createdEvents = await Effect.runPromise(
-        ChartAggregate.create({
-          root: Note.C,
-          tenantId: TenantID.make("tenant-1"),
-          title: "Test",
-          sections: { [Section.Verse]: [cChord] },
-          plan: [Section.Verse],
-          links: [],
-          tags: [],
-        }),
+      const createdEvents = await Effect.runPromise(ChartAggregate.create(command));
+      const chart = await Effect.runPromise(ChartAggregate.fromEvents(createdEvents));
+      const archivedEvent = chart.archiveChart(new Date());
+      const reArchived = await Effect.runPromiseExit(
+        ChartAggregate.archive(archivedEvent),
       );
 
-      const chart = await Effect.runPromise(ChartAggregate.fromEvents(createdEvents));
-
-      const archivedChart = chart.archiveChart(new Date());
-
-      const result = await Effect.runPromiseExit(ChartAggregate.archive(archivedChart));
-
-      expect(Exit.isFailure(result)).toBe(true);
-      if (Exit.isFailure(result)) {
-        const error = Cause.failureOption(result.cause);
+      expect(Exit.isFailure(reArchived)).toBe(true);
+      if (Exit.isFailure(reArchived)) {
+        const error = Cause.failureOption(reArchived.cause);
         expect(error._tag).toBe("Some");
         if (error._tag === "Some") {
           expect(error.value).toBeInstanceOf(ChartValidationError);
@@ -96,12 +77,9 @@ describe("ChartAggregate", () => {
     it("should rebuild chart from ChartCreated event", async () => {
       const events = await Effect.runPromise(
         ChartAggregate.create({
-          root: Note.C,
-          tenantId: TenantID.make("tenant-1"),
+          ...command,
           title: "My Chart",
           author: "John",
-          sections: { [Section.Verse]: [cChord] as const },
-          plan: [Section.Verse],
           links: ["http://example.com"],
           tags: ["jazz"],
         }),
@@ -113,11 +91,13 @@ describe("ChartAggregate", () => {
       expect(chart.root).toBe(Note.C);
       expect(chart.author).toBe("John");
       expect(chart.isActive).toBe(true);
+      expect(chart.links).toEqual(expect.arrayContaining(["http://example.com"]));
+      expect(chart.tags).toEqual(expect.arrayContaining(["jazz"]));
     });
 
     it("should fail if first event is not ChartCreated", async () => {
       const archiveEvent = new ChartArchived({
-        aggregateId: generateChartId(),
+        aggregateId: ChartID.generate(),
         tenantId: "tenant-1",
         occuredAt: new Date(),
         version: 1,
@@ -129,17 +109,7 @@ describe("ChartAggregate", () => {
     });
 
     it("should apply ChartArchived event", async () => {
-      const createEvents = await Effect.runPromise(
-        ChartAggregate.create({
-          root: Note.C,
-          tenantId: TenantID.make("tenant-1"),
-          title: "Test",
-          sections: { [Section.Verse]: [cChord] as const },
-          plan: [Section.Verse] as const,
-          links: [],
-          tags: [],
-        }),
-      );
+      const createEvents = await Effect.runPromise(ChartAggregate.create(command));
 
       const chart = await Effect.runPromise(ChartAggregate.fromEvents(createEvents));
 

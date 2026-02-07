@@ -2,8 +2,8 @@ import { Schema } from "effect";
 
 import { ulid } from "ulid";
 
-export const ChartID = Schema.String.pipe(Schema.brand("ChartID"));
-export type ChartIDType = typeof ChartID.Type;
+export const schema = Schema.String.pipe(Schema.brand("ChartID"));
+export type ChartID = typeof schema.Type;
 
-export const generateChartId = () => ulid() as ChartIDType;
-export const parse = (a: unknown) => Schema.decodeUnknown(ChartID)(a);
+export const generate = () => ulid() as ChartID;
+export const parse = (a: unknown) => Schema.decodeUnknown(schema)(a);

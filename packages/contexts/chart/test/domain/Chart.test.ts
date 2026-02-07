@@ -3,17 +3,17 @@ import { describe, expect, it } from "vitest";
 import { Note, Section, TenantID } from "@speira/chordschart-shared";
 
 import { Chart } from "../../src/domain/Chart";
-import { generateChartId } from "../../src/domain/valueObjects/ChartID";
+import { ChartID } from "../../src/domain/valueObjects";
 
 describe("Chart", () => {
   const createTestChart = () => {
     return new Chart({
-      id: generateChartId(),
-      tenantId: TenantID.make("tenant-1"),
+      id: ChartID.generate(),
+      tenantId: TenantID.schema.make("tenant-1"),
       root: Note.C,
       author: "John Doe",
       title: "Original Title",
-      sections: { [Section.Verse]: [] },
+      structure: { [Section.Verse]: { default: [] } },
       plan: [Section.Verse],
       links: ["https://example.com"],
       tags: ["jazz"],
@@ -63,19 +63,48 @@ describe("Chart", () => {
     });
   });
 
-  describe("updateSections", () => {
-    it("should update sections and updatedAt", () => {
+  describe("updateStructure", () => {
+    it("should update structure and updatedAt", () => {
       const chart = createTestChart();
-      const newSections = {
-        [Section.Intro]: [],
-        [Section.Verse]: [],
+      const newStructure = {
+        [Section.Intro]: {
+          default: [],
+        },
+        [Section.Verse]: {
+          default: [],
+        },
       };
       const newDate = new Date("2024-01-02");
 
-      const updated = chart.updateSections(newSections, newDate);
+      const updated = chart.updateStructure(newStructure, newDate);
 
-      expect(updated.sections).toEqual(newSections);
+      expect(updated.structure).toEqual(
+        expect.objectContaining({
+          [Section.Intro]: {
+            default: [],
+          },
+          [Section.Verse]: {
+            default: [],
+          },
+        }),
+      );
       expect(updated.updatedAt).toEqual(newDate);
+    });
+
+    it("should fail on update structure with wrong argument", () => {
+      const chart = createTestChart();
+      const wrongStructure = {
+        default: {
+          [Section.Intro]: [],
+          [Section.Verse]: [],
+        },
+      };
+      const newDate = new Date("2024-01-02");
+
+      const updated = chart.updateStructure(wrongStructure, newDate);
+      console.log(updated);
+      expect(updated.structure).not.toEqual(wrongStructure);
+      expect(updated.updatedAt).not.toEqual(newDate);
     });
   });
 

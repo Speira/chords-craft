@@ -25,10 +25,14 @@ const config: ViteUserConfig = {
     sequence: {
       concurrent: true,
     },
-    projects: [{ test: { name: "shared", root: "packages/shared" } }],
+    projects: [
+      { test: { name: "shared", root: "packages/shared" } },
+      { test: { name: "chart", root: "packages/contexts/chart" } },
+    ],
     include: ["test/**/*.test.ts"],
     alias: {
       ...alias("api/chart-api"),
+      ...alias("api/auth-api"),
       ...alias("contexts/chart"),
       ...alias("deployment"),
       ...alias("shared"),

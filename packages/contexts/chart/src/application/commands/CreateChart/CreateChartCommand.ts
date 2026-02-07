@@ -1,18 +1,15 @@
 import { Schema } from "effect";
 
-import { Chord, Note, Section, TenantID } from "@speira/chordschart-shared";
+import { Note, Section, Structure, TenantID } from "@speira/chordschart-shared";
 
 export class CreateChartCommand extends Schema.Class<CreateChartCommand>(
   "CreateChartCommand",
 )({
-  root: Note.schema,
-  tenantId: TenantID,
+  root: Note.transform,
+  tenantId: TenantID.schema,
   title: Schema.NonEmptyString.pipe(Schema.maxLength(255), Schema.minLength(2)),
   author: Schema.optional(Schema.NonEmptyString.pipe(Schema.maxLength(255))),
-  sections: Schema.Record({
-    key: Schema.String,
-    value: Schema.NonEmptyArray(Chord),
-  }),
+  structure: Structure.schema,
   plan: Schema.NonEmptyArray(Section.schema).pipe(Schema.maxItems(50)),
   links: Schema.Array(Schema.String.pipe(Schema.maxLength(255))).pipe(
     Schema.maxItems(12),

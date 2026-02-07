@@ -1,25 +1,29 @@
 import { Effect } from "effect";
 
 import {
-  type Chord,
   type Note,
   type Section,
+  type Structure,
   TenantID,
-  type TenantIDType,
 } from "@speira/chordschart-shared";
 
-import { generateChartId } from "./valueObjects/ChartID";
 import { Chart } from "./Chart";
-import { type ChartError, ChartValidationError } from "./ChartErrors";
-import { ChartArchived, ChartCreated, type ChartEvent } from "./ChartEvents";
+import { type ChartError, ChartValidationError } from "./errors";
+import {
+  ChartArchived,
+  ChartCreated,
+  type ChartEvent,
+  removeBaseEventFields,
+} from "./events";
+import { ChartID } from "./valueObjects";
 
 export class ChartAggregate {
   static create(data: {
     root: Note.Note;
-    tenantId: TenantIDType;
+    tenantId: TenantID.TenantID;
     title: string;
     author?: string;
-    sections: Record<string, ReadonlyArray<Chord>>;
+    structure: Structure.Structure;
     plan: ReadonlyArray<Section.Section>;
     links: ReadonlyArray<string>;
     tags: ReadonlyArray<string>;
@@ -29,7 +33,7 @@ export class ChartAggregate {
         ...data,
         isActive: true,
         author: data.author ?? "",
-        aggregateId: generateChartId(),
+        aggregateId: ChartID.generate(),
         occuredAt: new Date(),
         version: 1,
       }),
@@ -63,7 +67,7 @@ export class ChartAggregate {
     }
     const chart = new Chart({
       ...firstEvent,
-      tenantId: TenantID.make(firstEvent.tenantId),
+      tenantId: TenantID.schema.make(firstEvent.tenantId),
       id: firstEvent.aggregateId,
       createdAt: firstEvent.occuredAt,
       updatedAt: firstEvent.occuredAt,
@@ -72,23 +76,14 @@ export class ChartAggregate {
     const aggregatedChart = restEvents.reduce((acc, cur) => {
       switch (cur._tag) {
         case "ChartUpdated": {
-          let updated = acc;
-          if (cur.title !== undefined)
-            updated = updated.updateTitle(cur.title, cur.occuredAt);
-          if (cur.author !== undefined)
-            updated = updated.updateAuthor(cur.author, cur.occuredAt);
-          if (cur.plan !== undefined)
-            updated = updated.updatePlan(cur.plan, cur.occuredAt);
-          if (cur.sections !== undefined)
-            updated = updated.updateSections(cur.sections, cur.occuredAt);
-          if (cur.tags !== undefined)
-            updated = updated.updateTags(cur.tags, cur.occuredAt);
-          if (cur.links !== undefined)
-            updated = updated.updateLinks(cur.links, cur.occuredAt);
+          const updated = Chart.update(acc, {
+            ...removeBaseEventFields(cur),
+            updatedAt: cur.occuredAt,
+          });
           return updated;
         }
         case "ChartArchived":
-          return acc.archiveChart(cur.occuredAt);
+          return Chart.update(acc, { isActive: false, updatedAt: cur.occuredAt });
         default:
           return acc;
       }

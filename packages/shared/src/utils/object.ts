@@ -29,7 +29,7 @@ import type { DeepPartial, PlainObject } from "./types";
  *   const merged = ObjectUtils.mergeDeepPartial(a, b);
  *   // merged: { foo: { bar: 3, baz: 2 }, arr: [3] }
  */
-export default class ObjectUtils {
+export class ObjectUtils {
   /**
    * Converts the keys of an object to a string.
    *
@@ -60,6 +60,7 @@ export default class ObjectUtils {
    *
    * @example
    *   ObjectUtils.displayValue({ a: 1, b: 2 }, "a"); // 1
+   *   ObjectUtils.displayValue({ nested: { a: 1, b: 2 } }, "nested"); // "a:1; b:2"
    */
   static displayValue(
     item: object,
@@ -74,8 +75,58 @@ export default class ObjectUtils {
       if (typeof value === "boolean") {
         return value ? booleanAsValue[0] : booleanAsValue[1];
       }
+      if (Array.isArray(value)) {
+        return ObjectUtils.formatArray(value);
+      }
+      if (typeof value === "object" && value !== null) {
+        return ObjectUtils.flattenObject(value);
+      }
     }
     return "";
+  }
+
+  /**
+   * Formats an array into a string representation.
+   *
+   * @example
+   *   ObjectUtils.formatArray([1, 2, { a: 1 }]); // "[1, 2, {a:1}]"
+   */
+  private static formatArray(arr: Array<unknown>): string {
+    const formattedItems = arr.map((item) => {
+      if (Array.isArray(item)) {
+        return ObjectUtils.formatArray(item);
+      }
+      if (typeof item === "object" && item !== null) {
+        return `{${ObjectUtils.flattenObject(item)}}`;
+      }
+      return String(item);
+    });
+
+    return `[${formattedItems.join(", ")}]`;
+  }
+
+  /**
+   * Flattens an object into a string representation.
+   *
+   * @example
+   *   ObjectUtils.flattenObject({ a: 1, b: { c: 2 } }); // "a:1; b.c:2"
+   */
+  static flattenObject(obj: object, prefix: string = ""): string {
+    const entries: Array<string> = [];
+
+    for (const [key, value] of Object.entries(obj)) {
+      const fullKey = prefix ? `${prefix}.${key}` : key;
+
+      if (Array.isArray(value)) {
+        entries.push(`${fullKey}:${ObjectUtils.formatArray(value)}`);
+      } else if (typeof value === "object" && value !== null) {
+        entries.push(ObjectUtils.flattenObject(value, fullKey));
+      } else {
+        entries.push(`${fullKey}:${value}`);
+      }
+    }
+
+    return entries.join("; ");
   }
 
   /**
@@ -84,13 +135,19 @@ export default class ObjectUtils {
    * @example
    *   ObjectUtils.pick({ a: 1, b: 2 }, ["a"]); // { a: 1 }
    */
-  static pick<T extends object = object>(obj: T, keys: Array<keyof T>): Partial<T> {
-    return keys.reduce((acc, key) => {
-      if (Typeguards.checkIsKeyof(obj, key)) {
-        acc[key] = obj[key];
-      }
-      return acc;
-    }, {} as Partial<T>);
+  static pick<T extends object = object, K extends keyof T = keyof T>(
+    obj: T,
+    keys: Array<K>,
+  ): Pick<T, K> {
+    return keys.reduce(
+      (acc, key) => {
+        if (Typeguards.checkIsKeyof(obj, key)) {
+          acc[key] = obj[key];
+        }
+        return acc;
+      },
+      {} as Pick<T, K>,
+    );
   }
 
   /**

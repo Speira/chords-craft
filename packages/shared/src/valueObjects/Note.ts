@@ -1,6 +1,6 @@
 // Note Management (Only notes A,A#,Bb,...)
 
-import { type Brand, Effect, type ParseResult, Schema } from "effect";
+import { type Brand, Effect, ParseResult, Schema } from "effect";
 import { ParseError, Unexpected } from "effect/ParseResult";
 
 export type Note = string & Brand.Brand<"Note">;
@@ -42,7 +42,7 @@ export const ALL: Array<Note> = [AFlat, A, ASharp, BFlat, B, C, CSharp, DFlat, D
 export const schema = Schema.Literal(...ALL);
 export const checkNote = (a: string): a is Note => ALL.some((v) => a === v);
 
-/** Is used to build a Note inside the build function */
+/** Is used to build a Note inside the build/transform function */
 export const parse = (a: string): Effect.Effect<Note, ParseResult.ParseError> => {
   const str = sanitize(a);
   if (checkNote(str)) return Effect.succeed(str);
@@ -57,8 +57,8 @@ export const parse = (a: string): Effect.Effect<Note, ParseResult.ParseError> =>
 };
 
 /**
- * Try to build a Note from a string chart, this process is a part of a Chart Parse
- * function
+ * Try to build a Note from a string chart. It is the first build method called in Chart
+ * parse function
  */
 export const build = (
   str: string,
@@ -75,3 +75,12 @@ export const build = (
     return [note, restStr];
   });
 };
+
+export const transform = Schema.transformOrFail(Schema.String, schema, {
+  strict: true,
+  decode: (str, _, ast) =>
+    parse(str).pipe(
+      Effect.mapError((error) => new ParseResult.Type(ast, str, error.message)),
+    ),
+  encode: (note) => Effect.succeed(note),
+});

@@ -1,5 +1,5 @@
 {
-  "name": "@speira/chordschart-api-clerk",
+  "name": "@speira/chordschart-api-auth",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
@@ -19,13 +19,14 @@
     "check": "tsc -b tsconfig.json --noEmit",
     "test": "vitest"
   },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.971.0",
+    "@clerk/backend": "^2.29.0",
+    "effect": "^3.19.12"
+  },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.159",
     "vitest": "^4.0.16"
   },
-  "packageManager": "pnpm@10.14.0",
-  "dependencies": {
-    "@clerk/backend": "^2.29.0",
-    "effect": "^3.19.12"
-  }
+  "packageManager": "pnpm@10.14.0"
 }
