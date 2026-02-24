@@ -1,5 +1,7 @@
 import { type Brand, Schema } from "effect";
 
+import { getTransform } from "./_helper";
+
 export type Section = string & Brand.Brand<"Section">;
 export const Intro = "Intro" as Section;
 export const Verse = "Verse" as Section;
@@ -19,3 +21,5 @@ export const ALL: Array<Section> = [
 ];
 export const schema = Schema.Literal(...ALL);
 export const parse = (s: string) => Schema.decodeUnknown(schema)(s);
+
+export const transform = getTransform<Section>({ parse, schema });

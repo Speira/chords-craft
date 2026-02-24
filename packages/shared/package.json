@@ -1,37 +1,41 @@
 {
   "name": "@speira/chordschart-shared",
   "version": "1.0.0",
-  "author": "Speira",
+  "description": "Shared utilities for chordschart",
   "keywords": [
     "utilities",
     "shared",
     "typescript"
   ],
   "license": "ISC",
-  "description": "Shared utilities for chordschart",
+  "author": "Speira",
   "type": "module",
-  "main": "./build/index.js",
-  "types": "./build/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./build/index.d.ts",
-      "import": "./build/index.js"
+    "./valueObjects": {
+      "types": "./build/valueObjects/index.d.ts",
+      "import": "./build/valueObjects/index.js"
+    },
+    "./utils": {
+      "types": "./build/utils/index.d.ts",
+      "import": "./build/utils/index.js"
     }
   },
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
   "scripts": {
+    "build": "tsc",
     "test": "vitest",
-    "typecheck": "tsc --noEmit",
-    "build": "tsc"
+    "typecheck": "tsc --noEmit"
   },
-  "packageManager": "pnpm@10.14.0",
+  "dependencies": {
+    "effect": "^3.19.12"
+  },
   "devDependencies": {
     "@effect/vitest": "^0.27.0",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   },
-  "dependencies": {
-    "effect": "^3.19.12"
-  },
+  "packageManager": "pnpm@10.14.0",
   "effect": {
     "generateExports": {
       "include": [

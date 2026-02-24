@@ -9,6 +9,17 @@ const alias = (name: string) => {
   };
 };
 
+const project = (name: string) => {
+  return {
+    test: { name, root: `packages/${name}` },
+    resolve: {
+      alias: {
+        "~/": path.join(__dirname, `packages/${name}/src/`),
+      },
+    },
+  };
+};
+
 // This is a workaround, see https://github.com/vitest-dev/vitest/issues/4744
 const config: ViteUserConfig = {
   esbuild: {
@@ -25,18 +36,15 @@ const config: ViteUserConfig = {
     sequence: {
       concurrent: true,
     },
-    projects: [
-      { test: { name: "shared", root: "packages/shared" } },
-      { test: { name: "chart", root: "packages/contexts/chart" } },
-    ],
+    projects: [project("shared"), project("context-chart")],
     include: ["test/**/*.test.ts"],
     alias: {
-      ...alias("api/chart-api"),
-      ...alias("api/auth-api"),
-      ...alias("contexts/chart"),
+      ...alias("api-auth"),
+      ...alias("api-chart"),
+      ...alias("client-web"),
+      ...alias("context-chart"),
       ...alias("deployment"),
       ...alias("shared"),
-      ...alias("clients/web"),
       "~/": path.join(__dirname, "./src/"),
     },
   },

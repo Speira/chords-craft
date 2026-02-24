@@ -1,5 +1,7 @@
 import { type Brand, Effect, type ParseResult, Schema } from "effect";
 
+import { getTransform } from "./_helper";
+
 export type Extension = string & Brand.Brand<"Extension">;
 
 export const DELTA = "Δ";
@@ -29,3 +31,5 @@ export const build = (
   if (!extension) return Effect.succeed([undefined, str]);
   return Effect.succeed([extension, str.slice(extension.length)]);
 };
+
+export const transform = getTransform<Extension>({ parse, schema });

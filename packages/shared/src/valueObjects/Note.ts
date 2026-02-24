@@ -1,7 +1,9 @@
 // Note Management (Only notes A,A#,Bb,...)
 
-import { type Brand, Effect, ParseResult, Schema } from "effect";
+import { type Brand, Effect, type ParseResult, Schema } from "effect";
 import { ParseError, Unexpected } from "effect/ParseResult";
+
+import { getTransform } from "./_helper";
 
 export type Note = string & Brand.Brand<"Note">;
 
@@ -38,7 +40,7 @@ const SharpFlatpMap: Record<Note, Note> = { [ASharp]: BFlat, [CSharp]: DFlat, [D
 export const flatToSharp = (note: Note) => FlatSharpMap[note] ?? note;
 export const sharpToFlat = (note: Note) => SharpFlatpMap[note] ?? note;
 
-export const ALL: Array<Note> = [AFlat, A, ASharp, BFlat, B, C, CSharp, DFlat, D, DSharp, EFlat, E, F, FSharp, GFlat, G, GSharp] as const; // prettier-ignore
+export const ALL: ReadonlyArray<Note> = [AFlat, A, ASharp, BFlat, B, C, CSharp, DFlat, D, DSharp, EFlat, E, F, FSharp, GFlat, G, GSharp] as const; // prettier-ignore
 export const schema = Schema.Literal(...ALL);
 export const checkNote = (a: string): a is Note => ALL.some((v) => a === v);
 
@@ -60,27 +62,20 @@ export const parse = (a: string): Effect.Effect<Note, ParseResult.ParseError> =>
  * Try to build a Note from a string chart. It is the first build method called in Chart
  * parse function
  */
-export const build = (
-  str: string,
-): Effect.Effect<[Note, string], ParseResult.ParseError> => {
-  return Effect.gen(function* () {
-    const [noteStr, ...afterNote] = str;
-    const [maybeAccidental, ...afterAccidental] = afterNote;
-    const accidental = [SHARP, FLAT, "#", "b"].includes(maybeAccidental)
-      ? maybeAccidental
-      : "";
-    const strNote = `${noteStr}${accidental}`;
-    const note = yield* parse(strNote);
-    const restStr = accidental ? afterAccidental.join("") : afterNote.join("");
-    return [note, restStr];
-  });
-};
+export const build = Effect.fn(
+  (str: string): Effect.Effect<[Note, string], ParseResult.ParseError> => {
+    return Effect.gen(function* () {
+      const [noteStr, ...afterNote] = str;
+      const [maybeAccidental, ...afterAccidental] = afterNote;
+      const accidental = [SHARP, FLAT, "#", "b"].includes(maybeAccidental)
+        ? maybeAccidental
+        : "";
+      const strNote = `${noteStr}${accidental}`;
+      const note = yield* parse(strNote);
+      const restStr = accidental ? afterAccidental.join("") : afterNote.join("");
+      return [note, restStr];
+    });
+  },
+);
 
-export const transform = Schema.transformOrFail(Schema.String, schema, {
-  strict: true,
-  decode: (str, _, ast) =>
-    parse(str).pipe(
-      Effect.mapError((error) => new ParseResult.Type(ast, str, error.message)),
-    ),
-  encode: (note) => Effect.succeed(note),
-});
+export const transform = getTransform<Note>({ parse, schema });

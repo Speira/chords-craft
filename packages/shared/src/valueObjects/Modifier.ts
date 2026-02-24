@@ -1,5 +1,6 @@
 import { type Brand, Schema } from "effect";
 
+import { getTransform } from "./_helper";
 import * as Note from "./Note";
 
 export type Modifier = string & Brand.Brand<"Modifier">;
@@ -25,3 +26,5 @@ export const ALL: Array<Modifier> = [
 ];
 export const schema = Schema.Literal(...ALL);
 export const parse = (m: string) => Schema.decodeUnknown(schema)(Note.sanitize(m));
+
+export const transform = getTransform<Modifier>({ parse, schema });

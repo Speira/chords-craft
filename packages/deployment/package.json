@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@speira/chordschart-api-chart": "workspace:*",
-    "@speira/chordschart-contexts-chart": "workspace:*",
+    "@speira/chordschart-context-chart": "workspace:*",
     "aws-cdk-lib": "2.215.0",
     "constructs": "^10.0.0"
   },

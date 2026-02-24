@@ -2,9 +2,9 @@
   "extends": "./tsconfig.base.json",
   "include": [],
   "references": [
-    { "path": "packages/shared/tsconfig.build.json" },
-    { "path": "packages/contexts/chart/tsconfig.build.json" },
-    { "path": "packages/api/chart-api/tsconfig.build.json" },
-    { "path": "packages/api/auth-api/tsconfig.build.json" }
+    { "path": "packages/api-auth/tsconfig.build.json" },
+    { "path": "packages/api-chart/tsconfig.build.json" },
+    { "path": "packages/context-chart/tsconfig.build.json" },
+    { "path": "packages/shared/tsconfig.build.json" }
   ]
 }

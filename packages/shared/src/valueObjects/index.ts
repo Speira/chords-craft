@@ -6,6 +6,5 @@ export * as Note from "./Note";
 export * as Quality from "./Quality";
 export * as Scale from "./Scale";
 export * as Section from "./Section";
-export * as SectionRecord from "./SectionRecord";
 export * as Structure from "./Structure";
 export * as TenantID from "./TenantID";

@@ -1,0 +1,19 @@
+{
+  "name": "@speira/chordschart-context-user",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "Speira",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "effect": "^3.19.12"
+  },
+  "devDependencies": {
+    "@effect/vitest": "^0.27.0",
+    "vitest": "^4.0.16"
+  }
+}

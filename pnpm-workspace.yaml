@@ -1,9 +1,5 @@
 packages:
-  - packages/contexts/*
-  - packages/shared
-  - packages/deployment
-  - packages/api/*
-  - packages/clients/*
+  - packages/*
 
 ignoredBuiltDependencies:
   - sharp

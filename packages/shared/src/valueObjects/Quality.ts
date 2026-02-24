@@ -1,5 +1,7 @@
 import { type Brand, Effect, type ParseResult, Schema } from "effect";
 
+import { getTransform } from "./_helper";
+
 export type Quality = string & Brand.Brand<"Quality">;
 
 export const Minor = "m" as Quality;
@@ -26,3 +28,5 @@ export const build = (
   if (quality) return Effect.succeed([quality as Quality, str.slice(quality.length)]);
   return Effect.succeed([Major, str]);
 };
+
+export const transform = getTransform<Quality>({ parse, schema });

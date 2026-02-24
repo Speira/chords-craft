@@ -48,7 +48,7 @@ describe("Note test suite", () => {
       Note.GFlat,
       Note.G,
       Note.GSharp,
-    ]).toEqual(expect.arrayContaining(Note.ALL));
+    ]).toEqual(expect.arrayContaining([...Note.ALL]));
   });
 
   it("Should convert flat note to the corresponding sharp note", () => {
@@ -98,7 +98,6 @@ describe("Note test suite", () => {
     if (Exit.isFailure(result)) {
       expect(result.cause).toBeDefined();
       const message = Cause.pretty(result.cause);
-      console.debug({ message });
       expect(message).toContain('the string "???" is not a note');
     } else {
       expect.fail("Should fail");

@@ -8,16 +8,15 @@ const StyleChordsMap = Schema.optional(
 );
 
 /**
- * Ex:
- *
- * ```json
- * {
- *   "Intro": {
- *     "default": ["Cm7", "Dm7"], // default version
- *     "jazz": ["Cm7b5", "Dm13"] // -> Other version of this section
+ * @example
+ *   ```json
+ *   {
+ *     "Intro": {
+ *       "default": ["Cm7", "Dm7"], // default version
+ *       "jazz": ["Cm7b5", "Dm13"] // -> Other version of this section
+ *     }
  *   }
- * }
- * ```
+ *   ```;
  */
 export const schema = Schema.Struct({
   [Section.Intro]: StyleChordsMap,
