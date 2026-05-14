@@ -12,9 +12,9 @@ export const createChart = async (event: ResolverEvent): Promise<Chart> => {
     Effect.flatMap((command) => CreateChartHandler.execute(command)),
     Effect.provide(ChartServicesLive),
   );
+
   try {
-    const chart = await Effect.runPromise(program);
-    return chart;
+    return await Effect.runPromise(program);
   } catch (error) {
     console.error("CreateChart resolver handler failed", error);
     throw error;

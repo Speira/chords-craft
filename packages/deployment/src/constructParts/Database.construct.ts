@@ -15,9 +15,9 @@ export class DatabaseConstruct extends Construct {
     super(scope, id);
 
     const removalPolicy = props.removalPolicy ?? cdk.RemovalPolicy.DESTROY;
-
+    const stackName = props.stackName.toLowerCase();
     this.eventsTable = new dynamodb.Table(this, "ChartsEventsTable", {
-      tableName: `${props.stackName.toLowerCase()}-charts_events`,
+      tableName: `${stackName}-charts_events`,
       partitionKey: { name: "PK", type: dynamodb.AttributeType.STRING },
       sortKey: { name: "SK", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
@@ -29,7 +29,7 @@ export class DatabaseConstruct extends Construct {
     });
 
     this.projectionTable = new dynamodb.Table(this, "ChartsProjectionTable", {
-      tableName: `${props.stackName.toLowerCase()}-charts_projection`,
+      tableName: `${stackName}-charts_projection`,
       partitionKey: { name: "PK", type: dynamodb.AttributeType.STRING },
       sortKey: { name: "SK", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,

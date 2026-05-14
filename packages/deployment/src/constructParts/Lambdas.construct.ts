@@ -9,6 +9,8 @@ import * as sqs from "aws-cdk-lib/aws-sqs";
 import { Construct } from "constructs";
 import path from "path";
 
+import K from "../constants";
+
 export interface ILambdasConstruct {
   readonly vpc: ec2.IVpc;
   readonly securityGroup: ec2.ISecurityGroup;
@@ -33,14 +35,18 @@ export class LambdasConstruct extends Construct {
       "chordschart/clerk-secret-key_dev",
     );
 
+    const stackName = cdk.Stack.of(this).stackName;
+
     this.authorizerFunction = new lambda.Function(this, "AuthFunction", {
-      code: lambda.Code.fromAsset(path.join(__dirname, "../../../api/auth-api/build")),
+      code: lambda.Code.fromAsset(
+        path.join(__dirname, `../${K.PATHS_FROM_SRC.PACKAGES_API_AUTH}/build`),
+      ),
       environment: {
         CLERK_SECRET_NAME: clerkSecret.secretName,
       },
       handler: "index.handler",
       logGroup: new logs.LogGroup(this, "ChordsChartAuthLogGroup", {
-        logGroupName: `/aws/lambda/auth-function-${cdk.Stack.of(this).stackName}`,
+        logGroupName: `/aws/lambda/auth-function-${stackName}`,
         retention: logs.RetentionDays.ONE_WEEK,
         removalPolicy: cdk.RemovalPolicy.DESTROY,
       }),
@@ -59,7 +65,9 @@ export class LambdasConstruct extends Construct {
     });
 
     this.chartFunction = new lambda.Function(this, "ChartFunction", {
-      code: lambda.Code.fromAsset(path.join(__dirname, "../../../api/chart-api/build")),
+      code: lambda.Code.fromAsset(
+        path.join(__dirname, `../${K.PATHS_FROM_SRC.PACKAGES_API_CHART}/build`),
+      ),
       handler: "index.handler",
       deadLetterQueue: this.chartsDLQ,
       deadLetterQueueEnabled: true,
@@ -74,7 +82,7 @@ export class LambdasConstruct extends Construct {
         PROJECTION_TABLE: props.projectionTable.tableName,
       },
       logGroup: new logs.LogGroup(this, "ChordsChartFunctionLogGroup", {
-        logGroupName: `/aws/lambda/chart-function-${cdk.Stack.of(this).stackName}`,
+        logGroupName: `/aws/lambda/chart-function-${stackName}`,
         retention: logs.RetentionDays.ONE_WEEK,
         removalPolicy: cdk.RemovalPolicy.DESTROY,
       }),

@@ -14,8 +14,7 @@ export const listCharts = async (event: ResolverEvent): Promise<ReadonlyArray<Ch
   );
 
   try {
-    const charts = await Effect.runPromise(program);
-    return charts;
+    return await Effect.runPromise(program);
   } catch (error) {
     console.error("ListChart resolver handler failed", error);
     throw error;

@@ -44,16 +44,16 @@ export class DynamoDBChartRepository implements ChartRepository {
               SK: this.withVersionKey(evt.version),
               eventType: evt._tag,
               aggregateId: evt.aggregateId,
-              occuredAdt: evt.occuredAt,
-              createdAd: new Date().toISOString(),
+              occuredAt: evt.occuredAt.toISOString(),
+              createdAt: new Date().toISOString(),
               data: serializeEvent(evt),
             },
           },
         }));
         if (items.length === 1) {
-          this.client.send(new PutCommand(items[0].PUT));
+          await this.client.send(new PutCommand(items[0].PUT));
         } else {
-          this.client.send(new TransactWriteCommand({ TransactItems: items }));
+          await this.client.send(new TransactWriteCommand({ TransactItems: items }));
         }
       },
       catch: (error) => new ChartWriteError({ reason: error }),

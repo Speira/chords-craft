@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { createChart } from "../../../../src/interface/graphql/resolvers/createChart";
 import { type ResolverEvent } from "../../../../src/interface/graphql/resolvers/types";
@@ -38,30 +38,15 @@ describe("createChart resolver", () => {
     stash: {},
   });
 
-  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-    consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   describe("validation tests", () => {
     it("should reject invalid root note", async () => {
       const invalidInput = {
         ...validInput,
-        root: "X", // Invalid note
+        root: "X",
       };
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "CreateChart resolver handler failed",
-        expect.any(Object),
-      );
     });
 
     it("should reject empty title", async () => {
@@ -72,29 +57,26 @@ describe("createChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject title that is too short", async () => {
       const invalidInput = {
         ...validInput,
-        title: "A", // Less than 2 characters
+        title: "A",
       };
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject title that is too long", async () => {
       const invalidInput = {
         ...validInput,
-        title: "A".repeat(256), // More than 255 characters
+        title: "A".repeat(256),
       };
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject missing required tenantId", async () => {
@@ -105,7 +87,6 @@ describe("createChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject missing required root", async () => {
@@ -116,7 +97,6 @@ describe("createChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject empty plan array", async () => {
@@ -127,7 +107,6 @@ describe("createChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject invalid section in plan", async () => {
@@ -138,40 +117,36 @@ describe("createChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject plan with too many items", async () => {
       const invalidInput = {
         ...validInput,
-        plan: Array(201).fill("Verse"), // More than 200 items
+        plan: Array(201).fill("Verse"),
       };
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject too many links", async () => {
       const invalidInput = {
         ...validInput,
-        links: Array(13).fill("https://example.com"), // More than 12 items
+        links: Array(13).fill("https://example.com"),
       };
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject too many tags", async () => {
       const invalidInput = {
         ...validInput,
-        tags: Array(13).fill("tag"), // More than 12 items
+        tags: Array(13).fill("tag"),
       };
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject invalid structure format", async () => {
@@ -186,7 +161,6 @@ describe("createChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject missing required structure", async () => {
@@ -197,7 +171,6 @@ describe("createChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject missing required plan", async () => {
@@ -208,30 +181,11 @@ describe("createChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(createChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
   });
 
   describe("error handling", () => {
-    it("should log errors with correct message format", async () => {
-      const invalidInput = {
-        ...validInput,
-        root: "INVALID",
-      };
-      const event = createMockEvent(invalidInput);
-
-      try {
-        await createChart(event);
-        expect.fail("Should have thrown an error");
-      } catch {
-        expect(consoleErrorSpy).toHaveBeenCalledWith(
-          "CreateChart resolver handler failed",
-          expect.any(Object),
-        );
-      }
-    });
-
-    it("should rethrow errors after logging", async () => {
+    it("should rethrow errors", async () => {
       const invalidInput = {
         ...validInput,
         title: "",

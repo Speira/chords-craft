@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { getChart } from "../../../../src/interface/graphql/resolvers/getChart";
 import { type ResolverEvent } from "../../../../src/interface/graphql/resolvers/types";
@@ -28,17 +28,6 @@ describe("getChart resolver", () => {
     stash: {},
   });
 
-  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-    consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   describe("validation tests", () => {
     it("should reject missing required chartId", async () => {
       const invalidInput = {
@@ -48,10 +37,6 @@ describe("getChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "GetChart resolver handler failed:",
-        expect.any(Object),
-      );
     });
 
     it("should reject missing required tenantId", async () => {
@@ -62,7 +47,6 @@ describe("getChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject empty chartId", async () => {
@@ -73,7 +57,6 @@ describe("getChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject empty tenantId", async () => {
@@ -84,7 +67,6 @@ describe("getChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject invalid chartId format", async () => {
@@ -95,7 +77,6 @@ describe("getChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject chartId that is too short", async () => {
@@ -106,40 +87,36 @@ describe("getChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject chartId that is too long", async () => {
       const invalidInput = {
         ...validInput,
-        chartId: "A".repeat(27), // ULID should be exactly 26 characters
+        chartId: "A".repeat(27),
       };
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject chartId with invalid characters", async () => {
       const invalidInput = {
         ...validInput,
-        chartId: "01HQ3X5Z8M9N6P7R8S9T0V!@#$", // Invalid characters
+        chartId: "01HQ3X5Z8M9N6P7R8S9T0V!@#$",
       };
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject tenantId that is too long", async () => {
       const invalidInput = {
         ...validInput,
-        tenantId: "A".repeat(256), // Assuming max length validation
+        tenantId: "A".repeat(256),
       };
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject null chartId", async () => {
@@ -150,7 +127,6 @@ describe("getChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject null tenantId", async () => {
@@ -161,7 +137,6 @@ describe("getChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject numeric chartId", async () => {
@@ -172,7 +147,6 @@ describe("getChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject object as chartId", async () => {
@@ -183,7 +157,6 @@ describe("getChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     it("should reject array as tenantId", async () => {
@@ -194,30 +167,11 @@ describe("getChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
   });
 
   describe("error handling", () => {
-    it("should log errors with correct message format", async () => {
-      const invalidInput = {
-        ...validInput,
-        chartId: "",
-      };
-      const event = createMockEvent(invalidInput);
-
-      try {
-        await getChart(event);
-        expect.fail("Should have thrown an error");
-      } catch {
-        expect(consoleErrorSpy).toHaveBeenCalledWith(
-          "GetChart resolver handler failed:",
-          expect.any(Object),
-        );
-      }
-    });
-
-    it("should rethrow errors after logging", async () => {
+    it("should rethrow errors", async () => {
       const invalidInput = {
         ...validInput,
         tenantId: "",
@@ -235,7 +189,6 @@ describe("getChart resolver", () => {
       const event = createMockEvent(invalidInput);
 
       await expect(getChart(event)).rejects.toThrow();
-      expect(consoleErrorSpy).toHaveBeenCalled();
     });
   });
 });

@@ -14,8 +14,7 @@ export const getChart = async (event: ResolverEvent): Promise<Chart> => {
   );
 
   try {
-    const chart = await Effect.runPromise(program);
-    return chart;
+    return await Effect.runPromise(program);
   } catch (error) {
     console.error("GetChart resolver handler failed:", error);
     throw error;

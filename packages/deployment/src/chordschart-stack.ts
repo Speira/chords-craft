@@ -15,6 +15,7 @@ export class ChordsChartStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     const environment = this.node.tryGetContext("env") || "dev";
+    console.log({ environment_stack: environment });
     const IS_PRODUCTION = environment === "prod";
 
     const removalPolicy = IS_PRODUCTION
