@@ -43,7 +43,7 @@ describe("NumberUtils test suite", () => {
   describe("toIntPrice", () => {
     it("Should convert float price to integer price", () => {
       expect(NumberUtils.toIntPrice(100.123456)).toBe(10012);
-      expect(NumberUtils.toIntPrice(10.50)).toBe(1050);
+      expect(NumberUtils.toIntPrice(10.5)).toBe(1050);
       expect(NumberUtils.toIntPrice(1.99)).toBe(199);
     });
 
@@ -62,7 +62,7 @@ describe("NumberUtils test suite", () => {
     });
 
     it("Should handle negative prices", () => {
-      expect(NumberUtils.toIntPrice(-10.50)).toBe(-1050);
+      expect(NumberUtils.toIntPrice(-10.5)).toBe(-1050);
     });
 
     it("Should handle very small numbers", () => {
@@ -379,4 +379,3 @@ describe("NumberUtils test suite", () => {
     });
   });
 });
-

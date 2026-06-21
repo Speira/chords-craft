@@ -8,7 +8,7 @@ type ResolverContext = {
   orgId?: string;
 };
 
-export const handler = async (event: AppSyncResolverEvent<Record<string, unknown>>) => {
+export const handler = async (event: AppSyncResolverEvent<Record<string, unknown>>): Promise<unknown> => {
   const { fieldName } = event.info;
 
   // Type guard for Lambda authorizer identity
