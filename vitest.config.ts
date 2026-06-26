@@ -3,9 +3,10 @@ import type { ViteUserConfig } from "vitest/config";
 
 const alias = (name: string) => {
   const target = process.env.TEST_DIST !== undefined ? "dist/dist/esm" : "src";
+  const pkgName = `@speira/chordschart-${name}`;
   return {
-    [`${name}/test`]: path.join(__dirname, "packages", name, "test"),
-    [`${name}`]: path.join(__dirname, "packages", name, target),
+    [`${pkgName}/test`]: path.join(__dirname, "packages", name, "test"),
+    [`${pkgName}`]: path.join(__dirname, "packages", name, target),
   };
 };
 

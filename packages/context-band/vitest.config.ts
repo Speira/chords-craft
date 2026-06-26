@@ -8,7 +8,6 @@ const config: ViteUserConfig = {
   resolve: {
     alias: {
       "~": path.resolve(__dirname, "./src"),
-      "@speira/chordschart-shared": path.resolve(__dirname, "../shared/src"),
     },
   },
   test: {

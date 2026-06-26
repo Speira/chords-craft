@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "incremental": true,
+    "outDir": "./build",
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": false
+  },
+  "exclude": ["test", "**/*.test.ts"],
+  "references": [{ "path": "../shared/tsconfig.build.json" }]
+}

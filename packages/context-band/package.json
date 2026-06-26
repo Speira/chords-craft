@@ -1,0 +1,35 @@
+{
+  "name": "@speira/chordschart-context-band",
+  "version": "1.0.0",
+  "description": "Band bounded context",
+  "keywords": [],
+  "license": "ISC",
+  "author": "Speira",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.js",
+      "require": "./build/index.js"
+    }
+  },
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "check": "tsc -b tsconfig.json --noEmit",
+    "test": "vitest"
+  },
+  "packageManager": "pnpm@10.14.0",
+  "effect": {
+    "generateExports": {
+      "include": [
+        "**/*.ts"
+      ]
+    },
+    "generateIndex": {
+      "include": [
+        "**/*.ts"
+      ]
+    }
+  }
+}
