@@ -1,18 +1,16 @@
-import * as path from "node:path";
+import tsconfigPaths from "vite-tsconfig-paths";
 import type { ViteUserConfig } from "vitest/config";
 
 const config: ViteUserConfig = {
+  plugins: [tsconfigPaths()],
   esbuild: {
     target: "es2020",
   },
   resolve: {
-    alias: {
-      "~": path.resolve(__dirname, "./src"),
-      "@speira/chordschart-shared": path.resolve(__dirname, "../shared/src"),
-    },
+    conditions: ["source"],
   },
   test: {
-    setupFiles: [path.join(__dirname, "setupTests.ts")],
+    setupFiles: ["./setupTests.ts"],
     fakeTimers: {
       toFake: undefined,
     },

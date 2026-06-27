@@ -12,10 +12,12 @@
   "type": "module",
   "exports": {
     "./valueObjects": {
+      "source": "./src/valueObjects/index.ts",
       "types": "./build/valueObjects/index.d.ts",
       "import": "./build/valueObjects/index.js"
     },
     "./utils": {
+      "source": "./src/utils/index.ts",
       "types": "./build/utils/index.d.ts",
       "import": "./build/utils/index.js"
     }

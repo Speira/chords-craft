@@ -1,23 +1,19 @@
 import * as path from "node:path";
+import tsconfigPaths from "vite-tsconfig-paths";
 import type { ViteUserConfig } from "vitest/config";
 
 const alias = (name: string) => {
   const target = process.env.TEST_DIST !== undefined ? "dist/dist/esm" : "src";
-  const pkgName = `@speira/chordschart-${name}`;
   return {
-    [`${pkgName}/test`]: path.join(__dirname, "packages", name, "test"),
-    [`${pkgName}`]: path.join(__dirname, "packages", name, target),
+    [`${name}/test`]: path.join(__dirname, "packages", name, "test"),
+    [`${name}`]: path.join(__dirname, "packages", name, target),
   };
 };
 
 const project = (name: string) => {
   return {
+    plugins: [tsconfigPaths()],
     test: { name, root: `packages/${name}` },
-    resolve: {
-      alias: {
-        "~/": path.join(__dirname, `packages/${name}/src/`),
-      },
-    },
   };
 };
 
@@ -25,6 +21,9 @@ const project = (name: string) => {
 const config: ViteUserConfig = {
   esbuild: {
     target: "es2020",
+  },
+  resolve: {
+    conditions: ["source"],
   },
   optimizeDeps: {
     exclude: ["bun:sqlite"],
@@ -46,7 +45,6 @@ const config: ViteUserConfig = {
       ...alias("context-chart"),
       ...alias("deployment"),
       ...alias("shared"),
-      "~/": path.join(__dirname, "./src/"),
     },
   },
 };
