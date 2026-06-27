@@ -82,10 +82,7 @@ export function makeChartCreatedEvent(
   });
 }
 
-export function makeChart(
-  chartId = ChartID.generate(),
-  tenantId = "tenant-test",
-): Chart {
+export function makeChart(chartId = ChartID.generate(), tenantId = "tenant-test"): Chart {
   return Chart.create({
     id: chartId,
     tenantId: TenantID.schema.make(tenantId),

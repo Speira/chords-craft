@@ -4,6 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { ChartID } from "../../../src/domain/valueObjects";
 import { DynamoDBChartRepository } from "../../../src/infrastructure/dynamodb/DynamoDBChartRepository";
+
 import {
   createEventsTable,
   createTestClient,

@@ -5,6 +5,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { ChartReadError } from "../../../src/domain/errors";
 import { ChartID } from "../../../src/domain/valueObjects";
 import { DynamoDBChartProjection } from "../../../src/infrastructure/dynamodb/DynamoDBChartProjection";
+
 import {
   createProjectionTable,
   createTestClient,
