@@ -22,7 +22,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "check": "tsc -b tsconfig.json --noEmit",
-    "test": "vitest"
+    "test": "vitest",
+    "test:integration": "vitest --config vitest.config.integration.ts"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.948.0",

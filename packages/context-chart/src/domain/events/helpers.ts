@@ -43,6 +43,7 @@ export const deserializeEvent = Effect.fn(
 
       const baseData = {
         aggregateId: item.aggregateId,
+        tenantId: item.tenantId,
         version: item.version,
         occuredAt:
           typeof item.occuredAt === "string" ? new Date(item.occuredAt) : new Date(),

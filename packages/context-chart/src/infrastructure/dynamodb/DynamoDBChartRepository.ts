@@ -44,6 +44,8 @@ export class DynamoDBChartRepository implements ChartRepository {
               SK: this.withVersionKey(evt.version),
               eventType: evt._tag,
               aggregateId: evt.aggregateId,
+              tenantId: evt.tenantId,
+              version: evt.version,
               occuredAt: evt.occuredAt.toISOString(),
               createdAt: new Date().toISOString(),
               data: serializeEvent(evt),

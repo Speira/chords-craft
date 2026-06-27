@@ -14,8 +14,8 @@ const config: ViteUserConfig = {
     fakeTimers: {
       toFake: undefined,
     },
-    include: ["test/**/*.test.ts"],
-    exclude: ["test/infrastructure/**"],
+    include: ["test/infrastructure/**/*.test.ts"],
+    sequence: { concurrent: false },
   },
 };
 
