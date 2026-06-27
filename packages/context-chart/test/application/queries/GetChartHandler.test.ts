@@ -18,7 +18,7 @@ import { Chart } from "../../../src/domain/Chart";
 
 describe("GetChartHandler", () => {
   const date = new Date();
-  const chartId = ChartID.schema.make("test-id");
+  const chartId = ChartID.generate();
   const tenantId = TenantID.schema.make("tenant-test");
 
   const defaultChart = Chart.create({

@@ -27,8 +27,6 @@ const config: ViteUserConfig = {
       concurrent: true,
     },
     projects: [project("shared"), project("context-chart")],
-    include: ["test/**/*.test.ts"],
-    exclude: ["test/infrastructure/**"],
   },
 };
 

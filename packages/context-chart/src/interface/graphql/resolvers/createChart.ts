@@ -1,22 +1,28 @@
-import { Effect, pipe, Schema } from "effect";
+import { Effect, type Layer, ParseResult, pipe, Schema } from "effect";
 
 import { CreateChartCommand, CreateChartHandler } from "~/application/commands";
-import { type Chart } from "~/domain";
+import { type Chart, type ChartProjection, type ChartRepository } from "~/domain";
 import { ChartServicesLive } from "~/infrastructure/dynamodb";
 
-import { type ResolverEvent } from "./types";
-
-export const createChart = async (event: ResolverEvent): Promise<Chart> => {
+export const createChart = (
+  input: unknown,
+  layer: Layer.Layer<ChartRepository | ChartProjection> = ChartServicesLive,
+): Promise<Chart> => {
   const program = pipe(
-    Schema.decodeUnknown(CreateChartCommand)(event.arguments),
+    Schema.decodeUnknown(CreateChartCommand)(input),
     Effect.flatMap((command) => CreateChartHandler.execute(command)),
-    Effect.provide(ChartServicesLive),
+    Effect.tapError((error) =>
+      Effect.sync(() => {
+        if (error instanceof ParseResult.ParseError) {
+          // Invalid client input — a 400-class mistake, not a server fault.
+          console.warn("CreateChart rejected invalid input", error);
+        } else {
+          console.error("CreateChart resolver handler failed", error);
+        }
+      }),
+    ),
+    Effect.provide(layer),
   );
 
-  try {
-    return await Effect.runPromise(program);
-  } catch (error) {
-    console.error("CreateChart resolver handler failed", error);
-    throw error;
-  }
+  return Effect.runPromise(program);
 };

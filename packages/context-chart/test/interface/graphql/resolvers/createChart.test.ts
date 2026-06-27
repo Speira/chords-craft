@@ -1,7 +1,13 @@
-import { describe, expect, it } from "vitest";
+import { Effect, Layer } from "effect";
 
+import { describe, expect, it, vi } from "vitest";
+
+import {
+  ChartProjection,
+  ChartRepository,
+  ChartWriteError,
+} from "../../../../src/domain";
 import { createChart } from "../../../../src/interface/graphql/resolvers/createChart";
-import { type ResolverEvent } from "../../../../src/interface/graphql/resolvers/types";
 
 describe("createChart resolver", () => {
   const validInput = {
@@ -19,34 +25,13 @@ describe("createChart resolver", () => {
     tags: ["jazz", "pop"],
   };
 
-  const createMockEvent = (input: Record<string, unknown>): ResolverEvent => ({
-    arguments: input,
-    identity: null,
-    source: null,
-    request: {
-      headers: {},
-      domainName: null,
-    },
-    prev: null,
-    info: {
-      selectionSetList: [],
-      selectionSetGraphQL: "",
-      parentTypeName: "Mutation",
-      fieldName: "createChart",
-      variables: {},
-    },
-    stash: {},
-  });
-
   describe("validation tests", () => {
     it("should reject invalid root note", async () => {
       const invalidInput = {
         ...validInput,
         root: "X",
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject empty title", async () => {
@@ -54,9 +39,7 @@ describe("createChart resolver", () => {
         ...validInput,
         title: "",
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject title that is too short", async () => {
@@ -64,9 +47,7 @@ describe("createChart resolver", () => {
         ...validInput,
         title: "A",
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject title that is too long", async () => {
@@ -74,9 +55,7 @@ describe("createChart resolver", () => {
         ...validInput,
         title: "A".repeat(256),
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject missing required tenantId", async () => {
@@ -84,9 +63,7 @@ describe("createChart resolver", () => {
         ...validInput,
         tenantId: undefined,
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject missing required root", async () => {
@@ -94,9 +71,7 @@ describe("createChart resolver", () => {
         ...validInput,
         root: undefined,
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject empty plan array", async () => {
@@ -104,9 +79,7 @@ describe("createChart resolver", () => {
         ...validInput,
         plan: [],
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject invalid section in plan", async () => {
@@ -114,9 +87,7 @@ describe("createChart resolver", () => {
         ...validInput,
         plan: ["InvalidSection"],
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject plan with too many items", async () => {
@@ -124,9 +95,7 @@ describe("createChart resolver", () => {
         ...validInput,
         plan: Array(201).fill("Verse"),
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject too many links", async () => {
@@ -134,9 +103,7 @@ describe("createChart resolver", () => {
         ...validInput,
         links: Array(13).fill("https://example.com"),
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject too many tags", async () => {
@@ -144,9 +111,7 @@ describe("createChart resolver", () => {
         ...validInput,
         tags: Array(13).fill("tag"),
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject invalid structure format", async () => {
@@ -158,9 +123,7 @@ describe("createChart resolver", () => {
           },
         },
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject missing required structure", async () => {
@@ -168,9 +131,7 @@ describe("createChart resolver", () => {
         ...validInput,
         structure: undefined,
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject missing required plan", async () => {
@@ -178,9 +139,7 @@ describe("createChart resolver", () => {
         ...validInput,
         plan: undefined,
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(createChart(event)).rejects.toThrow();
+      await expect(createChart(invalidInput)).rejects.toThrow();
     });
   });
 
@@ -190,9 +149,49 @@ describe("createChart resolver", () => {
         ...validInput,
         title: "",
       };
-      const event = createMockEvent(invalidInput);
+      await expect(createChart(invalidInput)).rejects.toThrow();
+    });
+  });
 
-      await expect(createChart(event)).rejects.toThrow();
+  // The handler's own logic is covered in test/application with mocked infra.
+  // Here the resolver runs against the real handler with a mocked infrastructure
+  // layer, verifying delegation, persistence wiring, and error propagation.
+  describe("handler delegation", () => {
+    it("persists the chart and returns it", async () => {
+      const save = vi.fn(() => Effect.void);
+      const upsert = vi.fn(() => Effect.void);
+      const layer = Layer.mergeAll(
+        Layer.succeed(ChartRepository, { save, load: vi.fn() }),
+        Layer.succeed(ChartProjection, {
+          upsert,
+          findById: vi.fn(),
+          findByTenant: vi.fn(),
+          delete: vi.fn(),
+        }),
+      );
+
+      const result = await createChart(validInput, layer);
+
+      expect(result.title).toBe("Test Chart");
+      expect(save).toHaveBeenCalledOnce();
+      expect(upsert).toHaveBeenCalledOnce();
+    });
+
+    it("rethrows when persistence fails", async () => {
+      const layer = Layer.mergeAll(
+        Layer.succeed(ChartRepository, {
+          save: vi.fn(() => Effect.fail(new ChartWriteError({ reason: "boom" }))),
+          load: vi.fn(),
+        }),
+        Layer.succeed(ChartProjection, {
+          upsert: vi.fn(() => Effect.void),
+          findById: vi.fn(),
+          findByTenant: vi.fn(),
+          delete: vi.fn(),
+        }),
+      );
+
+      await expect(createChart(validInput, layer)).rejects.toThrow();
     });
   });
 });

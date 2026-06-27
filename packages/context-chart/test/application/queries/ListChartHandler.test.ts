@@ -20,10 +20,10 @@ describe("ListChartHandler", () => {
   const date = new Date();
   const tenantId = TenantID.schema.make("tenant-test");
 
-  const createTestChart = (id: string, title: string): Chart => {
+  const createTestChart = (title: string): Chart => {
     return Chart.create({
       root: Note.A,
-      id: ChartID.schema.make(id),
+      id: ChartID.generate(),
       author: "Test Author",
       tenantId,
       title,
@@ -42,9 +42,9 @@ describe("ListChartHandler", () => {
   };
 
   it("should list all charts for a tenant", async () => {
-    const chart1 = createTestChart("chart-1", "Chart 1");
-    const chart2 = createTestChart("chart-2", "Chart 2");
-    const chart3 = createTestChart("chart-3", "Chart 3");
+    const chart1 = createTestChart("Chart 1");
+    const chart2 = createTestChart("Chart 2");
+    const chart3 = createTestChart("Chart 3");
     const charts = [chart1, chart2, chart3];
 
     const mockProjection = {

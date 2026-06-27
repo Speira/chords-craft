@@ -15,7 +15,7 @@ const config: ViteUserConfig = {
       toFake: undefined,
     },
     include: ["test/**/*.test.ts"],
-    exclude: ["test/infrastructure/**"],
+    exclude: ["test/infrastructure/**/*.test.ts"],
   },
 };
 

@@ -1,8 +1,11 @@
 import { Schema } from "effect";
 
-import { ulid } from "ulid";
+import { isValid, ulid } from "ulid";
 
-export const schema = Schema.String.pipe(Schema.minLength(1), Schema.brand("ChartID"));
+export const schema = Schema.String.pipe(
+  Schema.filter((s) => isValid(s), { message: () => "Expected a valid ULID" }),
+  Schema.brand("ChartID"),
+);
 export type ChartID = typeof schema.Type;
 
 export const generate = () => ulid() as ChartID;

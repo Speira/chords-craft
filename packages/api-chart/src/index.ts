@@ -24,21 +24,20 @@ export const handler = async (
     throw new Error("Unauthorized: No tenant");
   }
 
-  const secureEvent = {
-    ...event,
-    arguments: {
-      ...event.arguments,
-      tenantId: context.tenantId,
-    },
+  // Translate the AppSync transport envelope into the agnostic input the
+  // interface layer expects, injecting the authenticated tenant.
+  const input = {
+    ...event.arguments,
+    tenantId: context.tenantId,
   };
 
   switch (fieldName) {
     case "createChart":
-      return ChartInterface.graphql.resolvers.createChart(secureEvent);
+      return ChartInterface.graphql.resolvers.createChart(input);
     case "getChart":
-      return ChartInterface.graphql.resolvers.getChart(secureEvent);
+      return ChartInterface.graphql.resolvers.getChart(input);
     case "listCharts":
-      return ChartInterface.graphql.resolvers.listCharts(secureEvent);
+      return ChartInterface.graphql.resolvers.listCharts(input);
     default:
       throw new Error(`Unknown field: ${fieldName}`);
   }

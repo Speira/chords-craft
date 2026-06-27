@@ -1,22 +1,28 @@
-import { Effect, pipe, Schema } from "effect";
+import { Effect, type Layer, ParseResult, pipe, Schema } from "effect";
 
 import { ListChartHandler, ListChartQuery } from "~/application/queries";
-import { type Chart } from "~/domain";
+import { type Chart, type ChartProjection, type ChartRepository } from "~/domain";
 import { ChartServicesLive } from "~/infrastructure/dynamodb";
 
-import { type ResolverEvent } from "./types";
-
-export const listCharts = async (event: ResolverEvent): Promise<ReadonlyArray<Chart>> => {
+export const listCharts = (
+  input: unknown,
+  layer: Layer.Layer<ChartRepository | ChartProjection> = ChartServicesLive,
+): Promise<ReadonlyArray<Chart>> => {
   const program = pipe(
-    Schema.decodeUnknown(ListChartQuery)(event.arguments),
+    Schema.decodeUnknown(ListChartQuery)(input),
     Effect.flatMap((query) => ListChartHandler.execute(query)),
-    Effect.provide(ChartServicesLive),
+    Effect.tapError((error) =>
+      Effect.sync(() => {
+        if (error instanceof ParseResult.ParseError) {
+          // Invalid client input — a 400-class mistake, not a server fault.
+          console.warn("ListChart rejected invalid input", error);
+        } else {
+          console.error("ListChart resolver handler failed", error);
+        }
+      }),
+    ),
+    Effect.provide(layer),
   );
 
-  try {
-    return await Effect.runPromise(program);
-  } catch (error) {
-    console.error("ListChart resolver handler failed", error);
-    throw error;
-  }
+  return Effect.runPromise(program);
 };

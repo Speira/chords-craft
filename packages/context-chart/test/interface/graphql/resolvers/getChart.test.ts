@@ -1,7 +1,17 @@
-import { describe, expect, it } from "vitest";
+import { Effect, Layer } from "effect";
 
+import { describe, expect, it, vi } from "vitest";
+
+import { Chord, Note, Section, TenantID } from "@speira/chordschart-shared/valueObjects";
+
+import {
+  ChartID,
+  ChartProjection,
+  ChartReadError,
+  ChartRepository,
+} from "../../../../src/domain";
+import { Chart } from "../../../../src/domain/Chart";
 import { getChart } from "../../../../src/interface/graphql/resolvers/getChart";
-import { type ResolverEvent } from "../../../../src/interface/graphql/resolvers/types";
 
 describe("getChart resolver", () => {
   const validInput = {
@@ -9,34 +19,13 @@ describe("getChart resolver", () => {
     tenantId: "tenant-123",
   };
 
-  const createMockEvent = (input: Record<string, unknown>): ResolverEvent => ({
-    arguments: input,
-    identity: null,
-    source: null,
-    request: {
-      headers: {},
-      domainName: null,
-    },
-    prev: null,
-    info: {
-      selectionSetList: [],
-      selectionSetGraphQL: "",
-      parentTypeName: "Query",
-      fieldName: "getChart",
-      variables: {},
-    },
-    stash: {},
-  });
-
   describe("validation tests", () => {
     it("should reject missing required chartId", async () => {
       const invalidInput = {
         ...validInput,
         chartId: undefined,
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject missing required tenantId", async () => {
@@ -44,9 +33,7 @@ describe("getChart resolver", () => {
         ...validInput,
         tenantId: undefined,
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject empty chartId", async () => {
@@ -54,9 +41,7 @@ describe("getChart resolver", () => {
         ...validInput,
         chartId: "",
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject empty tenantId", async () => {
@@ -64,9 +49,7 @@ describe("getChart resolver", () => {
         ...validInput,
         tenantId: "",
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject invalid chartId format", async () => {
@@ -74,9 +57,7 @@ describe("getChart resolver", () => {
         ...validInput,
         chartId: "invalid-ulid-format",
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject chartId that is too short", async () => {
@@ -84,9 +65,7 @@ describe("getChart resolver", () => {
         ...validInput,
         chartId: "SHORT",
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject chartId that is too long", async () => {
@@ -94,9 +73,7 @@ describe("getChart resolver", () => {
         ...validInput,
         chartId: "A".repeat(27),
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject chartId with invalid characters", async () => {
@@ -104,9 +81,7 @@ describe("getChart resolver", () => {
         ...validInput,
         chartId: "01HQ3X5Z8M9N6P7R8S9T0V!@#$",
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject tenantId that is too long", async () => {
@@ -114,9 +89,7 @@ describe("getChart resolver", () => {
         ...validInput,
         tenantId: "A".repeat(256),
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject null chartId", async () => {
@@ -124,9 +97,7 @@ describe("getChart resolver", () => {
         ...validInput,
         chartId: null,
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject null tenantId", async () => {
@@ -134,9 +105,7 @@ describe("getChart resolver", () => {
         ...validInput,
         tenantId: null,
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject numeric chartId", async () => {
@@ -144,9 +113,7 @@ describe("getChart resolver", () => {
         ...validInput,
         chartId: 12345,
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject object as chartId", async () => {
@@ -154,9 +121,7 @@ describe("getChart resolver", () => {
         ...validInput,
         chartId: { id: "test" },
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should reject array as tenantId", async () => {
@@ -164,9 +129,7 @@ describe("getChart resolver", () => {
         ...validInput,
         tenantId: ["tenant-1", "tenant-2"],
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
   });
 
@@ -176,9 +139,7 @@ describe("getChart resolver", () => {
         ...validInput,
         tenantId: "",
       };
-      const event = createMockEvent(invalidInput);
-
-      await expect(getChart(event)).rejects.toThrow();
+      await expect(getChart(invalidInput)).rejects.toThrow();
     });
 
     it("should handle missing both required fields", async () => {
@@ -186,9 +147,61 @@ describe("getChart resolver", () => {
         chartId: undefined,
         tenantId: undefined,
       };
-      const event = createMockEvent(invalidInput);
+      await expect(getChart(invalidInput)).rejects.toThrow();
+    });
+  });
 
-      await expect(getChart(event)).rejects.toThrow();
+  // The handler's own logic is covered in test/application with mocked infra.
+  // Here the resolver runs against the real handler with a mocked infrastructure
+  // layer, verifying delegation and error propagation.
+  describe("handler delegation", () => {
+    const defaultChart = Chart.create({
+      root: Note.A,
+      id: ChartID.generate(),
+      author: "John Doe",
+      tenantId: TenantID.schema.make("tenant-123"),
+      title: "Test Chart",
+      structure: {
+        [Section.Verse]: {
+          default: [Chord.create({ root: Note.A })],
+        },
+      },
+      plan: [Section.Verse],
+      links: ["https://example.com"],
+      tags: ["jazz"],
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    it("returns the chart found by the projection", async () => {
+      const findById = vi.fn(() => Effect.succeed(defaultChart));
+      const layer = Layer.mergeAll(
+        Layer.succeed(ChartRepository, { save: vi.fn(), load: vi.fn() }),
+        Layer.succeed(ChartProjection, {
+          findById,
+          findByTenant: vi.fn(),
+          upsert: vi.fn(),
+          delete: vi.fn(),
+        }),
+      );
+
+      await expect(getChart(validInput, layer)).resolves.toBe(defaultChart);
+      expect(findById).toHaveBeenCalledWith(validInput.chartId, validInput.tenantId);
+    });
+
+    it("rethrows projection failures", async () => {
+      const layer = Layer.mergeAll(
+        Layer.succeed(ChartRepository, { save: vi.fn(), load: vi.fn() }),
+        Layer.succeed(ChartProjection, {
+          findById: vi.fn(() => Effect.fail(new ChartReadError({ reason: "boom" }))),
+          findByTenant: vi.fn(),
+          upsert: vi.fn(),
+          delete: vi.fn(),
+        }),
+      );
+
+      await expect(getChart(validInput, layer)).rejects.toThrow();
     });
   });
 });
