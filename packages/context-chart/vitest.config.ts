@@ -1,14 +1,14 @@
 import tsconfigPaths from "vite-tsconfig-paths";
 import type { ViteUserConfig } from "vitest/config";
 
+import { workspaceAliases } from "../../vitest.shared";
+
 const config: ViteUserConfig = {
   plugins: [tsconfigPaths()],
   esbuild: {
     target: "es2020",
   },
-  resolve: {
-    conditions: ["source"],
-  },
+  resolve: { alias: workspaceAliases },
   test: {
     setupFiles: ["./setupTests.ts"],
     fakeTimers: {
