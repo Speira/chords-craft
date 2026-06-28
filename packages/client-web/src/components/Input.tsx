@@ -12,7 +12,7 @@ interface IInput extends ComponentProps<"input"> {
   isLoading?: boolean;
 }
 
-export function Input({ isLoading, ...props }: IInput) {
+export function Input({ isLoading, placeholder, ...props }: IInput) {
   const t = useAppTranslations();
 
   if (isLoading) return <Skeleton />;
@@ -20,7 +20,8 @@ export function Input({ isLoading, ...props }: IInput) {
   return (
     <UiInput
       {...props}
-      placeholder={props.placeholder ? t(props.placeholder) : undefined}
+      placeholder={placeholder ? t(placeholder) : undefined}
+      data-i18nkey={placeholder ?? ""}
     />
   );
 }

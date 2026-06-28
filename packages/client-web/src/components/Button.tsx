@@ -10,7 +10,7 @@ interface IButton extends ButtonProps, ITextualComponent {
 export function Button(props: IButton) {
   const { children, endNode, isServer, label, startNode, ...rest } = props;
   return (
-    <UiButton {...rest}>
+    <UiButton {...rest} data-i18nkey={label ?? ""}>
       <TextualComponent
         isServer={isServer}
         endNode={endNode}

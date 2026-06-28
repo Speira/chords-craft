@@ -4,7 +4,7 @@ import { Logger } from "../logger";
 
 export const toDarkMode = () => {
   try {
-    document.documentElement.classList.add("dark");
+    document.body.classList.add("dark");
   } catch (err) {
     Logger.error("toDarkMode", { err });
   }
@@ -12,7 +12,7 @@ export const toDarkMode = () => {
 
 export const toLightMode = () => {
   try {
-    document.documentElement.classList.remove("dark");
+    document.body.classList.remove("dark");
   } catch (err) {
     Logger.error("toLightMode", { err });
   }
@@ -20,7 +20,7 @@ export const toLightMode = () => {
 
 export const toggleMode = (needDarkMode: boolean) => {
   try {
-    document.documentElement.classList.toggle("dark", needDarkMode);
+    document.body.classList.toggle("dark", needDarkMode);
   } catch (err) {
     Logger.error("toggleMode", { err });
   }
@@ -28,7 +28,7 @@ export const toggleMode = (needDarkMode: boolean) => {
 
 export const checkIsDarkMode = () => {
   try {
-    return document.documentElement.classList.contains("dark");
+    return document.body.classList.contains("dark");
   } catch (err) {
     Logger.error("checkIsDarkMode", { err });
     return false;

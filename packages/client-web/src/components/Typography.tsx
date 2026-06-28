@@ -44,6 +44,7 @@ export function Typography(props: TypographyProps) {
   return (
     <TypographyComponent
       className={cn(baseClasses[as], "flex items-center gap-2", className)}
+      data-i18nkey={label}
       {...rest}>
       <TextualComponent
         isServer={isServer}

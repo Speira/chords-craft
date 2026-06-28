@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
 
 import { LinkButton, Main, Typography } from "~/components";
+import { StyledArc } from "~/components/icons/StyledArc";
 import K from "~/constants";
 
 export default async function Home() {
@@ -14,7 +14,7 @@ export default async function Home() {
         label="general.title"
       />
       <div className="relative h-16 max-h-1/3 w-dvw max-w-3xl">
-        <Image src="/arc.svg" alt="home-header-image" priority fill objectFit="contain" />
+        <StyledArc />
       </div>
       <Typography isServer className="text-primary" as="strong" label="home.subtitle" />
       <div>

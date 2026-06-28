@@ -43,7 +43,7 @@ export function LinkButton(props: LinkButtonProps) {
   const { children, endNode, href, isServer, label, startNode, ...rest } = props;
   return (
     <Button asChild {...rest}>
-      <NextLink href={href}>
+      <NextLink href={href} data-i18nkey={label ?? ""}>
         <TextualComponent
           isServer={isServer}
           endNode={endNode}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Prosto_One } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 
 import { Footer, Header } from "~/components";
 import { AuthHeaderNav, AuthProvider } from "~/features/auth";
@@ -40,16 +41,18 @@ export default async function RootLayout({
 
   return (
     <AuthProvider locale={locale}>
-      <html lang={locale}>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} ${prostoOne.variable} antialiased`}>
-          <I18nProvider locale={locale}>
-            <Header endNode={<AuthHeaderNav />} />
-            {children}
-            <Footer />
-          </I18nProvider>
-        </body>
-      </html>
+      <ThemeProvider attribute="class">
+        <html lang={locale} suppressHydrationWarning>
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} ${prostoOne.variable} antialiased`}>
+            <I18nProvider locale={locale}>
+              <Header endNode={<AuthHeaderNav />} />
+              {children}
+              <Footer />
+            </I18nProvider>
+          </body>
+        </html>
+      </ThemeProvider>
     </AuthProvider>
   );
 }

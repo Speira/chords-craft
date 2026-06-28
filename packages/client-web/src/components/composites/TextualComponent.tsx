@@ -21,6 +21,7 @@ export interface ITextualComponent {
   startNode?: ReactNode;
 }
 
+/** Internal component to display translated text whithout html tag */
 export function TextualComponent(props: ITextualComponent) {
   const { children, endNode, isServer, label, startNode } = props;
   return (
