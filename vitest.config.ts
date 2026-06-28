@@ -1,13 +1,13 @@
 import * as path from "node:path";
 import tsconfigPaths from "vite-tsconfig-paths";
-import type { ViteUserConfig } from "vitest/config";
+import { configDefaults, type ViteUserConfig } from "vitest/config";
 
 import { workspaceAliases } from "./vitest.shared";
 
-const project = (name: string) => ({
+const project = (name: string, test: Record<string, unknown> = {}) => ({
   plugins: [tsconfigPaths()],
   resolve: { alias: workspaceAliases },
-  test: { name, root: `packages/${name}` },
+  test: { name, root: `packages/${name}`, ...test },
 });
 
 // This is a workaround, see https://github.com/vitest-dev/vitest/issues/4744
@@ -26,7 +26,16 @@ const config: ViteUserConfig = {
     sequence: {
       concurrent: true,
     },
-    projects: [project("shared"), project("context-chart")],
+    projects: [
+      project("shared"),
+      // Integration tests (test/infrastructure/**) need a local DynamoDB and run
+      // only via context-chart's `test:integration` script, never in the default suite.
+      project("context-chart", {
+        exclude: [...configDefaults.exclude, "test/infrastructure/**"],
+      }),
+      project("api-auth"),
+      project("api-chart"),
+    ],
   },
 };
 

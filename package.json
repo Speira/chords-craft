@@ -13,6 +13,7 @@
     "clean": "node scripts/clean.mjs",
     "codegen": "pnpm -r --parallel run codegen",
     "coverage": "vitest run --coverage",
+    "dev:web": "pnpm --filter @speira/chordschart-client-web dev",
     "format": "prettier --write \"**/{src,test,scripts}/**/*.{ts,tsx,mjs,css}\"",
     "format:check": "prettier --check \"**/{src,test,scripts}/**/*.{ts,tsx,mjs,css}\"",
     "lint": "eslint \"**/{src,test,scripts}/**/*.{ts,tsx,mjs}\"",
