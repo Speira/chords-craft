@@ -6,7 +6,6 @@ import {
   DatabaseConstruct,
   LambdasConstruct,
   MonitoringConstruct,
-  NetworkingConstruct,
   SecurityConstruct,
   StorageConstruct,
 } from "./constructParts";
@@ -22,14 +21,13 @@ export class ChordsChartStack extends cdk.Stack {
       ? cdk.RemovalPolicy.RETAIN
       : cdk.RemovalPolicy.DESTROY;
 
+    const clerkAuthSecretPath = IS_PRODUCTION
+      ? "chordschart/clerk-secret-key_prod"
+      : "chordschart/clerk-secret-key_dev";
+
     const database = new DatabaseConstruct(this, "Database", {
       stackName: this.stackName,
       removalPolicy,
-    });
-
-    const networking = new NetworkingConstruct(this, "Networking", {
-      maxAzs: 2,
-      natGateways: 0,
     });
 
     const storage = new StorageConstruct(this, "Construct", {
@@ -38,24 +36,32 @@ export class ChordsChartStack extends cdk.Stack {
       removalPolicy,
       autoDeleteObjects: !IS_PRODUCTION,
     });
-    new SecurityConstruct(this, "Security");
 
     const lambdas = new LambdasConstruct(this, "Lambdas", {
-      vpc: networking.vpc,
-      securityGroup: networking.lambdaSecurityGroup,
       projectionTable: database.projectionTable,
       eventsTable: database.eventsTable,
       chartBucket: storage.chartBucket,
       userBucket: storage.userBucket,
-    });
-
-    new MonitoringConstruct(this, "Monitoring", {
-      chartFunction: lambdas.chartFunction,
+      isProduction: IS_PRODUCTION,
+      clerkAuthSecretPath,
     });
 
     const appSyncApi = new AppSynConstruct(this, "AppSync", {
       authorizerFunction: lambdas.authorizerFunction,
       chartFunction: lambdas.chartFunction,
+      isProduction: IS_PRODUCTION,
+    });
+
+    new MonitoringConstruct(this, "Monitoring", {
+      stackName: this.stackName,
+      authorizerFunction: lambdas.authorizerFunction,
+      chartFunction: lambdas.chartFunction,
+      isProduction: IS_PRODUCTION,
+      apiId: appSyncApi.graphqlApi.apiId,
+    });
+
+    new SecurityConstruct(this, "Security", {
+      resourceArn: appSyncApi.graphqlApi.arn,
     });
 
     // Outputs:

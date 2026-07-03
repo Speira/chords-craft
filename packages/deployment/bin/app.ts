@@ -9,7 +9,7 @@ const env = {
   region: "eu-west-3",
 };
 const environment = app.node.tryGetContext("env") || "dev";
-const stackName = `ChordsChart-${environment}`;
+const stackName = `ChordsChart-${environment}`; // ChordsChart-dev
 new ChordsChartStack(app, stackName, {
   env,
   tags: {

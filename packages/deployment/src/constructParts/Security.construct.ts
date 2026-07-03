@@ -1,10 +1,14 @@
 import * as wafv2 from "aws-cdk-lib/aws-wafv2";
 import { Construct } from "constructs";
 
+export interface ISecurityConstruct {
+  resourceArn: string;
+}
+
 export class SecurityConstruct extends Construct {
   public readonly webAcl: wafv2.CfnWebACL;
 
-  constructor(scope: Construct, id: string) {
+  constructor(scope: Construct, id: string, props: ISecurityConstruct) {
     super(scope, id);
 
     // WAF Web ACL for AppSync protection
@@ -50,6 +54,11 @@ export class SecurityConstruct extends Construct {
           },
         },
       ],
+    });
+
+    new wafv2.CfnWebACLAssociation(this, "AppSyncWebACLAssociation", {
+      resourceArn: props.resourceArn,
+      webAclArn: this.webAcl.attrArn,
     });
   }
 }

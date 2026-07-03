@@ -37,7 +37,7 @@ export class StorageConstruct extends Construct {
     // User Bucket
     this.userBucket = new s3.Bucket(this, "UserBucket", {
       bucketName: `${props.stackName.toLowerCase()}-users-${props.account}`,
-      versioned: true,
+      versioned: false,
       encryption: s3.BucketEncryption.S3_MANAGED,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       removalPolicy,
