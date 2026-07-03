@@ -1,11 +1,16 @@
 # Chords Chart
 
-SaaS platform for Musicians to help building their chords chart and share with others. Built with event sourcing, DDD, and serverless architecture
-(find more details about the architecture design in the [High level design document](documentations/HIGH_LEVEL_DESIGN.md)).
+SaaS platform for Musicians to:
+
+- Help building & share their chords charts.
+- Organize, sync their bands.
+
+Built with event sourcing, DDD, and serverless architecture
+(find more details about the architecture design in the [High level design document](documentation/HIGH_LEVEL_DESIGN.md)).
 
 ## Overview
 
-**Problem:** Musicians struggle to create and share their music chords chart in a standard way.
+**Problem:** Musicians struggle to create and share their music chords chart.
 
 **Solution:** Intuitive App to create chords chart and share with groups/friends
 
@@ -22,21 +27,18 @@ SaaS platform for Musicians to help building their chords chart and share with o
 
 ## Structure
 
-```
+```markdown
 packages/
-├── api/
-│   ├── chart-api/            # A dedicated AWS lambda api
-├── clients/
-│   ├── web/                  # browser app using Next.js
-├── contexts/                 # Bounded contexts (contains domain, application, infrastructure and interface)
-│   ├── chart/                # Chart management
-│   │   ├── domain/           # Entities, aggregates, events (pure TS)
-│   │   ├── application/      # Commands, queries, handlers (Effect programs)
-│   │   ├── infrastructure/   # DynamoDB repos, projections, layers
-│   │   └── interface/        # GraphQL/Lambda adapters
-│   └── user/                 # User management (planned)
-├── deployment/               # Deployment (Infra as Code) via AWS CDK with Appsync
-└── shared/                   # Common types, value objects
+├── api-chart/ # A dedicated AWS lambda api
+├── clients-web/ # browser app using Next.js
+├── context-chart/ # Bounded contexts for Chart
+│ ├── domain/ # Entities, aggregates, events (pure TS)
+│ ├── application/ # Commands, queries, handlers (Effect programs)
+│ ├── infrastructure/ # DynamoDB repos, projections, layers
+│ └── interface/ # GraphQL/Lambda adapters
+├── context-band/ # Bounded contexts for Band
+├── deployment/ # Deployment (Infra as Code) via AWS CDK with Appsync
+└── shared/ # Common types, value objects
 ```
 
 ## Key Patterns
@@ -59,7 +61,7 @@ packages/
 - `dynamodb/DynamoDBChartRepository.ts` - Event store (writes)
 - `dynamodb/DynamoDBChartProjection.ts` - Read model (queries)
 - `dynamodb/DynamoDBChartService.ts` - Expose service from DynamoDB
-- `cli.ts` - Run action with infrastructure implementations (ex: rerun DynamoDB projector events)
+- `cli.ts` - Run action with infrastructure implementations (ex: rerun events)
 
 **Interface Layer** (system boundaries, executions):
 
@@ -84,7 +86,7 @@ packages/
 
 ## Operations
 
-**Building**
+**Building**:
 
 To build all packages in the monorepo:
 
@@ -92,7 +94,7 @@ To build all packages in the monorepo:
 pnpm build
 ```
 
-**Testing**
+**Testing**:
 
 To test all packages in the monorepo:
 
@@ -100,7 +102,7 @@ To test all packages in the monorepo:
 pnpm test
 ```
 
-**Clean**
+**Clean**:
 
 To clean all packages in the monorepo:
 
