@@ -27,18 +27,19 @@ Built with event sourcing, DDD, and serverless architecture
 
 ## Structure
 
-```markdown
-packages/
-├── api-chart/ # A dedicated AWS lambda api
-├── clients-web/ # browser app using Next.js
-├── context-chart/ # Bounded contexts for Chart
-│ ├── domain/ # Entities, aggregates, events (pure TS)
-│ ├── application/ # Commands, queries, handlers (Effect programs)
-│ ├── infrastructure/ # DynamoDB repos, projections, layers
-│ └── interface/ # GraphQL/Lambda adapters
-├── context-band/ # Bounded contexts for Band
-├── deployment/ # Deployment (Infra as Code) via AWS CDK with Appsync
-└── shared/ # Common types, value objects
+```bash
+./packages/
+  ├── api-chart/            # A dedicated AWS lambda api
+  ├── api-auth/             # An auth api using Clerk
+  ├── clients-web/          # browser app using Next.js
+  ├── context-chart/        # Bounded contexts for Chart
+  │   ├── domain/           # Entities, aggregates, events (pure TS)
+  │   ├── application/      # Commands, queries, handlers (Effect programs)
+  │   ├── infrastructure/   # DynamoDB repos, projections, layers
+  │   └── interface/        # GraphQL/Lambda adapters
+  ├── context-band/         # Bounded contexts for Band
+  ├── deployment/           # Deployment via AWS CDK with Appsync
+  └── shared/               # Common types, value objects
 ```
 
 ## Key Patterns
