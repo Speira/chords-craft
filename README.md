@@ -5,8 +5,10 @@ SaaS platform for Musicians to:
 - Help building & share their chords charts.
 - Organize, sync their bands.
 
-Built with event sourcing, DDD, and serverless architecture
-(find more details about the architecture design in the [High level design document](documentation/HIGH_LEVEL_DESIGN.md)).
+Built with event sourcing, DDD, and serverless architecture.
+
+- [Product Requirements Document](documentation/PRD.md) — what the product does, and what is built versus specified.
+- [High Level Design](documentation/HIGH_LEVEL_DESIGN.md) — architecture design details.
 
 ## Overview
 
