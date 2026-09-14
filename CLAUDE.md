@@ -125,3 +125,7 @@ Available skills:
 /careful, /freeze, /guard, /unfreeze, /gstack-upgrade
 
 If gstack skills aren't working, run: cd .claude/skills/gstack && ./setup
+
+## Non-negotiable constraints
+
+- update documentations (README.md, documentation/\*\*), after each impactful task to stay up to date in these documentations.
