@@ -279,8 +279,6 @@ decision.
    The implemented design is the better one; the HLD should be updated to it.
 4. **Undocumented contexts.** `context-band` and `context-user` exist as packages but are
    absent from `CLAUDE.md`'s package map.
-5. **Naming defect.** `packages/context-band/src/domain/valueObjects/BamdMember.ts` is
-   misspelled; it should be `BandMember.ts`.
 
 ---
 
