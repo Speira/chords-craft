@@ -37,6 +37,7 @@
     "error": {
       "emailExists": "This email address is already registered.",
       "form_code_incorrect": "Incorrect verification code.",
+      "form_code_incorrect_second_factor": "Incorrect verification code.",
       "form_identifier_exists": "This email is already taken.",
       "form_identifier_not_found": "Couldn't find your account",
       "form_param_format_invalid": "Invalid email format.",
@@ -49,6 +50,8 @@
       "missingInformation": "Please fill in all required fields.",
       "passwordTooShort": "Password must be at least 6 characters long.",
       "passwordsDoNotMatch": "Passwords do not match",
+      "secondFactorFailed": "That code did not work. Please try again.",
+      "secondFactorUnsupported": "Your account uses a second step this app cannot handle yet. Please contact support.",
       "signupFailed": "Signup failed. Please try again.",
       "unknown_error": "An error occurred. Please try again.",
       "userNotFound": "User not found. Please check your email address.",
@@ -78,6 +81,15 @@
     "signupSuccess": "Sign up successful",
     "signupTitle": "Sign Up",
     "title": "Auth",
+    "twoFactor": {
+      "backupCodePrompt": "Enter one of your backup codes.",
+      "code": "Verification code",
+      "emailCodePrompt": "Enter the code we sent to your email.",
+      "phoneCodePrompt": "Enter the code we sent to your phone.",
+      "title": "Two-step verification",
+      "totpPrompt": "Enter the code from your authenticator app.",
+      "verify": "Verify"
+    },
     "username": "Username",
     "verificationCode": "Verification Code",
     "verificationCodeSent": "We've sent a verification code to your email address.",

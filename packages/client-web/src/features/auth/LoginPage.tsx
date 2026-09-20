@@ -11,7 +11,15 @@ import { type AppTranslation, useRouter } from '#client-web/lib/nextIntl';
 import { useAppTranslations } from '#client-web/lib/nextIntl/useAppTranslation';
 import { checkIsDarkMode, cn } from '#client-web/lib/shadcn';
 
-import { clerkLocalAdapter, describeAuthError, getClerkError } from './utils';
+import { LoginSecondFactor } from './LoginSecondFactor';
+import {
+  checkIsSecondFactorStrategy,
+  clerkLocalAdapter,
+  describeAuthError,
+  getClerkError,
+  SECOND_FACTOR_STRATEGIES,
+  type SecondFactorStrategy,
+} from './utils';
 
 export function LoginPage(props: { locale: string }) {
   const locale = clerkLocalAdapter(props.locale);
@@ -23,6 +31,26 @@ export function LoginPage(props: { locale: string }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<AppTranslation | ''>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [secondFactor, setSecondFactor] = useState<SecondFactorStrategy | null>(null);
+
+  /** Resolve and prepare the second factor Clerk is asking for. False when we cannot handle it. */
+  const startSecondFactor = async () => {
+    const strategy = SECOND_FACTOR_STRATEGIES.find((candidate) =>
+      (signIn?.supportedSecondFactors ?? []).some((factor) => factor.strategy === candidate),
+    );
+    if (!checkIsSecondFactorStrategy(strategy)) {
+      Logger.warn('LoginPage.startSecondFactor', {
+        supportedSecondFactors: signIn?.supportedSecondFactors,
+      });
+      return false;
+    }
+    // TOTP and backup codes are entered straight away; a code has to be sent first.
+    if (strategy === 'phone_code' || strategy === 'email_code') {
+      await signIn?.prepareSecondFactor({ strategy });
+    }
+    setSecondFactor(strategy);
+    return true;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +62,10 @@ export function LoginPage(props: { locale: string }) {
       // Every outcome must either navigate or show why it did not: while isLoading is true the
       // inputs are disabled and the submit button is replaced by a skeleton, so a silent return
       // leaves the screen looking frozen.
+      if (result.status === 'needs_second_factor') {
+        if (!(await startSecondFactor())) setError('auth.error.secondFactorUnsupported');
+        return;
+      }
       if (result.status !== 'needs_first_factor') {
         Logger.warn('LoginPage.handleSubmit', { status: result.status });
         setError('auth.error.invalidCredentials');
@@ -43,6 +75,12 @@ export function LoginPage(props: { locale: string }) {
         strategy: 'password',
         password,
       });
+      if (attemptFirstFactor.status === 'needs_second_factor') {
+        // The account has 2FA on: ask for the factor Clerk offers instead of calling the
+        // password wrong.
+        if (!(await startSecondFactor())) setError('auth.error.secondFactorUnsupported');
+        return;
+      }
       if (attemptFirstFactor.status !== 'complete') {
         Logger.warn('LoginPage.handleSubmit', { status: attemptFirstFactor.status });
         setError('auth.error.invalidCredentials');
@@ -77,6 +115,8 @@ export function LoginPage(props: { locale: string }) {
         setIsLoading(false);
       });
   };
+
+  if (secondFactor) return <LoginSecondFactor strategy={secondFactor} />;
 
   return (
     <section className="flex flex-col items-center">

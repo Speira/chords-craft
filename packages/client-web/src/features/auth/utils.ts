@@ -62,3 +62,23 @@ export const getClerkError = (err: unknown) => {
   if (!Typeguards.checkIsString(errorItem.code)) return '';
   return `auth.error.${errorItem.code}`;
 };
+
+/** The second-factor strategies this app can prompt for, in the order it prefers them. */
+export const SECOND_FACTOR_STRATEGIES = [
+  'totp',
+  'phone_code',
+  'email_code',
+  'backup_code',
+] as const;
+
+export type SecondFactorStrategy = (typeof SECOND_FACTOR_STRATEGIES)[number];
+
+/**
+ * Pick the second factor to prompt for out of Clerk's `supportedSecondFactors`.
+ *
+ * Returns `undefined` when the account only offers factors this screen cannot handle, so the caller
+ * can say so instead of leaving the user stuck.
+ */
+export const checkIsSecondFactorStrategy = (value: unknown): value is SecondFactorStrategy =>
+  Typeguards.checkIsString(value) &&
+  SECOND_FACTOR_STRATEGIES.includes(value as SecondFactorStrategy);

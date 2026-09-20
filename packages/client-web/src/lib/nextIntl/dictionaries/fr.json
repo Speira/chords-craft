@@ -32,9 +32,12 @@
     "title": "Chords Craft"
   },
   "auth": {
+    "confirmPassword": "Confirmer le mot de passe",
+    "email": "Email",
     "error": {
       "emailExists": "Cette adresse e-mail est déjà enregistrée.",
       "form_code_incorrect": "Code de vérification incorrecte",
+      "form_code_incorrect_second_factor": "Code de vérification incorrect.",
       "form_identifier_exists": "Cet Email est déjà pris",
       "form_identifier_not_found": "Ce compte n'est pas enregistré.",
       "form_param_format_invalid": "Format d'Email invalide.",
@@ -47,13 +50,13 @@
       "missingInformation": "Veuillez remplir tous les champs requis.",
       "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères.",
       "passwordsDoNotMatch": "Les mots de passe no correspondent pas.",
+      "secondFactorFailed": "Ce code est invalide. Veuillez réessayer.",
+      "secondFactorUnsupported": "Votre compte utilise une seconde étape que l'application ne gère pas encore. Contactez le support.",
       "signupFailed": "L'inscription a échoué, veuillez recommencer.",
       "unknown_error": "Une erreur est survenue, veuillez recommencer.",
       "userNotFound": "Utilisateur introuvable. Veuillez vérifier votre adresse e-mail.",
       "verificationFailed": "La vérification a échoué. Veuillez recommencer."
     },
-    "confirmPassword": "Confirmer le mot de passe",
-    "email": "Email",
     "firstName": "Prénom",
     "forgotPassword": "Mot de passe oublié ?",
     "hasAccount": "Vous avez déjà un compte ?",
@@ -78,6 +81,15 @@
     "signupSuccess": "Inscription réussie",
     "signupTitle": "Inscription",
     "title": "Authentification",
+    "twoFactor": {
+      "backupCodePrompt": "Saisissez l’un de vos codes de secours.",
+      "code": "Code de vérification",
+      "emailCodePrompt": "Saisissez le code envoyé par e-mail.",
+      "phoneCodePrompt": "Saisissez le code envoyé sur votre téléphone.",
+      "title": "Vérification en deux étapes",
+      "totpPrompt": "Saisissez le code de votre application d'authentification.",
+      "verify": "Vérifier"
+    },
     "username": "Pseudo",
     "verificationCode": "Verification Code",
     "verificationCodeSent": "Un mail contenant le code vient de vous être envoyé",
