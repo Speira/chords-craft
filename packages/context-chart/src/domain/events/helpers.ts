@@ -45,7 +45,9 @@ export const deserializeEvent = Effect.fn(
         aggregateId: item.aggregateId,
         tenantId: item.tenantId,
         version: item.version,
-        occuredAt: typeof item.occuredAt === 'string' ? new Date(item.occuredAt) : new Date(),
+        // `occuredAt` is `Schema.Date`: its encoded side is the ISO string, so it is handed over
+        // untouched and the schema does the decoding.
+        occuredAt: typeof item.occuredAt === 'string' ? item.occuredAt : new Date().toISOString(),
       };
 
       if (!Typeguards.checkIsPlainObject(item.data)) {
@@ -59,20 +61,23 @@ export const deserializeEvent = Effect.fn(
       switch (eventType) {
         case 'ChartCreated':
           return yield* Schema.decodeUnknown(ChartCreated)({
+            _tag: 'ChartCreated',
             ...baseData,
             ...item.data,
           }).pipe(Effect.mapError(mapToChartParseError));
 
         case 'ChartUpdated':
           return yield* Schema.decodeUnknown(ChartUpdated)({
+            _tag: 'ChartUpdated',
             ...baseData,
             ...item.data,
           }).pipe(Effect.mapError(mapToChartParseError));
 
         case 'ChartArchived':
-          return yield* Schema.decodeUnknown(ChartArchived)(baseData).pipe(
-            Effect.mapError(mapToChartParseError),
-          );
+          return yield* Schema.decodeUnknown(ChartArchived)({
+            _tag: 'ChartArchived',
+            ...baseData,
+          }).pipe(Effect.mapError(mapToChartParseError));
 
         default:
           return yield* new ChartParseError({
