@@ -10,7 +10,7 @@ import { Construct } from 'constructs';
 
 import K from '../constants';
 
-export interface ILambdasConstruct {
+export interface LambdasConstructProps {
   readonly eventsTable: dynamodb.ITable;
   readonly projectionTable: dynamodb.ITable;
   readonly chartBucket: s3.IBucket;
@@ -24,7 +24,7 @@ export class LambdasConstruct extends Construct {
   public readonly chartFunction: lambda.Function;
   public readonly chartsDLQ: sqs.Queue;
 
-  constructor(scope: Construct, id: string, props: ILambdasConstruct) {
+  constructor(scope: Construct, id: string, props: LambdasConstructProps) {
     super(scope, id);
 
     // Retrieve Clerk secret from Secrets Manager

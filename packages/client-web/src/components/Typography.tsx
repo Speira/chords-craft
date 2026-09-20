@@ -2,14 +2,14 @@ import type { ClassNameValue } from 'tailwind-merge';
 
 import { cn } from '#client-web/lib/shadcn';
 
-import { type ITextualComponent, TextualComponent } from './composites/TextualComponent';
+import { TextualComponent, type TextualComponentProps } from './composites/TextualComponent';
 
 interface TypographyProps
   extends
     React.HTMLAttributes<
       HTMLHeadingElement | HTMLParagraphElement | HTMLSpanElement | HTMLQuoteElement
     >,
-    ITextualComponent {
+    TextualComponentProps {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'b' | 'span' | 'small' | 'strong' | 'blockquote';
 }
 

@@ -1,5 +1,14 @@
 /** Constants for the web app */
 export default {
+  /**
+   * The brand colour as a literal. Browser metadata (themeColor, the web manifest) and Clerk's
+   * appearance API cannot read CSS variables, so this mirrors `--primary` (light mode) from
+   * `app/[locale]/globals.css`. Change both together — see DESIGN.md.
+   */
+  BRAND: {
+    PRIMARY: '#556e84',
+    BACKGROUND: '#fdfdfd',
+  },
   API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001',
   API_ENDPOINTS: {
     AUTH_LOGIN: '/auth/login',

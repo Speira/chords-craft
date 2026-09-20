@@ -561,17 +561,17 @@ export default defineConfig(
     files: ['packages/**/*.{ts,tsx}'],
     ignores: CONFIG_FILES, // those run without type information
     rules: {
-      '@typescript-eslint/no-unnecessary-condition': 'warn', // 25
+      '@typescript-eslint/no-unnecessary-condition': 'warn', // 28
       'no-restricted-syntax': 'warn', // 21
-      '@typescript-eslint/no-unsafe-member-access': 'warn', // 20
-      '@typescript-eslint/no-empty-function': 'warn', // 18
+      '@typescript-eslint/no-unsafe-member-access': 'warn', // 21
+      '@typescript-eslint/no-empty-function': 'warn', // 32
       '@typescript-eslint/no-unsafe-call': 'warn', // 17
-      '@typescript-eslint/no-unsafe-assignment': 'warn', // 15
-      '@typescript-eslint/naming-convention': 'warn', // 14
+      '@typescript-eslint/no-unsafe-assignment': 'warn', // 16
+      '@typescript-eslint/naming-convention': 'warn', // 11
       'no-console': 'warn', // 12
       '@typescript-eslint/no-unsafe-argument': 'warn', // 7
       '@typescript-eslint/prefer-nullish-coalescing': 'warn', // 7
-      'import-x/no-default-export': 'warn', // 6
+      'import-x/no-default-export': 'warn', // 16
       '@typescript-eslint/no-explicit-any': 'warn', // 4
       '@typescript-eslint/no-unsafe-return': 'warn', // 4
       '@typescript-eslint/require-await': 'warn', // 4

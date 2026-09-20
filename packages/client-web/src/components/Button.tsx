@@ -1,13 +1,13 @@
 import type { AppTranslation } from '#client-web/lib/nextIntl';
 
-import { type ITextualComponent, TextualComponent } from './composites/TextualComponent';
-import { Button as UiButton, type ButtonProps } from './ui/button';
+import { TextualComponent, type TextualComponentProps } from './composites/TextualComponent';
+import { Button as UiButton, type ButtonProps as UiButtonProps } from './ui/button';
 
-interface IButton extends ButtonProps, ITextualComponent {
+interface ButtonProps extends UiButtonProps, TextualComponentProps {
   label?: AppTranslation;
 }
 
-export function Button(props: IButton) {
+export function Button(props: ButtonProps) {
   const { children, endNode, isServer, label, startNode, ...rest } = props;
   return (
     <UiButton {...rest} data-i18nkey={label ?? ''}>

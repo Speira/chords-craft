@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Prosto_One } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 
 import { Footer, Header } from '#client-web/components';
+import K from '#client-web/constants';
 import { AuthHeaderNav, AuthProvider } from '#client-web/features/auth';
 import { I18nProvider } from '#client-web/lib/nextIntl';
 
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
   },
 };
 export const viewport = {
-  themeColor: '#556e84',
+  themeColor: K.BRAND.PRIMARY,
 };
 export default async function RootLayout({
   children,

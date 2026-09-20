@@ -30,8 +30,10 @@ What is left is tracked, not hidden:
 - Vitest 5: `describe.sequential` → `{ concurrent: false }`, constructor mocks need a
   `function`, and the global `sequence.concurrent` is gone (it made a resolver test observe
   another test's mock).
-- File and interface naming: `useMobile.ts`, `nextIntl/`, `ChordsChartStack.ts`, and
-  `IButton`/`IHeader`/… → `ButtonProps`/`HeaderProps`/…
+- File naming: `useMobile.ts`, `nextIntl/`, `ChordsChartStack.ts`.
+- Interface naming: `IButton`/`IHeader`/… → `ButtonProps`/`HeaderProps`/…. Claimed in the
+  migration commit but not actually applied there (the script aborted before that step); landed
+  afterwards in `fix/design-doc-drift`.
 
 ## Deviations from the template (deliberate)
 

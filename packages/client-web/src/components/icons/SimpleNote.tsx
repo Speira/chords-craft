@@ -1,6 +1,6 @@
 import { useId } from 'react';
 
-export const SimpleNote = ({ color = '#262626' }) => {
+export const SimpleNote = ({ color = 'currentColor' }) => {
   const id = useId();
   const g1 = `${id}-gr1`;
   const g2 = `${id}-gr2`;
