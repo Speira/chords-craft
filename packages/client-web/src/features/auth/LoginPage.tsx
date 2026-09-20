@@ -11,7 +11,7 @@ import { type AppTranslation, useRouter } from '#client-web/lib/nextIntl';
 import { useAppTranslations } from '#client-web/lib/nextIntl/useAppTranslation';
 import { checkIsDarkMode, cn } from '#client-web/lib/shadcn';
 
-import { clerkLocalAdapter, getClerkError } from './utils';
+import { clerkLocalAdapter, describeAuthError, getClerkError } from './utils';
 
 export function LoginPage(props: { locale: string }) {
   const locale = clerkLocalAdapter(props.locale);
@@ -43,9 +43,9 @@ export function LoginPage(props: { locale: string }) {
           Logger.warn('LoginPage.handleSubmit', { attemptFirstFactor });
         }
       }
-      if (isLoading) setIsLoading(false);
+      setIsLoading(false);
     } catch (err) {
-      Logger.error('SignUpPage.handleSubmit', { err });
+      Logger.error('LoginPage.handleSubmit', describeAuthError(err));
       setIsLoading(false);
       const code = getClerkError(err);
       if (t.has(code)) setError(code as AppTranslation);
@@ -62,7 +62,7 @@ export function LoginPage(props: { locale: string }) {
         redirectUrlComplete: '/',
       })
       .catch((err) => {
-        Logger.error('LoginPage.signInWithGoogle', { err });
+        Logger.error('LoginPage.signInWithGoogle', describeAuthError(err));
         setError('auth.error.googleAuthError');
       })
       .finally(() => {

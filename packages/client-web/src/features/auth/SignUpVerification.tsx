@@ -8,6 +8,8 @@ import { Button, Input, Skeleton, Typography } from '#client-web/components';
 import { Logger } from '#client-web/lib/logger';
 import { type AppTranslation, useRouter } from '#client-web/lib/nextIntl';
 
+import { describeAuthError } from './utils';
+
 export function SignUpVerification() {
   const [error, setError] = useState<AppTranslation | ''>('');
   const { setActive, signUp } = useSignUp();
@@ -27,10 +29,10 @@ export function SignUpVerification() {
         setIsLoading(false);
         router.push('/');
       }
-      if (isLoading) setIsLoading(false);
+      setIsLoading(false);
     } catch (err) {
       setIsLoading(false);
-      Logger.error('SignUpVerification.handleVerification', { err });
+      Logger.error('SignUpVerification.handleVerification', describeAuthError(err));
       setError('auth.error.verificationFailed');
     }
   };
