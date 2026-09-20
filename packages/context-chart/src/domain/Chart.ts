@@ -1,6 +1,6 @@
 import { Data, Effect, Schema } from 'effect';
 
-import { ObjectUtils } from '@speira/chordschart-shared/utils';
+import { ObjectUtils } from '@chordcraft/shared/utils';
 
 import {
   ChartSchema,

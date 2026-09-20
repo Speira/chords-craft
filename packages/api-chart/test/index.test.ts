@@ -1,11 +1,11 @@
 import type { AppSyncResolverEvent } from 'aws-lambda';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ChartInterface } from '@speira/chordschart-context-chart';
+import { ChartInterface } from '@chordcraft/context-chart';
 
 import { handler } from '../src/index';
 
-vi.mock('@speira/chordschart-context-chart', () => ({
+vi.mock('@chordcraft/context-chart', () => ({
   ChartInterface: {
     graphql: {
       resolvers: {

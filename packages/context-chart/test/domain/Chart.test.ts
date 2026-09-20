@@ -2,7 +2,7 @@ import { Effect, Exit } from 'effect';
 
 import { describe, expect, it } from 'vitest';
 
-import { Chord, Note, Quality, Section, TenantID } from '@speira/chordschart-shared/valueObjects';
+import { Chord, Note, Quality, Section, TenantID } from '@chordcraft/shared/valueObjects';
 
 import { Chart } from '../../src/domain/Chart';
 import { ChartID } from '../../src/domain/valueObjects';

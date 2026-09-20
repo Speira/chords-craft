@@ -1,6 +1,6 @@
 import { Effect, Schema } from 'effect';
 
-import { Typeguards } from '@speira/chordschart-shared/utils';
+import { Typeguards } from '@chordcraft/shared/utils';
 
 import { ChartParseError } from '../errors';
 

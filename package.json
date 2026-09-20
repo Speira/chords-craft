@@ -1,5 +1,5 @@
 {
-  "name": "@speira/chordscraft",
+  "name": "@chordcraft/root",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,7 +12,7 @@
     "codegen": "pnpm -r --parallel --if-present run codegen",
     "coverage": "vitest run --coverage --project '!integration'",
     "dev": "pnpm --parallel --filter \"./packages/{api,client}-*\" run dev",
-    "dev:web": "pnpm --filter @speira/chordschart-client-web dev",
+    "dev:web": "pnpm --filter @chordcraft/client-web dev",
     "format": "prettier --write . && pnpm lint:fix",
     "format:check": "prettier --check .",
     "knip": "knip",

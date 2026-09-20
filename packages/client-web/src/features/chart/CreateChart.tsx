@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Note, Section } from "@speira/chordschart-shared/valueObjects";
+import { Note, Section } from "@chordcraft/shared/valueObjects";
 
 import { Button, Input } from "~/components";
 import { Logger } from "~/lib/logger";

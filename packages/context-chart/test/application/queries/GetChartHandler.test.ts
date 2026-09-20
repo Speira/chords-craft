@@ -2,7 +2,7 @@ import { Effect, Layer, pipe } from 'effect';
 
 import { describe, expect, it, vi } from 'vitest';
 
-import { Chord, Note, Section, TenantID } from '@speira/chordschart-shared/valueObjects';
+import { Chord, Note, Section, TenantID } from '@chordcraft/shared/valueObjects';
 
 import { GetChartHandler, GetChartQuery } from '../../../src/application/queries/GetChart';
 import { type ChartError, ChartID, ChartProjection, ChartReadError } from '../../../src/domain';

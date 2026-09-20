@@ -1,5 +1,5 @@
 {
-  "name": "@speira/chordschart-context-chart",
+  "name": "@chordcraft/context-chart",
   "version": "1.0.0",
   "description": "The ChordsChart Context",
   "keywords": [],
@@ -28,7 +28,7 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.948.0",
     "@aws-sdk/lib-dynamodb": "^3.948.0",
-    "@speira/chordschart-shared": "workspace:*",
+    "@chordcraft/shared": "workspace:*",
     "effect": "^3.19.12",
     "ulid": "^3.0.2"
   },

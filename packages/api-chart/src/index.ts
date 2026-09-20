@@ -1,6 +1,6 @@
 import type { AppSyncResolverEvent } from 'aws-lambda';
 
-import { ChartInterface } from '@speira/chordschart-context-chart';
+import { ChartInterface } from '@chordcraft/context-chart';
 
 type ResolverContext = {
   userId: string;

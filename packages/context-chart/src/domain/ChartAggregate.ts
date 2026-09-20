@@ -5,7 +5,7 @@ import {
   type Section,
   type Structure,
   TenantID,
-} from '@speira/chordschart-shared/valueObjects';
+} from '@chordcraft/shared/valueObjects';
 
 import { Chart } from './Chart';
 import { type ChartError, ChartValidationError } from './errors';

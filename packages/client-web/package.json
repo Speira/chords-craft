@@ -1,5 +1,5 @@
 {
-  "name": "@speira/chordschart-client-web",
+  "name": "@chordcraft/client-web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -27,7 +27,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.4.2",
-    "@speira/chordschart-shared": "workspace:*",
+    "@chordcraft/shared": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",

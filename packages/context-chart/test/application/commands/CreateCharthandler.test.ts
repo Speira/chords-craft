@@ -2,7 +2,7 @@ import { Effect, Layer, pipe, Schema } from 'effect';
 
 import { describe, expect, it, vi } from 'vitest';
 
-import { Note, TenantID } from '@speira/chordschart-shared/valueObjects';
+import { Note, TenantID } from '@chordcraft/shared/valueObjects';
 
 import {
   CreateChartCommand,

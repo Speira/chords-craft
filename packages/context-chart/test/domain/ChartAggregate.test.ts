@@ -2,7 +2,7 @@ import { Cause, Effect, Exit } from 'effect';
 
 import { describe, expect, it } from 'vitest';
 
-import { Chord, Note, Section, TenantID } from '@speira/chordschart-shared/valueObjects';
+import { Chord, Note, Section, TenantID } from '@chordcraft/shared/valueObjects';
 
 import {
   ChartAggregate,

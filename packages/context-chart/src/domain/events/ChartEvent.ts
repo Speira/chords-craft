@@ -1,6 +1,6 @@
 import { Schema } from 'effect';
 
-import { Note, Section, Structure } from '@speira/chordschart-shared/valueObjects';
+import { Note, Section, Structure } from '@chordcraft/shared/valueObjects';
 
 import { ChartID } from '../valueObjects';
 

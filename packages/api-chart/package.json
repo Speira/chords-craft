@@ -1,5 +1,5 @@
 {
-  "name": "@speira/chordschart-api-chart",
+  "name": "@chordcraft/api-chart",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
@@ -20,8 +20,8 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@speira/chordschart-context-chart": "workspace:*",
-    "@speira/chordschart-shared": "workspace:*",
+    "@chordcraft/context-chart": "workspace:*",
+    "@chordcraft/shared": "workspace:*",
     "effect": "^3.19.12"
   },
   "devDependencies": {

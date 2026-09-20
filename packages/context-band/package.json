@@ -1,5 +1,5 @@
 {
-  "name": "@speira/chordschart-context-band",
+  "name": "@chordcraft/context-band",
   "version": "1.0.0",
   "description": "Band bounded context",
   "keywords": [],
