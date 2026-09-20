@@ -31,25 +31,33 @@ export function LoginPage(props: { locale: string }) {
     try {
       setIsLoading(true);
       const result = await signIn.create({ identifier: email });
-      if (result.status === 'needs_first_factor') {
-        const attemptFirstFactor = await signIn.attemptFirstFactor({
-          strategy: 'password',
-          password,
-        });
-        if (attemptFirstFactor.status === 'complete') {
-          await setActive({ session: attemptFirstFactor.createdSessionId });
-          router.push('/');
-        } else {
-          Logger.warn('LoginPage.handleSubmit', { attemptFirstFactor });
-        }
+      // Every outcome must either navigate or show why it did not: while isLoading is true the
+      // inputs are disabled and the submit button is replaced by a skeleton, so a silent return
+      // leaves the screen looking frozen.
+      if (result.status !== 'needs_first_factor') {
+        Logger.warn('LoginPage.handleSubmit', { status: result.status });
+        setError('auth.error.invalidCredentials');
+        return;
       }
-      setIsLoading(false);
+      const attemptFirstFactor = await signIn.attemptFirstFactor({
+        strategy: 'password',
+        password,
+      });
+      if (attemptFirstFactor.status !== 'complete') {
+        Logger.warn('LoginPage.handleSubmit', { status: attemptFirstFactor.status });
+        setError('auth.error.invalidCredentials');
+        return;
+      }
+      await setActive({ session: attemptFirstFactor.createdSessionId });
+      router.push('/');
     } catch (err) {
       Logger.error('LoginPage.handleSubmit', describeAuthError(err));
-      setIsLoading(false);
       const code = getClerkError(err);
       if (t.has(code)) setError(code as AppTranslation);
       else setError('auth.error.invalidCredentials');
+    } finally {
+      // Guarantees the form comes back on every path, including the early returns above.
+      setIsLoading(false);
     }
   };
 

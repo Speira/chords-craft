@@ -24,16 +24,19 @@ export function SignUpVerification() {
     try {
       setIsLoading(true);
       const completeSignUp = await signUp.attemptEmailAddressVerification({ code });
-      if (completeSignUp.status === 'complete') {
-        await setActive({ session: completeSignUp.createdSessionId });
-        setIsLoading(false);
-        router.push('/');
+      // An incomplete verification used to end here in silence, with the form still disabled.
+      if (completeSignUp.status !== 'complete') {
+        Logger.warn('SignUpVerification.handleVerification', { status: completeSignUp.status });
+        setError('auth.error.verificationFailed');
+        return;
       }
-      setIsLoading(false);
+      await setActive({ session: completeSignUp.createdSessionId });
+      router.push('/');
     } catch (err) {
-      setIsLoading(false);
       Logger.error('SignUpVerification.handleVerification', describeAuthError(err));
       setError('auth.error.verificationFailed');
+    } finally {
+      setIsLoading(false);
     }
   };
 
