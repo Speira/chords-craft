@@ -89,8 +89,9 @@ Suggested order, one PR per package:
 ## Not done, decide separately
 
 - **Source-first packages + bundled lambdas** (see deviations above).
-- **CI**: `.github/workflows/check.yml` and `pr-title.yml` are in place but have never run;
-  the repo also still has `deploy.yml` and `snapshot.yml`, which were left untouched.
+- **CI**: `check.yml` and `pr-title.yml` pass on PR #1. `snapshot.yml` was deleted: it published
+  per-PR previews through pkg-pr-new, whose GitHub App is not installed on the repo, and every
+  package here is private. `deploy.yml` is untouched.
 - **Branch protection**: enable squash-merge only, and make the check jobs and the PR-title
   check required on `main`.
 - **`pnpm-workspace.yaml` catalog**: dependency versions are still per package; the template
