@@ -11,7 +11,7 @@ import type { AppTranslation } from '#client-web/lib/nextIntl';
 import { checkIsDarkMode, cn } from '#client-web/lib/shadcn';
 
 import { SignUpVerification } from './SignUpVerification';
-import { clerkLocalAdapter } from './utils';
+import { clerkLocalAdapter, describeAuthError } from './utils';
 
 /** Signup */
 export function SignUpPage(props: { locale: string }) {
@@ -42,12 +42,12 @@ export function SignUpPage(props: { locale: string }) {
       setIsLoading(true);
       await signUp.create({ emailAddress, password, firstName, lastName, locale });
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
-      setIsLoading(false);
       setPendingVerification(true);
     } catch (err) {
-      setIsLoading(false);
-      Logger.error('SignUpPage.handleSubmit', { err });
+      Logger.error('SignUpPage.handleSubmit', describeAuthError(err));
       setError('auth.error.signupFailed');
+    } finally {
+      setIsLoading(false);
     }
   };
 
