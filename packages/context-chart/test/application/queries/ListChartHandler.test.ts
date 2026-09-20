@@ -42,6 +42,7 @@ describe('ListChartHandler', () => {
       upsert: vi.fn(() => Effect.void),
       findById: vi.fn(),
       findByTenant: vi.fn(() => Effect.succeed(charts)),
+      findAllByTenant: vi.fn(),
       delete: vi.fn(),
     };
 
@@ -65,6 +66,7 @@ describe('ListChartHandler', () => {
       upsert: vi.fn(() => Effect.void),
       findById: vi.fn(),
       findByTenant: vi.fn(() => Effect.succeed([])),
+      findAllByTenant: vi.fn(),
       delete: vi.fn(),
     };
 
@@ -88,6 +90,7 @@ describe('ListChartHandler', () => {
       upsert: vi.fn(() => Effect.void),
       findById: vi.fn(),
       findByTenant: vi.fn(() => Effect.fail(error)),
+      findAllByTenant: vi.fn(),
       delete: vi.fn(),
     };
 
