@@ -9,7 +9,7 @@ export const rebuildChartProjections = async (tenantId: string) => {
     const repository = yield* ChartRepository;
     const projection = yield* ChartProjection;
 
-    const charts = yield* projection.findByTenant(tenantId);
+    const charts = yield* projection.findAllByTenant(tenantId);
 
     yield* Effect.all(
       charts.map((chart) =>

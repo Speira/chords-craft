@@ -7,6 +7,7 @@ import {
   GetCommand,
   PutCommand,
   QueryCommand,
+  type QueryCommandOutput,
 } from '@aws-sdk/lib-dynamodb';
 
 import {
@@ -18,9 +19,14 @@ import {
   ChartWriteError,
 } from '#context-chart/domain';
 
+/** Set by the CDK stack, which prefixes the table with the stack name. */
+const TABLE_NAME = process.env.PROJECTION_TABLE ?? 'charts_projection';
+
+const ACTIVE_INDEX = 'GSI1';
+
 export class DynamoDBChartProjection implements ChartProjection {
   private readonly client: DynamoDBClient;
-  private readonly tableName = 'charts_projection';
+  private readonly tableName = TABLE_NAME;
   private readonly withTenantKey = (str: string) => `TENANT#${str}`;
   private readonly withChartKey = (str: string) => `CHART#${str}`;
 
@@ -44,30 +50,37 @@ export class DynamoDBChartProjection implements ChartProjection {
     }).pipe(
       Effect.flatMap((result) => {
         if (!result.Item) return new ChartReadError({ reason: 'Chart not found (findById)' });
-        return Chart.parse(result.Item);
+        return Chart.fromRecord(result.Item);
       }),
     );
   }
 
+  /**
+   * Active charts of a tenant, most recently updated first, read from GSI1. Archived charts are
+   * excluded; use {@link findAllByTenant} when the whole tenant is needed.
+   */
   findByTenant(tenantId: string): Effect.Effect<ReadonlyArray<Chart>, ChartError> {
-    return Effect.tryPromise({
-      try: () =>
-        this.client.send(
-          new QueryCommand({
-            TableName: this.tableName,
-            KeyConditionExpression: 'PK = :pk',
-            ExpressionAttributeValues: {
-              ':pk': this.withTenantKey(tenantId),
-            },
-          }),
-        ),
-      catch: (error) => new ChartReadError({ reason: error }),
-    }).pipe(
-      Effect.flatMap((result) => {
-        const items = result.Items ?? [];
-        return Effect.all(items.map(Chart.parse));
-      }),
-    );
+    return this.queryAll({
+      TableName: this.tableName,
+      IndexName: ACTIVE_INDEX,
+      KeyConditionExpression: 'GSI1PK = :pk AND begins_with(GSI1SK, :active)',
+      ExpressionAttributeValues: {
+        ':pk': this.withTenantKey(tenantId),
+        ':active': 'ACTIVE#true#',
+      },
+      ScanIndexForward: false,
+    });
+  }
+
+  /** Every chart of a tenant, archived included. Reads the base table, so no index is involved. */
+  findAllByTenant(tenantId: string): Effect.Effect<ReadonlyArray<Chart>, ChartError> {
+    return this.queryAll({
+      TableName: this.tableName,
+      KeyConditionExpression: 'PK = :pk',
+      ExpressionAttributeValues: {
+        ':pk': this.withTenantKey(tenantId),
+      },
+    });
   }
 
   upsert(chart: Chart): Effect.Effect<void, ChartError> {
@@ -105,5 +118,31 @@ export class DynamoDBChartProjection implements ChartProjection {
       },
       catch: (error) => new ChartWriteError({ reason: error }),
     });
+  }
+
+  /**
+   * A DynamoDB query returns at most 1MB per call; without following `LastEvaluatedKey` a tenant
+   * silently loses every chart past that page.
+   */
+  private queryAll(
+    input: ConstructorParameters<typeof QueryCommand>[0],
+  ): Effect.Effect<ReadonlyArray<Chart>, ChartError> {
+    return Effect.tryPromise({
+      try: async () => {
+        const items: Array<Record<string, unknown>> = [];
+        let startKey: QueryCommandOutput['LastEvaluatedKey'];
+
+        do {
+          const page: QueryCommandOutput = await this.client.send(
+            new QueryCommand({ ...input, ExclusiveStartKey: startKey }),
+          );
+          for (const item of page.Items ?? []) items.push(item);
+          startKey = page.LastEvaluatedKey;
+        } while (startKey);
+
+        return items;
+      },
+      catch: (error) => new ChartReadError({ reason: error }),
+    }).pipe(Effect.flatMap((items) => Effect.all(items.map((item) => Chart.fromRecord(item)))));
   }
 }
