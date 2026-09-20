@@ -1,7 +1,7 @@
 import { type ComponentProps } from "react";
 
-import { type AppTranslation } from "~/lib/next-intl";
-import { useAppTranslations } from "~/lib/next-intl/useAppTranslation";
+import { type AppTranslation } from "#client-web/lib/next-intl";
+import { useAppTranslations } from "#client-web/lib/next-intl/useAppTranslation";
 
 import { Input as UiInput } from "./ui/input";
 import { Skeleton } from "./Skeleton";

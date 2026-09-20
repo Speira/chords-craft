@@ -10,7 +10,7 @@ import {
   ChartCreated,
   ChartID,
   ChartValidationError,
-} from '../../src/domain';
+} from '#context-chart/domain';
 
 describe('ChartAggregate', () => {
   const cChord = Chord.create({ root: Note.C });

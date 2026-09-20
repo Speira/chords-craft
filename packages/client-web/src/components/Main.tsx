@@ -1,6 +1,6 @@
 import { type PropsWithChildren } from "react";
 
-import { cn } from "~/lib/shadcn";
+import { cn } from "#client-web/lib/shadcn";
 
 /** Main component to display any page content directly inside the layout */
 export function Main({ children, className }: PropsWithChildren<{ className?: string }>) {

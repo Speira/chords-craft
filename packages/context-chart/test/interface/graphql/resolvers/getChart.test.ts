@@ -4,9 +4,9 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { Chord, Note, Section, TenantID } from '@chordcraft/shared/valueObjects';
 
-import { ChartID, ChartProjection, ChartReadError, ChartRepository } from '../../../../src/domain';
-import { Chart } from '../../../../src/domain/Chart';
-import { getChart } from '../../../../src/interface/graphql/resolvers/getChart';
+import { ChartID, ChartProjection, ChartReadError, ChartRepository } from '#context-chart/domain';
+import { Chart } from '#context-chart/domain/Chart';
+import { getChart } from '#context-chart/interface/graphql/resolvers/getChart';
 
 describe('getChart resolver', () => {
   const validInput = {

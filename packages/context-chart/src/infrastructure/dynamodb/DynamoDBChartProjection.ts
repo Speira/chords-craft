@@ -16,7 +16,7 @@ import {
   type ChartProjection,
   ChartReadError,
   ChartWriteError,
-} from '~/domain';
+} from '#context-chart/domain';
 
 export class DynamoDBChartProjection implements ChartProjection {
   private readonly client: DynamoDBClient;

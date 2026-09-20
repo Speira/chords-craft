@@ -18,7 +18,7 @@ import {
   ChartWriteError,
   deserializeEvent,
   serializeEvent,
-} from '~/domain';
+} from '#context-chart/domain';
 
 export class DynamoDBChartRepository implements ChartRepository {
   private readonly tableName = 'charts_events';

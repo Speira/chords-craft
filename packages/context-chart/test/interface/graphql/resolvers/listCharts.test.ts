@@ -4,9 +4,9 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { Chord, Note, Section, TenantID } from '@chordcraft/shared/valueObjects';
 
-import { ChartID, ChartProjection, ChartReadError } from '../../../../src/domain';
-import { Chart } from '../../../../src/domain/Chart';
-import { listCharts } from '../../../../src/interface/graphql/resolvers/listCharts';
+import { ChartID, ChartProjection, ChartReadError } from '#context-chart/domain';
+import { Chart } from '#context-chart/domain/Chart';
+import { listCharts } from '#context-chart/interface/graphql/resolvers/listCharts';
 
 describe('listCharts resolver', () => {
   describe('validation tests', () => {

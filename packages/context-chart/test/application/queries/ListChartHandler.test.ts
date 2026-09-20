@@ -4,9 +4,9 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { Chord, Note, Section, TenantID } from '@chordcraft/shared/valueObjects';
 
-import { ListChartHandler, ListChartQuery } from '../../../src/application/queries/ListChart';
-import { type ChartError, ChartID, ChartProjection, ChartReadError } from '../../../src/domain';
-import { Chart } from '../../../src/domain/Chart';
+import { ListChartHandler, ListChartQuery } from '#context-chart/application/queries/ListChart';
+import { type ChartError, ChartID, ChartProjection, ChartReadError } from '#context-chart/domain';
+import { Chart } from '#context-chart/domain/Chart';
 
 describe('ListChartHandler', () => {
   const date = new Date();

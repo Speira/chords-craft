@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { cn } from "~/lib/shadcn/index";
+import { cn } from "#client-web/lib/shadcn/index";
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (

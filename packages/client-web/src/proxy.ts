@@ -1,7 +1,7 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import createMiddleware from "next-intl/middleware";
 
-import { routing } from "~/lib/next-intl";
+import { routing } from "#client-web/lib/next-intl";
 
 const localePattern = `(${routing.locales.join("|")})`;
 

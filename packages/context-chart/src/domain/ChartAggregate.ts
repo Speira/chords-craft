@@ -1,11 +1,6 @@
 import { Effect } from 'effect';
 
-import {
-  type Note,
-  type Section,
-  type Structure,
-  TenantID,
-} from '@chordcraft/shared/valueObjects';
+import { type Note, type Section, type Structure, TenantID } from '@chordcraft/shared/valueObjects';
 
 import { Chart } from './Chart';
 import { type ChartError, ChartValidationError } from './errors';

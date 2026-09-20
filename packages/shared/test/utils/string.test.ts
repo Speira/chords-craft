@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { StringUtils } from '../../src/utils/string';
+import { StringUtils } from '#shared/utils/string';
 
 describe('StringUtils test suite', () => {
   describe('capitalize', () => {

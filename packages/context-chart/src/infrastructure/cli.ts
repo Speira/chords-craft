@@ -1,6 +1,6 @@
 import { Effect } from 'effect';
 
-import { ChartAggregate, ChartProjection, ChartRepository } from '~/domain';
+import { ChartAggregate, ChartProjection, ChartRepository } from '#context-chart/domain';
 
 import { ChartServicesLive } from './dynamodb';
 

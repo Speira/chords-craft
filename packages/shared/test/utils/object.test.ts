@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ObjectUtils } from '../../src/utils/object';
+import { ObjectUtils } from '#shared/utils/object';
 
 describe('ObjectUtils test suite', () => {
   describe('keysToString', () => {

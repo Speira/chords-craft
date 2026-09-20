@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { NumberUtils } from '../../src/utils/number';
+import { NumberUtils } from '#shared/utils/number';
 
 describe('NumberUtils test suite', () => {
   describe('formatPrice', () => {

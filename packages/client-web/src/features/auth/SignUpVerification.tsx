@@ -4,9 +4,9 @@ import { useState } from "react";
 
 import { useSignUp } from "@clerk/nextjs";
 
-import { Button, Input, Skeleton, Typography } from "~/components";
-import { Logger } from "~/lib/logger";
-import { type AppTranslation, useRouter } from "~/lib/next-intl";
+import { Button, Input, Skeleton, Typography } from "#client-web/components";
+import { Logger } from "#client-web/lib/logger";
+import { type AppTranslation, useRouter } from "#client-web/lib/next-intl";
 
 export function SignUpVerification() {
   const [error, setError] = useState<AppTranslation | "">("");

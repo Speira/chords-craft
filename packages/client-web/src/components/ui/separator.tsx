@@ -4,7 +4,7 @@ import * as React from "react";
 
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
 
-import { cn } from "~/lib/shadcn/index";
+import { cn } from "#client-web/lib/shadcn/index";
 
 function Separator({
   className,

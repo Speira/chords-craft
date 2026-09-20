@@ -18,7 +18,7 @@ const config: ViteUserConfig = {
     },
     include: ['test/**/*.test.ts'],
     alias: {
-      '~/*': './src/',
+      '#shared/*': './src/',
     },
   },
 };

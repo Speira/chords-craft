@@ -2,7 +2,7 @@ import { type HTMLAttributes } from "react";
 
 import { type LinkProps as NextLinkProps } from "next/link";
 
-import { Link as NextLink } from "~/lib/next-intl";
+import { Link as NextLink } from "#client-web/lib/next-intl";
 
 import { type ITextualComponent, TextualComponent } from "./composites/TextualComponent";
 import { Button, type ButtonProps } from "./ui/button";

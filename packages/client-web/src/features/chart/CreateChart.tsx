@@ -4,8 +4,8 @@ import { useState } from "react";
 
 import { Note, Section } from "@chordcraft/shared/valueObjects";
 
-import { Button, Input } from "~/components";
-import { Logger } from "~/lib/logger";
+import { Button, Input } from "#client-web/components";
+import { Logger } from "#client-web/lib/logger";
 
 import { useCreateChart } from "./hooks";
 

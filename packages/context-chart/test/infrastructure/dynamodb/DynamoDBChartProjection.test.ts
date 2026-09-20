@@ -2,9 +2,9 @@ import { Effect } from 'effect';
 
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { ChartReadError } from '../../../src/domain/errors';
-import { ChartID } from '../../../src/domain/valueObjects';
-import { DynamoDBChartProjection } from '../../../src/infrastructure/dynamodb/DynamoDBChartProjection';
+import { ChartReadError } from '#context-chart/domain/errors';
+import { ChartID } from '#context-chart/domain/valueObjects';
+import { DynamoDBChartProjection } from '#context-chart/infrastructure/dynamodb/DynamoDBChartProjection';
 
 import {
   createProjectionTable,

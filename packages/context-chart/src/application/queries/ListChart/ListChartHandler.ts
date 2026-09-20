@@ -1,6 +1,6 @@
 import { Effect } from 'effect';
 
-import { type Chart, type ChartError, ChartProjection } from '~/domain';
+import { type Chart, type ChartError, ChartProjection } from '#context-chart/domain';
 
 import { type ListChartQuery } from './ListChartQuery';
 

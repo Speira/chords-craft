@@ -10,6 +10,9 @@
   "license": "ISC",
   "author": "Speira",
   "type": "module",
+  "imports": {
+    "#shared/*": "./src/*"
+  },
   "exports": {
     "./valueObjects": {
       "types": "./build/valueObjects/index.d.ts",
@@ -25,7 +28,7 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "effect": "^3.19.12"

@@ -2,8 +2,8 @@ import { Context, Effect, Layer } from 'effect';
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
-import { ChartProjection } from '~/domain/ChartProjection';
-import { ChartRepository } from '~/domain/ChartRepository';
+import { ChartProjection } from '#context-chart/domain/ChartProjection';
+import { ChartRepository } from '#context-chart/domain/ChartRepository';
 
 import { DynamoDBChartProjection } from './DynamoDBChartProjection';
 import { DynamoDBChartRepository } from './DynamoDBChartRepository';

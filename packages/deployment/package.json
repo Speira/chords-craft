@@ -2,6 +2,9 @@
   "name": "@chordcraft/deployment",
   "version": "0.1.0",
   "description": "Infrastructure as code using AWS CDK for chordschart",
+  "imports": {
+    "#deployment/*": "./src/*"
+  },
   "bin": {
     "app": "bin/app.js"
   },
@@ -14,6 +17,7 @@
     "merge-schemas": "ts-node ./bin/mergeSchemas.ts",
     "synth": "pnpm merge-schemas && cdk synth",
     "test": "jest",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
     "watch": "tsc -w"
   },
   "dependencies": {

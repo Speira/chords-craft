@@ -6,7 +6,7 @@ import {
   type ChartError,
   ChartProjection,
   ChartRepository,
-} from '~/domain';
+} from '#context-chart/domain';
 
 import { type CreateChartCommand } from './CreateChartCommand';
 

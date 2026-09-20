@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 
 import { Chord, Note, Quality, Section, TenantID } from '@chordcraft/shared/valueObjects';
 
-import { Chart } from '../../src/domain/Chart';
-import { ChartID } from '../../src/domain/valueObjects';
+import { Chart } from '#context-chart/domain/Chart';
+import { ChartID } from '#context-chart/domain/valueObjects';
 
 describe('Chart', () => {
   const createTestChart = () => {

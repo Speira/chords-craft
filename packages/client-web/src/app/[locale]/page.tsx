@@ -1,8 +1,8 @@
 import { ArrowRight } from "lucide-react";
 
-import { LinkButton, Main, Typography } from "~/components";
-import { StyledArc } from "~/components/icons/StyledArc";
-import K from "~/constants";
+import { LinkButton, Main, Typography } from "#client-web/components";
+import { StyledArc } from "#client-web/components/icons/StyledArc";
+import K from "#client-web/constants";
 
 export default async function Home() {
   return (

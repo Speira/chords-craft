@@ -4,11 +4,11 @@ import { useState } from "react";
 
 import { useSignUp } from "@clerk/nextjs";
 
-import { Button, Input, Link, Typography } from "~/components";
-import K from "~/constants";
-import { Logger } from "~/lib/logger";
-import { type AppTranslation } from "~/lib/next-intl";
-import { checkIsDarkMode, cn } from "~/lib/shadcn";
+import { Button, Input, Link, Typography } from "#client-web/components";
+import K from "#client-web/constants";
+import { Logger } from "#client-web/lib/logger";
+import { type AppTranslation } from "#client-web/lib/next-intl";
+import { checkIsDarkMode, cn } from "#client-web/lib/shadcn";
 
 import { SignUpVerification } from "./SignUpVerification";
 import { clerkLocalAdapter } from "./utils";

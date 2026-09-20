@@ -1,8 +1,8 @@
 import { Effect, type Layer, ParseResult, pipe, Schema } from 'effect';
 
-import { ListChartHandler, ListChartQuery } from '~/application/queries';
-import { type Chart, type ChartProjection, type ChartRepository } from '~/domain';
-import { ChartServicesLive } from '~/infrastructure/dynamodb';
+import { ListChartHandler, ListChartQuery } from '#context-chart/application/queries';
+import { type Chart, type ChartProjection, type ChartRepository } from '#context-chart/domain';
+import { ChartServicesLive } from '#context-chart/infrastructure/dynamodb';
 
 export const listCharts = (
   input: unknown,

@@ -11,7 +11,7 @@ import {
 } from "@clerk/nextjs";
 import { LogInIcon, LogOutIcon } from "lucide-react";
 
-import { Button } from "~/components";
+import { Button } from "#client-web/components";
 
 const AuthNavDiv = ({ children }: PropsWithChildren) => <div>{children}</div>;
 

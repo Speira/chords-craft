@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ChartInterface } from '@chordcraft/context-chart';
 
-import { handler } from '../src/index';
+import { handler } from '#api-chart/index';
 
 vi.mock('@chordcraft/context-chart', () => ({
   ChartInterface: {

@@ -1,5 +1,5 @@
-import { Main } from "~/components";
-import { SignUpPage } from "~/features/auth";
+import { Main } from "#client-web/components";
+import { SignUpPage } from "#client-web/features/auth";
 
 type IPage = PageProps<"/[locale]/auth/sign-up">;
 

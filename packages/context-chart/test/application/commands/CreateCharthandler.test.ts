@@ -7,9 +7,9 @@ import { Note, TenantID } from '@chordcraft/shared/valueObjects';
 import {
   CreateChartCommand,
   CreateChartHandler,
-} from '../../../src/application/commands/CreateChart';
-import { type ChartError, ChartProjection, ChartRepository } from '../../../src/domain';
-import { type Chart } from '../../../src/domain/Chart';
+} from '#context-chart/application/commands/CreateChart';
+import { type ChartError, ChartProjection, ChartRepository } from '#context-chart/domain';
+import { type Chart } from '#context-chart/domain/Chart';
 
 describe('CreateChartHandler', () => {
   it('should create chart and save to repository and projection', async () => {

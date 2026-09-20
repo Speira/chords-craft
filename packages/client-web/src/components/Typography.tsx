@@ -1,6 +1,6 @@
 import { type ClassNameValue } from "tailwind-merge";
 
-import { cn } from "~/lib/shadcn";
+import { cn } from "#client-web/lib/shadcn";
 
 import { type ITextualComponent, TextualComponent } from "./composites/TextualComponent";
 

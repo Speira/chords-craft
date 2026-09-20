@@ -10,6 +10,9 @@
   },
   "license": "ISC",
   "author": "Speira",
+  "imports": {
+    "#context-chart/*": "./src/*"
+  },
   "exports": {
     ".": {
       "types": "./build/index.d.ts",
@@ -23,7 +26,8 @@
     "build": "tsc -p tsconfig.build.json",
     "check": "tsc -b tsconfig.json --noEmit",
     "test": "vitest",
-    "test:integration": "vitest --config vitest.config.integration.ts"
+    "test:integration": "vitest --config vitest.config.integration.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.948.0",

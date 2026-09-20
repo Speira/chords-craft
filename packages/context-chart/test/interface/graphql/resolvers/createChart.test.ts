@@ -2,8 +2,8 @@ import { Effect, Layer } from 'effect';
 
 import { describe, expect, it, vi } from 'vitest';
 
-import { ChartProjection, ChartRepository, ChartWriteError } from '../../../../src/domain';
-import { createChart } from '../../../../src/interface/graphql/resolvers/createChart';
+import { ChartProjection, ChartRepository, ChartWriteError } from '#context-chart/domain';
+import { createChart } from '#context-chart/interface/graphql/resolvers/createChart';
 
 describe('createChart resolver', () => {
   const validInput = {

@@ -4,7 +4,7 @@ import {
   type AppTranslation,
   ClientTranslation,
   ServerTranslation,
-} from "~/lib/next-intl";
+} from "#client-web/lib/next-intl";
 
 export interface ITextualComponent {
   children?: ReactNode;

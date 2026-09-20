@@ -1,4 +1,4 @@
-import { type AppTranslation } from "~/lib/next-intl";
+import { type AppTranslation } from "#client-web/lib/next-intl";
 
 import { type ITextualComponent, TextualComponent } from "./composites/TextualComponent";
 import { Button as UiButton, type ButtonProps } from "./ui/button";

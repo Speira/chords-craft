@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Prosto_One } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 
-import { Footer, Header } from "~/components";
-import { AuthHeaderNav, AuthProvider } from "~/features/auth";
-import { I18nProvider } from "~/lib/next-intl";
+import { Footer, Header } from "#client-web/components";
+import { AuthHeaderNav, AuthProvider } from "#client-web/features/auth";
+import { I18nProvider } from "#client-web/lib/next-intl";
 
 import "./globals.css";
 

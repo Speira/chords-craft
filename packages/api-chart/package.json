@@ -5,6 +5,9 @@
   "keywords": [],
   "license": "ISC",
   "author": "Speira",
+  "imports": {
+    "#api-chart/*": "./src/*"
+  },
   "exports": {
     ".": {
       "types": "./build/index.d.ts",
@@ -17,7 +20,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "check": "tsc -b tsconfig.json --noEmit",
-    "test": "vitest"
+    "test": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@chordcraft/context-chart": "workspace:*",

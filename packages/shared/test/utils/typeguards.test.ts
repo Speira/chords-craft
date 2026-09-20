@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { Typeguards } from '../../src/utils/typeguards';
+import { Typeguards } from '#shared/utils/typeguards';
 
 describe('Typeguards test suite', () => {
   describe('checkIsArray', () => {

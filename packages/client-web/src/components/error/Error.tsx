@@ -1,5 +1,5 @@
 "use client";
-import K from "~/constants";
+import K from "#client-web/constants";
 
 import { LinkButton } from "../Link";
 import { Main } from "../Main";

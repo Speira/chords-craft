@@ -2,8 +2,8 @@ import { Effect } from 'effect';
 
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { ChartID } from '../../../src/domain/valueObjects';
-import { DynamoDBChartRepository } from '../../../src/infrastructure/dynamodb/DynamoDBChartRepository';
+import { ChartID } from '#context-chart/domain/valueObjects';
+import { DynamoDBChartRepository } from '#context-chart/infrastructure/dynamodb/DynamoDBChartRepository';
 
 import {
   createEventsTable,

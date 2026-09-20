@@ -14,8 +14,8 @@ import {
 import type * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
 
-import { Label } from "~/components/ui/label";
-import { cn } from "~/lib/shadcn/index";
+import { Label } from "#client-web/components/ui/label";
+import { cn } from "#client-web/lib/shadcn/index";
 
 const Form = FormProvider;
 

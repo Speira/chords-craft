@@ -11,8 +11,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "~/components";
-import { defaultLocale, localeLabels, usePathname, useRouter } from "~/lib/next-intl";
+} from "#client-web/components";
+import { defaultLocale, localeLabels, usePathname, useRouter } from "#client-web/lib/next-intl";
 
 export const LanguageSwitcher = () => {
   const router = useRouter();

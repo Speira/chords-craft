@@ -54,7 +54,7 @@ export class Chord extends Schema.Class<Chord>('Chord')({
     });
   }
 
-  get toString(): string {
+  override get toString(): string {
     return [
       this.root,
       this.quality,

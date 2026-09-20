@@ -2,9 +2,9 @@ import { CreateTableCommand, DeleteTableCommand, DynamoDBClient } from '@aws-sdk
 
 import { Note, Section, TenantID } from '@chordcraft/shared/valueObjects';
 
-import { Chart } from '../../../src/domain/Chart';
-import { ChartCreated } from '../../../src/domain/events';
-import { ChartID } from '../../../src/domain/valueObjects';
+import { Chart } from '#context-chart/domain/Chart';
+import { ChartCreated } from '#context-chart/domain/events';
+import { ChartID } from '#context-chart/domain/valueObjects';
 
 export const EVENTS_TABLE = 'charts_events';
 export const PROJECTION_TABLE = 'charts_projection';

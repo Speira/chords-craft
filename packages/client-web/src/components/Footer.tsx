@@ -1,7 +1,7 @@
 import { Mail, Phone } from "lucide-react";
 
-import K from "~/constants";
-import { getAppTranslations } from "~/lib/next-intl/getAppTranslation";
+import K from "#client-web/constants";
+import { getAppTranslations } from "#client-web/lib/next-intl/getAppTranslation";
 
 import { Link } from "./Link";
 import { Typography } from "./Typography";

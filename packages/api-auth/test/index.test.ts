@@ -2,11 +2,11 @@ import { verifyToken } from '@clerk/backend';
 import type { AppSyncAuthorizerEvent } from 'aws-lambda';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { handler } from '../src/index';
-import { getClerkSecret } from '../src/utils';
+import { handler } from '#api-auth/index';
+import { getClerkSecret } from '#api-auth/utils';
 
 vi.mock('@clerk/backend', () => ({ verifyToken: vi.fn() }));
-vi.mock('../src/utils', () => ({ getClerkSecret: vi.fn() }));
+vi.mock('#api-auth/utils', () => ({ getClerkSecret: vi.fn() }));
 
 const makeEvent = (authorizationToken: string | null): AppSyncAuthorizerEvent =>
   ({ authorizationToken }) as unknown as AppSyncAuthorizerEvent;

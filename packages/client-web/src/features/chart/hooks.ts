@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { useAuth } from "@clerk/nextjs";
 
-import { getGraphQLClient, queries } from "~/lib/graphql";
+import { getGraphQLClient, queries } from "#client-web/lib/graphql";
 
 export function useCreateChart() {
   const client = getGraphQLClient();
