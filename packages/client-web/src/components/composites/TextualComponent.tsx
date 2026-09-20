@@ -11,8 +11,8 @@ export interface TextualComponentProps {
   /** Decorational node */
   endNode?: ReactNode;
   /**
-   * Help Typography to call the right TranslationComponent, isServer allows a better SEO but throw
-   * error when called in client component
+   * Help Typography to call the right TranslationComponent. Set it only from a Server component: it
+   * renders the async `ServerTranslation` (better SEO), which throws inside a Client component.
    */
   isServer?: boolean;
   /** The label code corresponding to the translation key */

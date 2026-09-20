@@ -59,7 +59,7 @@ components:
     states: 'active:bg-*/50, disabled:opacity-50 + cursor-default, focus-visible ring-[3px] ring-ring/50, aria-invalid ring-destructive/20'
   typography: # src/components/Typography.tsx
     as: h1 | h2 | h3 | h4 | p | b | span | small | strong | blockquote
-    note: 'renders through TextualComponent, carries data-i18nkey, needs isServer inside a client component'
+    note: 'renders through TextualComponent, carries data-i18nkey, needs isServer from a server component'
   input: 'src/components/Input.tsx over ui/input.tsx — in use'
   navigation: 'ui/navigation-menu.tsx via components/layout/HeaderNavigation.tsx — in use'
   skeleton: 'ui/skeleton.tsx via components/Skeleton.tsx — in use'
@@ -139,7 +139,8 @@ Radius comes from one base (`0.625rem`) with a calculated scale — never an arb
   and `ghost` for secondary and toolbar actions; `link` only inside prose. Pressed state is the
   variant colour at 50% (`active:bg-*/50`); disabled is `opacity-50` with `cursor-default`.
 - **Typography** — the way to render text with a heading level in app code: it takes a translation
-  `label` and emits `data-i18nkey`; pass `isServer` when calling it from a client component.
+  `label` and emits `data-i18nkey`; pass `isServer` only when calling it from a server component
+  (it renders the async `ServerTranslation`, which throws inside a client component).
   `GlobalError` is a deliberate exception (it renders outside the providers, so it cannot
   translate). `CreateChart` and `SignUpPage` still use raw `<p>`/`<h*>` — treat those as debt,
   not as precedent.
