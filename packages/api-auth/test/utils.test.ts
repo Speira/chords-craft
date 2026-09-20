@@ -2,14 +2,20 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const send = vi.fn();
 
+// Vitest 5 only lets `new` be used on a mock whose implementation is a function
+// or class declaration, so these cannot be arrow functions.
 vi.mock('@aws-sdk/client-secrets-manager', () => ({
-  SecretsManagerClient: vi.fn(() => ({ send })),
-  GetSecretValueCommand: vi.fn((args: unknown) => args),
+  SecretsManagerClient: vi.fn(function SecretsManagerClient() {
+    return { send };
+  }),
+  GetSecretValueCommand: vi.fn(function GetSecretValueCommand(args: unknown) {
+    return args;
+  }),
 }));
 
 // getClerkSecret memoizes in module scope; reset the module per test so the
 // cache starts empty, and keep the suite serial since it mutates process.env.
-describe.sequential('getClerkSecret', () => {
+describe('getClerkSecret', { concurrent: false }, () => {
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();

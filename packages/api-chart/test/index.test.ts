@@ -34,7 +34,7 @@ const makeEvent = (opts: {
   }) as unknown as AppSyncResolverEvent<Record<string, unknown>>;
 
 // Shared resolver mocks are asserted on; keep serial under concurrent default.
-describe.sequential('api-chart handler', () => {
+describe('api-chart handler', { concurrent: false }, () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });

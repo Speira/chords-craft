@@ -12,7 +12,7 @@ const makeEvent = (authorizationToken: string | null): AppSyncAuthorizerEvent =>
   ({ authorizationToken }) as unknown as AppSyncAuthorizerEvent;
 
 // Shared module-level mocks make these tests order-sensitive; keep them serial.
-describe.sequential('api-auth handler', () => {
+describe('api-auth handler', { concurrent: false }, () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(getClerkSecret).mockResolvedValue('sk_test_secret');

@@ -29,9 +29,10 @@ const config: ViteUserConfig = {
     fakeTimers: {
       toFake: undefined,
     },
-    sequence: {
-      concurrent: true,
-    },
+    // Files already run in parallel. Tests inside a file stay sequential: since Vitest 5,
+    // `sequence.concurrent` also makes assertions on shared per-suite state unreliable
+    // (and the global `expect` is not safe in concurrent tests). Opt in per suite with
+    // `describe.concurrent` where a suite is I/O bound and has no shared state.
     projects: [
       project('api-auth'),
       project('api-chart'),
