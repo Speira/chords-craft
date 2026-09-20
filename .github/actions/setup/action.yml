@@ -1,21 +1,14 @@
 name: Setup
-description: Perform standard setup and install dependencies using pnpm.
-inputs:
-  node-version:
-    description: The version of Node.js to install
-    required: true
-    default: 24.5.0
+description: Install pnpm + Node.js (versions from package.json devEngines) and the workspace dependencies.
 
 runs:
   using: composite
   steps:
-    - name: Install pnpm
-      uses: pnpm/action-setup@v3
-    - name: Install node
-      uses: actions/setup-node@v4
+    - name: Install pnpm, Node.js and dependencies
+      uses: pnpm/setup@v2
       with:
-        cache: pnpm
-        node-version: ${{ inputs.node-version }}
-    - name: Install dependencies
-      shell: bash
-      run: pnpm install
+        # pnpm comes from devEngines.packageManager. Node is pinned to the LTS major here so CI
+        # stays reproducible while devEngines.runtime only sets a minimum.
+        runtime: node@24
+        cache: true
+        require-lockfile: true

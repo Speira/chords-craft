@@ -1,59 +1,94 @@
 name: Check
+
 on:
-  workflow_dispatch:
   pull_request:
     branches: [main]
   push:
     branches: [main]
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions: {}
+permissions:
+  contents: read
 
+# Same steps as `pnpm check`, split into parallel jobs for faster, clearer feedback.
 jobs:
-  build:
-    name: Build
+  format:
+    name: Format
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies
-        uses: ./.github/actions/setup
-      - run: pnpm codegen
-      - name: Check source state
-        run: git add packages/*/src && git diff-index --cached HEAD --exit-code packages/*/src
-
-  types:
-    name: Types
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies
-        uses: ./.github/actions/setup
-      - run: pnpm build
-      - run: pnpm check
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - run: pnpm format:check
 
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - name: Restore ESLint cache
+        uses: actions/cache@v6
+        with:
+          path: node_modules/.cache/eslint
+          key: eslint-${{ hashFiles('pnpm-lock.yaml', 'eslint.config.ts', '**/tsconfig*.json') }}-${{ github.sha }}
+          restore-keys: eslint-${{ hashFiles('pnpm-lock.yaml', 'eslint.config.ts', '**/tsconfig*.json') }}-
+      - run: pnpm lint
+
+  typecheck:
+    name: Types
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies
-        uses: ./.github/actions/setup
-      - run: pnpm lint
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - run: pnpm typecheck
+
+  knip:
+    name: Dead code
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - run: pnpm knip
 
   test:
     name: Test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - run: pnpm coverage
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+      - name: Upload coverage report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  codegen:
+    name: Generated code is up to date
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies
-        uses: ./.github/actions/setup
-      - run: pnpm vitest
-        env:
-          NODE_OPTIONS: --max_old_space_size=8192
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - run: pnpm codegen
+      - name: Fail if codegen changed files
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git status --short
+            echo "::error::Generated files are stale: run 'pnpm codegen' and commit the result."
+            exit 1
+          fi
