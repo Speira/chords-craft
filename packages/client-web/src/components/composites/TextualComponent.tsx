@@ -6,7 +6,7 @@ import {
   ServerTranslation,
 } from '#client-web/lib/nextIntl';
 
-export interface ITextualComponent {
+export interface TextualComponentProps {
   children?: ReactNode;
   /** Decorational node */
   endNode?: ReactNode;
@@ -22,7 +22,7 @@ export interface ITextualComponent {
 }
 
 /** Internal component to display translated text whithout html tag */
-export function TextualComponent(props: ITextualComponent) {
+export function TextualComponent(props: TextualComponentProps) {
   const { children, endNode, isServer, label, startNode } = props;
   return (
     <>

@@ -3,11 +3,11 @@ import type { HTMLAttributes } from 'react';
 
 import { Link as NextLink } from '#client-web/lib/nextIntl';
 
-import { type ITextualComponent, TextualComponent } from './composites/TextualComponent';
+import { TextualComponent, type TextualComponentProps } from './composites/TextualComponent';
 import { Button, type ButtonProps } from './ui/button';
 
 interface LinkProps
-  extends HTMLAttributes<HTMLAnchorElement>, Omit<NextLinkProps, 'locale'>, ITextualComponent {
+  extends HTMLAttributes<HTMLAnchorElement>, Omit<NextLinkProps, 'locale'>, TextualComponentProps {
   children?: React.ReactNode;
   target?: '_blank' | '_self' | '_parent' | '_top';
 }
@@ -27,7 +27,7 @@ interface LinkButtonProps
   extends
     ButtonProps,
     Pick<LinkProps, 'href' | 'target' | 'label' | 'startNode' | 'endNode'>,
-    ITextualComponent {
+    TextualComponentProps {
   children?: React.ReactNode;
 }
 /** @warning: Add "isServer" props when called inside a Client component */

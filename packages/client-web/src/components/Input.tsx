@@ -6,13 +6,13 @@ import { useAppTranslations } from '#client-web/lib/nextIntl/useAppTranslation';
 import { Input as UiInput } from './ui/input';
 import { Skeleton } from './Skeleton';
 
-interface IInput extends ComponentProps<'input'> {
+interface InputProps extends ComponentProps<'input'> {
   label?: AppTranslation;
   placeholder?: AppTranslation;
   isLoading?: boolean;
 }
 
-export function Input({ isLoading, placeholder, ...props }: IInput) {
+export function Input({ isLoading, placeholder, ...props }: InputProps) {
   const t = useAppTranslations();
 
   if (isLoading) return <Skeleton />;

@@ -4,12 +4,12 @@ import type { ReactNode } from 'react';
 import { HeaderNavigation, LanguageSwitcher, ThemeSwitcher } from './layout';
 import { Typography } from './Typography';
 
-interface IHeader {
+interface HeaderProps {
   startNode?: ReactNode;
   endNode?: ReactNode;
 }
 
-export async function Header(props: IHeader) {
+export async function Header(props: HeaderProps) {
   const { endNode, startNode } = props;
   return (
     <header className="grid grid-cols-3 p-4 text-secondary-foreground 2xl:px-10">

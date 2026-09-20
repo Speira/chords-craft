@@ -1,5 +1,7 @@
 import type { MetadataRoute } from 'next';
 
+import K from '#client-web/constants';
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Chords Craft',
@@ -7,8 +9,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Create and share musical chord charts',
     start_url: '/',
     display: 'standalone',
-    background_color: '#fdfdfd',
-    theme_color: '#556e84',
+    background_color: K.BRAND.BACKGROUND,
+    theme_color: K.BRAND.PRIMARY,
     icons: [
       {
         src: '/favicon-android-192x192.png',
