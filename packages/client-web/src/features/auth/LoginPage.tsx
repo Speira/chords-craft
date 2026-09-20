@@ -4,14 +4,15 @@ import { useState } from 'react';
 
 import { useSignIn } from '@clerk/nextjs';
 
-import { Button, Input, Link, Skeleton, Typography } from '#client-web/components';
+import { Button, Input, Link, Loader, Skeleton, Typography } from '#client-web/components';
 import K from '#client-web/constants';
 import { Logger } from '#client-web/lib/logger';
-import { type AppTranslation, useRouter } from '#client-web/lib/nextIntl';
+import type { AppTranslation } from '#client-web/lib/nextIntl';
 import { useAppTranslations } from '#client-web/lib/nextIntl/useAppTranslation';
 import { checkIsDarkMode, cn } from '#client-web/lib/shadcn';
 
 import { LoginSecondFactor } from './LoginSecondFactor';
+import { useAuthRedirect } from './useAuthRedirect';
 import {
   checkIsSecondFactorStrategy,
   clerkLocalAdapter,
@@ -24,7 +25,7 @@ import {
 export function LoginPage(props: { locale: string }) {
   const locale = clerkLocalAdapter(props.locale);
   const isDarkMode = checkIsDarkMode();
-  const router = useRouter();
+  const { checkIsRedirecting, isRedirecting, redirectTo } = useAuthRedirect();
   const t = useAppTranslations();
   const { setActive, signIn } = useSignIn();
   const [email, setEmail] = useState('');
@@ -87,15 +88,15 @@ export function LoginPage(props: { locale: string }) {
         return;
       }
       await setActive({ session: attemptFirstFactor.createdSessionId });
-      router.push('/');
+      redirectTo('/');
     } catch (err) {
       Logger.error('LoginPage.handleSubmit', describeAuthError(err));
       const code = getClerkError(err);
       if (t.has(code)) setError(code as AppTranslation);
       else setError('auth.error.invalidCredentials');
     } finally {
-      // Guarantees the form comes back on every path, including the early returns above.
-      setIsLoading(false);
+      // Comes back on every path except a navigation, where the pending UI must stay up.
+      if (!checkIsRedirecting()) setIsLoading(false);
     }
   };
 
@@ -115,6 +116,15 @@ export function LoginPage(props: { locale: string }) {
         setIsLoading(false);
       });
   };
+
+  if (isRedirecting) {
+    return (
+      <section className="flex flex-col items-center gap-4 p-6">
+        <Loader />
+        <Typography as="p" className="text-sm text-muted-foreground" label="auth.signingIn" />
+      </section>
+    );
+  }
 
   if (secondFactor) return <LoginSecondFactor strategy={secondFactor} />;
 

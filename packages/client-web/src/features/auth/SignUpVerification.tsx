@@ -4,16 +4,17 @@ import { useState } from 'react';
 
 import { useSignUp } from '@clerk/nextjs';
 
-import { Button, Input, Skeleton, Typography } from '#client-web/components';
+import { Button, Input, Loader, Skeleton, Typography } from '#client-web/components';
 import { Logger } from '#client-web/lib/logger';
-import { type AppTranslation, useRouter } from '#client-web/lib/nextIntl';
+import type { AppTranslation } from '#client-web/lib/nextIntl';
 
+import { useAuthRedirect } from './useAuthRedirect';
 import { describeAuthError } from './utils';
 
 export function SignUpVerification() {
   const [error, setError] = useState<AppTranslation | ''>('');
   const { setActive, signUp } = useSignUp();
-  const router = useRouter();
+  const { checkIsRedirecting, isRedirecting, redirectTo } = useAuthRedirect();
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,14 +32,23 @@ export function SignUpVerification() {
         return;
       }
       await setActive({ session: completeSignUp.createdSessionId });
-      router.push('/');
+      redirectTo('/');
     } catch (err) {
       Logger.error('SignUpVerification.handleVerification', describeAuthError(err));
       setError('auth.error.verificationFailed');
     } finally {
-      setIsLoading(false);
+      if (!checkIsRedirecting()) setIsLoading(false);
     }
   };
+
+  if (isRedirecting) {
+    return (
+      <section className="flex flex-col items-center gap-4 p-6">
+        <Loader />
+        <Typography as="p" className="text-sm text-muted-foreground" label="auth.signingIn" />
+      </section>
+    );
+  }
 
   return (
     <section className="flex flex-col items-center">

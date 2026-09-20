@@ -4,11 +4,12 @@ import { useState } from 'react';
 
 import { useSignIn } from '@clerk/nextjs';
 
-import { Button, Input, Skeleton, Typography } from '#client-web/components';
+import { Button, Input, Loader, Skeleton, Typography } from '#client-web/components';
 import { Logger } from '#client-web/lib/logger';
-import { type AppTranslation, useRouter } from '#client-web/lib/nextIntl';
+import type { AppTranslation } from '#client-web/lib/nextIntl';
 import { useAppTranslations } from '#client-web/lib/nextIntl/useAppTranslation';
 
+import { useAuthRedirect } from './useAuthRedirect';
 import { describeAuthError, getClerkError, type SecondFactorStrategy } from './utils';
 
 interface LoginSecondFactorProps {
@@ -25,7 +26,7 @@ const PROMPTS: Record<SecondFactorStrategy, AppTranslation> = {
 
 /** Second step of the sign-in flow, shown when Clerk answers `needs_second_factor`. */
 export function LoginSecondFactor({ strategy }: LoginSecondFactorProps) {
-  const router = useRouter();
+  const { checkIsRedirecting, isRedirecting, redirectTo } = useAuthRedirect();
   const t = useAppTranslations();
   const { setActive, signIn } = useSignIn();
   const [code, setCode] = useState('');
@@ -45,16 +46,26 @@ export function LoginSecondFactor({ strategy }: LoginSecondFactorProps) {
         return;
       }
       await setActive({ session: attempt.createdSessionId });
-      router.push('/');
+      redirectTo('/');
     } catch (err) {
       Logger.error('LoginSecondFactor.handleSubmit', describeAuthError(err));
       const clerkCode = getClerkError(err);
       if (t.has(clerkCode)) setError(clerkCode as AppTranslation);
       else setError('auth.error.secondFactorFailed');
     } finally {
-      setIsLoading(false);
+      // Stay pending while the router navigates, or the stale code form flashes back.
+      if (!checkIsRedirecting()) setIsLoading(false);
     }
   };
+
+  if (isRedirecting) {
+    return (
+      <section className="flex flex-col items-center gap-4 p-6">
+        <Loader />
+        <Typography as="p" className="text-sm text-muted-foreground" label="auth.signingIn" />
+      </section>
+    );
+  }
 
   return (
     <section className="flex flex-col items-center">
