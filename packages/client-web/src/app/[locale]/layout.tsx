@@ -40,19 +40,19 @@ export default async function RootLayout({
   const { locale } = await params;
 
   return (
-    <AuthProvider locale={locale}>
-      <ThemeProvider attribute="class">
-        <html lang={locale} suppressHydrationWarning>
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} ${prostoOne.variable} antialiased`}>
+    <html lang={locale} suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${prostoOne.variable} antialiased`}>
+        <AuthProvider locale={locale}>
+          <ThemeProvider attribute="class">
             <I18nProvider locale={locale}>
               <Header endNode={<AuthHeaderNav />} />
               {children}
               <Footer />
             </I18nProvider>
-          </body>
-        </html>
-      </ThemeProvider>
-    </AuthProvider>
+          </ThemeProvider>
+        </AuthProvider>
+      </body>
+    </html>
   );
 }
