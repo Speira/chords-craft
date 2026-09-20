@@ -12,8 +12,10 @@ pnpm install
 pnpm build
 pnpm build:watch       # Watch mode
 
-# Type checking (no emit)
+# Quality gate: format:check -> lint -> typecheck -> knip -> tests
 pnpm check
+pnpm typecheck         # tsc --noEmit in every package
+pnpm knip              # unused files, exports and dependencies
 
 # Run all tests
 pnpm test
@@ -26,7 +28,7 @@ pnpm test -- <pattern> # Filter by file/test name
 
 # Lint & format
 pnpm lint
-pnpm lint-fix
+pnpm lint:fix
 pnpm format            # Prettier write + ESLint fix
 
 # Code generation (barrel files, etc.)
@@ -93,10 +95,26 @@ AWS CDK stack that combines chart context + API. Merges GraphQL schemas via `mer
 
 ## Key Patterns
 
-- **Import ordering** (enforced by ESLint): `effect`/`react` → external → internal (`@speira/*`) → relative
-- **Type imports**: always use `import type` for types
+Conventions follow the coding profile (`sass/coding-profile`, ADR-001 to ADR-005). The migration
+status and what is still tracked as lint warnings are in MIGRATION.md.
+
+- **Import ordering** (enforced by ESLint): `effect`/`react` → external → workspace
+  (`@chordcraft/*`) → own package alias (`#context-chart/*`) → relative `./`
+- **Aliases**: each package has its own `#<package>/*` alias for its `src/` (package.json
+  `imports` + the root `tsconfig.base.json` paths). Another package is reached by its package
+  name, never by a path. Relative imports are for siblings (`./`) only.
+- **Type imports**: inline (`import { type A, B }`), or `import type` when every specifier is a type
+- **Exports**: named only; default exports only where a framework requires them
+- **Functions**: a file's exported functions are `function` declarations; arrows for callbacks,
+  one-line helpers and typed handlers
+- **Types**: `interface` for object shapes (no `I` prefix), `type` for unions; no `enum`, use
+  `as const`; no `any`, use `unknown`
+- **Naming**: PascalCase files for components and classes, camelCase for hooks and utils;
+  UPPER_SNAKE constants; booleans prefixed `is/has/can/should/could/require`; boolean-returning
+  functions prefixed `check`
 - **Workspace dependencies**: use `workspace:*` protocol in `package.json`
 - **Versioning**: Changesets (`pnpm changeset`) for semantic versioning of packages
+- **Commits**: Conventional Commits; the lefthook hooks format, lint, and run typecheck + tests
 
 ## Testing
 
@@ -111,8 +129,12 @@ Tests should verify **behavior**, not implementation details:
 
 ### Vitest Configuration
 
-- Root config has `sequence: { concurrent: true }` for parallel test execution
-- Tests run concurrently by default for better performance
+- Tests live in `test/`, mirroring `src/`, and import through the package alias
+  (`#context-chart/domain/Chart`)
+- Files run in parallel; tests inside a file run in order. Opt into `describe.concurrent` only
+  for I/O-bound suites without shared state
+- Integration tests (`test/infrastructure/**`) need a local DynamoDB and run via
+  `pnpm test:integration`
 
 ## gstack
 

@@ -1,7 +1,7 @@
-import { Main } from "#client-web/components";
-import { SignUpPage } from "#client-web/features/auth";
+import { Main } from '#client-web/components';
+import { SignUpPage } from '#client-web/features/auth';
 
-type IPage = PageProps<"/[locale]/auth/sign-up">;
+type IPage = PageProps<'/[locale]/auth/sign-up'>;
 
 export default async function Signup(props: IPage) {
   const { locale } = await props.params;

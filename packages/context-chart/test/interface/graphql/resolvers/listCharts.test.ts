@@ -1,8 +1,7 @@
 import { Effect, Layer } from 'effect';
 
-import { describe, expect, it, vi } from 'vitest';
-
 import { Chord, Note, Section, TenantID } from '@chordcraft/shared/valueObjects';
+import { describe, expect, it, vi } from 'vitest';
 
 import { ChartID, ChartProjection, ChartReadError, ChartRepository } from '#context-chart/domain';
 import { Chart } from '#context-chart/domain/Chart';

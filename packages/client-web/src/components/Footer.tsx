@@ -1,10 +1,10 @@
-import { Mail, Phone } from "lucide-react";
+import { Mail, Phone } from 'lucide-react';
 
-import K from "#client-web/constants";
-import { getAppTranslations } from "#client-web/lib/next-intl/getAppTranslation";
+import K from '#client-web/constants';
+import { getAppTranslations } from '#client-web/lib/nextIntl/getAppTranslation';
 
-import { Link } from "./Link";
-import { Typography } from "./Typography";
+import { Link } from './Link';
+import { Typography } from './Typography';
 
 export async function Footer() {
   const t = await getAppTranslations();
@@ -22,19 +22,14 @@ export async function Footer() {
             />
             <Typography
               isServer
-              className="text-muted-foreground mb-4 text-sm"
+              className="mb-4 text-sm text-muted-foreground"
               as="p"
               label="general.description"
             />
           </div>
 
           <div>
-            <Typography
-              isServer
-              as="h4"
-              label="general.legal"
-              className="mb-4 font-semibold"
-            />
+            <Typography isServer as="h4" label="general.legal" className="mb-4 font-semibold" />
             <ul className="space-y-2 text-sm">
               <li>
                 <Link isServer href={K.PATHS.PRIVACY} label="general.privacy" />
@@ -48,19 +43,10 @@ export async function Footer() {
             </ul>
           </div>
 
-          <div className="flex-col flex">
-            <Typography
-              isServer
-              as="h4"
-              label="social.title"
-              className="mb-4 font-semibold"
-            />
+          <div className="flex flex-col">
+            <Typography isServer as="h4" label="social.title" className="mb-4 font-semibold" />
             <div className="mb-4 flex gap-4">
-              <Link
-                isServer
-                href={K.SOCIAL.FACEBOOK}
-                target="_blank"
-                title={t("social.facebook")}>
+              <Link isServer href={K.SOCIAL.FACEBOOK} target="_blank" title={t('social.facebook')}>
                 <img
                   height="32"
                   width="32"
@@ -72,7 +58,7 @@ export async function Footer() {
                 isServer
                 href={K.SOCIAL.INSTAGRAM}
                 target="_blank"
-                title={t("social.instagram")}>
+                title={t('social.instagram')}>
                 <img
                   height="32"
                   width="32"
@@ -80,11 +66,7 @@ export async function Footer() {
                   src="https://unpkg.com/simple-icons/icons/instagram.svg"
                 />
               </Link>
-              <Link
-                isServer
-                href={K.SOCIAL.X}
-                target="_blank"
-                title={t("social.twitter")}>
+              <Link isServer href={K.SOCIAL.X} target="_blank" title={t('social.twitter')}>
                 <img
                   height="32"
                   width="32"
@@ -92,11 +74,7 @@ export async function Footer() {
                   src="https://unpkg.com/simple-icons/icons/x.svg"
                 />
               </Link>
-              <Link
-                isServer
-                href={K.SOCIAL.SNAPCHAT}
-                target="_blank"
-                title={t("social.snapchat")}>
+              <Link isServer href={K.SOCIAL.SNAPCHAT} target="_blank" title={t('social.snapchat')}>
                 <img
                   height="32"
                   width="32"
@@ -105,27 +83,20 @@ export async function Footer() {
                 />
               </Link>
             </div>
-            <div className="text-muted-foreground flex flex-col gap-2 text-sm">
-              <Link
-                isServer
-                href={`mailto:${K.CONTACT.EMAIL}`}
-                className="flex items-center gap-2">
+            <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <Link isServer href={`mailto:${K.CONTACT.EMAIL}`} className="flex items-center gap-2">
                 <Mail size={18} />
                 <Typography isServer as="span" startNode={K.CONTACT.EMAIL} />
               </Link>
-              <Link
-                isServer
-                href={`tel:${K.CONTACT.PHONE}`}
-                className="flex items-center gap-2">
+              <Link isServer href={`tel:${K.CONTACT.PHONE}`} className="flex items-center gap-2">
                 <Phone size={18} />
                 <Typography isServer as="span" startNode={K.CONTACT.PHONE} />
               </Link>
             </div>
           </div>
         </div>
-        <div className="text-muted-foreground mt-8 border-t pt-8 text-center text-sm">
-          © {new Date().getFullYear()} {t("general.title")}.{" "}
-          {t("general.allRightsReserved")}.
+        <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
+          © {new Date().getFullYear()} {t('general.title')}. {t('general.allRightsReserved')}.
         </div>
       </div>
     </footer>

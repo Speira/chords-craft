@@ -42,8 +42,7 @@ export const sharpToFlat = (note: Note) => SharpFlatpMap[note] ?? note;
 
 export const ALL: ReadonlyArray<Note> = [AFlat, A, ASharp, BFlat, B, C, CSharp, DFlat, D, DSharp, EFlat, E, F, FSharp, GFlat, G, GSharp] as const; // prettier-ignore
 export const schema = Schema.Literal(...ALL);
-// eslint-disable-next-line unicorn/prefer-includes -- `includes` narrows to the branded
-// Note type, so a plain string argument would not type-check.
+// eslint-disable-next-line unicorn/prefer-includes -- `includes` would require a Note, which is what this guard establishes
 export const checkNote = (a: string): a is Note => ALL.some((v) => a === v);
 
 /** Is used to build a Note inside the build/transform function */

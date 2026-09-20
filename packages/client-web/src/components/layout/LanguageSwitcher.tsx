@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from 'react';
 
-import { Globe } from "lucide-react";
-import { useParams } from "next/navigation";
+import { Globe } from 'lucide-react';
+import { useParams } from 'next/navigation';
 
 import {
   Select,
@@ -11,8 +11,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "#client-web/components";
-import { defaultLocale, localeLabels, usePathname, useRouter } from "#client-web/lib/next-intl";
+} from '#client-web/components';
+import { defaultLocale, localeLabels, usePathname, useRouter } from '#client-web/lib/nextIntl';
 
 export const LanguageSwitcher = () => {
   const router = useRouter();
@@ -22,9 +22,7 @@ export const LanguageSwitcher = () => {
 
   const paramLocale = (params?.locale as string | undefined) ?? undefined;
 
-  const [currentLocale, setCurrentLocale] = useState<string>(
-    paramLocale ?? defaultLocale,
-  );
+  const [currentLocale, setCurrentLocale] = useState<string>(paramLocale ?? defaultLocale);
 
   useEffect(() => {
     if (paramLocale && paramLocale !== currentLocale) {

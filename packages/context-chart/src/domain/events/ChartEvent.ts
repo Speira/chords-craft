@@ -2,7 +2,7 @@ import { Schema } from 'effect';
 
 import { Note, Section, Structure } from '@chordcraft/shared/valueObjects';
 
-import { ChartID } from '../valueObjects';
+import { ChartID } from '#context-chart/domain/valueObjects';
 
 const BaseEvent = Schema.Struct({
   aggregateId: ChartID.schema,

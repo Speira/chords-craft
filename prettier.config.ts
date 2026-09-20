@@ -2,7 +2,7 @@ import type { Config } from 'prettier';
 
 /** Tailwind v4 entry stylesheet of each front-end package (paths are relative to the repo root). */
 const TAILWIND_STYLESHEETS: Record<string, string> = {
-  'packages/client-web': 'packages/client-web/src/styles.css',
+  'packages/client-web': 'packages/client-web/src/app/[locale]/globals.css',
 };
 
 const BASE_PLUGINS = ['prettier-plugin-packagejson', 'prettier-plugin-jsdoc'];

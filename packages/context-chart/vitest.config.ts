@@ -1,6 +1,7 @@
-import { workspaceAliases } from '../../vitest.shared';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import type { ViteUserConfig } from 'vitest/config';
+
+import { workspaceAliases } from '../../vitest.shared';
 
 const config: ViteUserConfig = {
   plugins: [tsconfigPaths()],

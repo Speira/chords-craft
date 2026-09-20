@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { useSignUp } from "@clerk/nextjs";
+import { useSignUp } from '@clerk/nextjs';
 
-import { Button, Input, Link, Typography } from "#client-web/components";
-import K from "#client-web/constants";
-import { Logger } from "#client-web/lib/logger";
-import type { AppTranslation } from "#client-web/lib/next-intl";
-import { checkIsDarkMode, cn } from "#client-web/lib/shadcn";
+import { Button, Input, Link, Typography } from '#client-web/components';
+import K from '#client-web/constants';
+import { Logger } from '#client-web/lib/logger';
+import type { AppTranslation } from '#client-web/lib/nextIntl';
+import { checkIsDarkMode, cn } from '#client-web/lib/shadcn';
 
-import { SignUpVerification } from "./SignUpVerification";
-import { clerkLocalAdapter } from "./utils";
+import { SignUpVerification } from './SignUpVerification';
+import { clerkLocalAdapter } from './utils';
 
 /** Signup */
 export function SignUpPage(props: { locale: string }) {
@@ -19,21 +19,21 @@ export function SignUpPage(props: { locale: string }) {
   const isDarkMode = checkIsDarkMode();
   const locale = clerkLocalAdapter(props.locale);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [error, setError] = useState<AppTranslation | "">("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [error, setError] = useState<AppTranslation | ''>('');
   const [isLoading, setIsLoading] = useState(false);
 
   const [pendingVerification, setPendingVerification] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     if (password !== confirmPassword) {
-      setError("auth.error.passwordsDoNotMatch");
+      setError('auth.error.passwordsDoNotMatch');
       return;
     }
     if (!signUp) return;
@@ -41,21 +41,21 @@ export function SignUpPage(props: { locale: string }) {
       const emailAddress = email;
       setIsLoading(true);
       await signUp.create({ emailAddress, password, firstName, lastName, locale });
-      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+      await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
       setIsLoading(false);
       setPendingVerification(true);
     } catch (err) {
       setIsLoading(false);
-      Logger.error("SignUpPage.handleSubmit", { err });
-      setError("auth.error.signupFailed");
+      Logger.error('SignUpPage.handleSubmit', { err });
+      setError('auth.error.signupFailed');
     }
   };
 
   const signUpWithGoogle = () => {
     signUp?.authenticateWithRedirect({
-      strategy: "oauth_google",
-      redirectUrl: "/auth/callback",
-      redirectUrlComplete: "/",
+      strategy: 'oauth_google',
+      redirectUrl: '/auth/callback',
+      redirectUrlComplete: '/',
     });
   };
 
@@ -106,20 +106,15 @@ export function SignUpPage(props: { locale: string }) {
             disabled={isLoading}
             required
           />
-          {error && <p className="text-destructive text-sm">{error}</p>}
+          {error && <p className="text-sm text-destructive">{error}</p>}
 
           <div
             id="clerk-captcha"
             data-cl-language={locale}
-            data-cl-theme={isDarkMode ? "dark" : "light"}
+            data-cl-theme={isDarkMode ? 'dark' : 'light'}
           />
 
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full"
-            label="auth.signup"
-          />
+          <Button type="submit" disabled={isLoading} className="w-full" label="auth.signup" />
         </form>
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
@@ -139,21 +134,11 @@ export function SignUpPage(props: { locale: string }) {
           className="w-full"
           label="auth.signUpGoogle"
           disabled={isLoading}
-          startNode={
-            <img height="16" width="16" src="/google-logo.svg" alt="google-logo" />
-          }
+          startNode={<img height="16" width="16" src="/google-logo.svg" alt="google-logo" />}
         />
-        <div className={cn("flex gap-3 text-center text-sm", { invisible: isLoading })}>
-          <Typography
-            as="span"
-            label="auth.hasAccount"
-            className="text-muted-foreground"
-          />
-          <Link
-            href={K.PATHS.LOGIN}
-            className="text-primary hover:underline"
-            label="auth.signIn"
-          />
+        <div className={cn('flex gap-3 text-center text-sm', { invisible: isLoading })}>
+          <Typography as="span" label="auth.hasAccount" className="text-muted-foreground" />
+          <Link href={K.PATHS.LOGIN} className="text-primary hover:underline" label="auth.signIn" />
         </div>
       </div>
     </section>

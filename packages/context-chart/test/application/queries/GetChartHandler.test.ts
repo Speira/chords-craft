@@ -1,8 +1,7 @@
 import { Effect, Layer, pipe } from 'effect';
 
-import { describe, expect, it, vi } from 'vitest';
-
 import { Chord, Note, Section, TenantID } from '@chordcraft/shared/valueObjects';
+import { describe, expect, it, vi } from 'vitest';
 
 import { GetChartHandler, GetChartQuery } from '#context-chart/application/queries/GetChart';
 import { type ChartError, ChartID, ChartProjection, ChartReadError } from '#context-chart/domain';
@@ -49,15 +48,14 @@ describe('GetChartHandler', () => {
 
     const program = pipe(GetChartHandler.execute(query), Effect.provide(TestLayer));
 
-    const chart = await Effect.runPromise(program as Effect.Effect<Chart, ChartError, never>);
+    const chart = await Effect.runPromise(program as Effect.Effect<Chart, ChartError>);
 
     expect(chart.id).toBe(chartId);
     expect(chart.tenantId).toBe(tenantId);
     expect(chart.title).toBe('Test title');
     expect(chart.author).toBe('Test Author');
     expect(chart.root).toBe(Note.A);
-    expect(mockProjection.findById).toHaveBeenCalledOnce();
-    expect(mockProjection.findById).toHaveBeenCalledWith(chartId, tenantId);
+    expect(mockProjection.findById).toHaveBeenCalledExactlyOnceWith(chartId, tenantId);
   });
 
   it('should propagate error when chart is not found', async () => {
@@ -78,9 +76,7 @@ describe('GetChartHandler', () => {
 
     const program = pipe(GetChartHandler.execute(query), Effect.provide(TestLayer));
 
-    await expect(
-      Effect.runPromise(program as Effect.Effect<Chart, ChartError, never>),
-    ).rejects.toThrow();
+    await expect(Effect.runPromise(program as Effect.Effect<Chart, ChartError>)).rejects.toThrow();
     expect(mockProjection.findById).toHaveBeenCalledOnce();
   });
 });

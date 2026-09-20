@@ -1,7 +1,7 @@
-import { NextIntlClientProvider } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { NextIntlClientProvider } from 'next-intl';
+import { setRequestLocale } from 'next-intl/server';
 
-import { checkIsLocale, defaultLocale } from "./definitions";
+import { checkIsLocale, defaultLocale } from './definitions';
 
 interface I18nProviderProps {
   children: React.ReactNode;

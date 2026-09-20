@@ -1,8 +1,7 @@
 import { Effect, Layer, pipe } from 'effect';
 
-import { describe, expect, it, vi } from 'vitest';
-
 import { Chord, Note, Section, TenantID } from '@chordcraft/shared/valueObjects';
+import { describe, expect, it, vi } from 'vitest';
 
 import { ListChartHandler, ListChartQuery } from '#context-chart/application/queries/ListChart';
 import { type ChartError, ChartID, ChartProjection, ChartReadError } from '#context-chart/domain';
@@ -52,16 +51,13 @@ describe('ListChartHandler', () => {
 
     const program = pipe(ListChartHandler.execute(query), Effect.provide(TestLayer));
 
-    const result = await Effect.runPromise(
-      program as Effect.Effect<ReadonlyArray<Chart>, ChartError, never>,
-    );
+    const result = await Effect.runPromise(program);
 
     expect(result).toHaveLength(3);
     expect(result[0].title).toBe('Chart 1');
     expect(result[1].title).toBe('Chart 2');
     expect(result[2].title).toBe('Chart 3');
-    expect(mockProjection.findByTenant).toHaveBeenCalledOnce();
-    expect(mockProjection.findByTenant).toHaveBeenCalledWith(tenantId);
+    expect(mockProjection.findByTenant).toHaveBeenCalledExactlyOnceWith(tenantId);
   });
 
   it('should return empty array when no charts exist for tenant', async () => {
@@ -80,9 +76,7 @@ describe('ListChartHandler', () => {
 
     const program = pipe(ListChartHandler.execute(query), Effect.provide(TestLayer));
 
-    const result = await Effect.runPromise(
-      program as Effect.Effect<ReadonlyArray<Chart>, ChartError, never>,
-    );
+    const result = await Effect.runPromise(program);
 
     expect(result).toHaveLength(0);
     expect(mockProjection.findByTenant).toHaveBeenCalledOnce();
@@ -106,7 +100,7 @@ describe('ListChartHandler', () => {
     const program = pipe(ListChartHandler.execute(query), Effect.provide(TestLayer));
 
     await expect(
-      Effect.runPromise(program as Effect.Effect<Array<Chart>, ChartError, never>),
+      Effect.runPromise(program as Effect.Effect<Array<Chart>, ChartError>),
     ).rejects.toThrow();
     expect(mockProjection.findByTenant).toHaveBeenCalledOnce();
   });

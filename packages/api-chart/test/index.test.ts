@@ -1,7 +1,6 @@
+import { ChartInterface } from '@chordcraft/context-chart';
 import type { AppSyncResolverEvent } from 'aws-lambda';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { ChartInterface } from '@chordcraft/context-chart';
 
 import { handler } from '#api-chart/index';
 

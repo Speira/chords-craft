@@ -1,6 +1,6 @@
-import { useId } from "react";
+import { useId } from 'react';
 
-export const SimpleNote = ({ color = "#262626" }) => {
+export const SimpleNote = ({ color = '#262626' }) => {
   const id = useId();
   const g1 = `${id}-gr1`;
   const g2 = `${id}-gr2`;
@@ -55,7 +55,7 @@ export const SimpleNote = ({ color = "#262626" }) => {
 export const NoteCredit = () => (
   <div
     dangerouslySetInnerHTML={{
-      __html: "<!-- Icon Downloaded from https://icons8.com/ -->",
+      __html: '<!-- Icon Downloaded from https://icons8.com/ -->',
     }}
   />
 );

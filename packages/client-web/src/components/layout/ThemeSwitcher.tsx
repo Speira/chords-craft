@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
-import { Skeleton } from "../Skeleton";
-import { Switch } from "../ui/switch";
+import { Skeleton } from '#client-web/components/Skeleton';
+import { Switch } from '#client-web/components/ui/switch';
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
@@ -16,10 +16,10 @@ export function ThemeSwitcher() {
     setMounted(true); // eslint-disable-line
   }, []);
 
-  const isDarkMode = resolvedTheme === "dark";
+  const isDarkMode = resolvedTheme === 'dark';
 
   const toggleTheme = () => {
-    const newTheme = isDarkMode ? "light" : "dark";
+    const newTheme = isDarkMode ? 'light' : 'dark';
     setTheme(newTheme);
   };
 
@@ -27,11 +27,7 @@ export function ThemeSwitcher() {
   return (
     <div className="flex items-center space-x-2">
       <Sun className="h-5 w-5 text-yellow-500" />
-      <Switch
-        checked={isDarkMode}
-        aria-checked={isDarkMode}
-        onCheckedChange={toggleTheme}
-      />
+      <Switch checked={isDarkMode} aria-checked={isDarkMode} onCheckedChange={toggleTheme} />
       <Moon className="h-5 w-5 text-gray-500" />
     </div>
   );

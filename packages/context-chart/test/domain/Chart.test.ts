@@ -1,8 +1,7 @@
 import { Effect, Exit } from 'effect';
 
-import { describe, expect, it } from 'vitest';
-
 import { Chord, Note, Quality, Section, TenantID } from '@chordcraft/shared/valueObjects';
+import { describe, expect, it } from 'vitest';
 
 import { Chart } from '#context-chart/domain/Chart';
 import { ChartID } from '#context-chart/domain/valueObjects';

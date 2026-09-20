@@ -2,7 +2,7 @@ import { Effect, Schema } from 'effect';
 
 import { Typeguards } from '@chordcraft/shared/utils';
 
-import { ChartParseError } from '../errors';
+import { ChartParseError } from '#context-chart/domain/errors';
 
 import { ChartArchived, ChartCreated, type ChartEvent, ChartUpdated } from './ChartEvent';
 

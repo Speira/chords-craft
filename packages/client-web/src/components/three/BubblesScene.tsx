@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { Environment } from "@react-three/drei";
+import { Environment } from '@react-three/drei';
 
-import { BubbleEntity } from "./BubbleEntity";
-import { CanvasLayer } from "./CanvasLayer";
+import { BubbleEntity } from './BubbleEntity';
+import { CanvasLayer } from './CanvasLayer';
 
 export default function BubblesScene() {
   return (

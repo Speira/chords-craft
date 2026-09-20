@@ -1,37 +1,37 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { useSignUp } from "@clerk/nextjs";
+import { useSignUp } from '@clerk/nextjs';
 
-import { Button, Input, Skeleton, Typography } from "#client-web/components";
-import { Logger } from "#client-web/lib/logger";
-import { type AppTranslation, useRouter } from "#client-web/lib/next-intl";
+import { Button, Input, Skeleton, Typography } from '#client-web/components';
+import { Logger } from '#client-web/lib/logger';
+import { type AppTranslation, useRouter } from '#client-web/lib/nextIntl';
 
 export function SignUpVerification() {
-  const [error, setError] = useState<AppTranslation | "">("");
+  const [error, setError] = useState<AppTranslation | ''>('');
   const { setActive, signUp } = useSignUp();
   const router = useRouter();
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleVerification = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     if (!signUp) return;
     try {
       setIsLoading(true);
       const completeSignUp = await signUp.attemptEmailAddressVerification({ code });
-      if (completeSignUp.status === "complete") {
+      if (completeSignUp.status === 'complete') {
         await setActive({ session: completeSignUp.createdSessionId });
         setIsLoading(false);
-        router.push("/");
+        router.push('/');
       }
       if (isLoading) setIsLoading(false);
     } catch (err) {
       setIsLoading(false);
-      Logger.error("SignUpVerification.handleVerification", { err });
-      setError("auth.error.verificationFailed");
+      Logger.error('SignUpVerification.handleVerification', { err });
+      setError('auth.error.verificationFailed');
     }
   };
 
@@ -53,7 +53,7 @@ export function SignUpVerification() {
             required
             disabled={isLoading}
           />
-          {error && <Typography className="text-destructive text-sm" label={error} />}
+          {error && <Typography className="text-sm text-destructive" label={error} />}
           {isLoading ? (
             <Skeleton />
           ) : (

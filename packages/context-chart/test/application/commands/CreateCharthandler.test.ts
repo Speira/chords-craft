@@ -1,15 +1,14 @@
 import { Effect, Layer, pipe, Schema } from 'effect';
 
-import { describe, expect, it, vi } from 'vitest';
-
 import { Note, TenantID } from '@chordcraft/shared/valueObjects';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   CreateChartCommand,
   CreateChartHandler,
 } from '#context-chart/application/commands/CreateChart';
 import { type ChartError, ChartProjection, ChartRepository } from '#context-chart/domain';
-import { type Chart } from '#context-chart/domain/Chart';
+import type { Chart } from '#context-chart/domain/Chart';
 
 describe('CreateChartHandler', () => {
   it('should create chart and save to repository and projection', async () => {
@@ -51,7 +50,7 @@ describe('CreateChartHandler', () => {
       Effect.provide(TestLayer),
     );
 
-    const chart = await Effect.runPromise(program as Effect.Effect<Chart, ChartError, never>);
+    const chart = await Effect.runPromise(program as Effect.Effect<Chart, ChartError>);
 
     expect(chart.title).toBe('Test Chart');
     expect(chart.root).toBe(Note.C);

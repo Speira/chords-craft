@@ -1,2 +1,2 @@
-export * from "./config";
-export * as queries from "./queries";
+export * from './config';
+export * as queries from './queries';

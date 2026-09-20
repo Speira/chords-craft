@@ -1,5 +1,4 @@
 import { CreateTableCommand, DeleteTableCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
-
 import { Note, Section, TenantID } from '@chordcraft/shared/valueObjects';
 
 import { Chart } from '#context-chart/domain/Chart';

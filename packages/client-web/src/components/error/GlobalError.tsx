@@ -1,4 +1,4 @@
-import { Logger } from "#client-web/lib/logger";
+import { Logger } from '#client-web/lib/logger';
 
 export function GlobalError({
   error,

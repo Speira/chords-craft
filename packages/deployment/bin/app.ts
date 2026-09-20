@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib/core';
 
-import { ChordsChartStack } from '../src/chordschart-stack';
+import { ChordsChartStack } from '../src/ChordsChartStack';
 
 const app = new cdk.App();
 const env = {

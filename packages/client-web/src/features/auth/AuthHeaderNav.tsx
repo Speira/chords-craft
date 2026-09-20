@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   SignedIn,
   SignedOut,
@@ -6,11 +6,11 @@ import {
   SignUpButton,
   useAuth,
   UserButton,
-} from "@clerk/nextjs";
-import { LogInIcon, LogOutIcon } from "lucide-react";
-import type { PropsWithChildren } from "react";
+} from '@clerk/nextjs';
+import { LogInIcon, LogOutIcon } from 'lucide-react';
+import type { PropsWithChildren } from 'react';
 
-import { Button } from "#client-web/components";
+import { Button } from '#client-web/components';
 
 const AuthNavDiv = ({ children }: PropsWithChildren) => <div>{children}</div>;
 

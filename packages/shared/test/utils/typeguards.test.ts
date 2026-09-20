@@ -375,7 +375,7 @@ describe('Typeguards test suite', () => {
 
     it('Should narrow keyof types correctly', () => {
       const obj = { a: 1, b: 2 };
-      const key: string = 'a';
+      const key = 'a';
 
       if (Typeguards.checkIsKeyof(obj, key)) {
         // TypeScript should know key is keyof typeof obj

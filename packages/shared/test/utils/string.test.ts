@@ -76,7 +76,7 @@ describe('StringUtils test suite', () => {
     });
 
     it('Should reject passwords that are too long', () => {
-      const longPassword = 'Password123!' + 'a'.repeat(60);
+      const longPassword = `Password123!${'a'.repeat(60)}`;
       expect(StringUtils.checkPassword(longPassword, 8, 64)).toBe(false);
     });
   });

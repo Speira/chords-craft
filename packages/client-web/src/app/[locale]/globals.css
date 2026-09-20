@@ -1,6 +1,6 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "@clerk/themes/shadcn.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import '@clerk/themes/shadcn.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -122,7 +122,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply flex flex-col bg-background text-foreground min-h-dvh max-w-dvw;
+    @apply flex min-h-dvh max-w-dvw flex-col bg-background text-foreground;
   }
   body * {
     @apply box-border;
