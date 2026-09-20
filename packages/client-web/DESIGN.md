@@ -1,0 +1,211 @@
+---
+version: alpha
+name: chordcraft-client-web-design
+description: A quiet, paper-white workspace for writing and reading chord charts. The interface is
+  a neutral grey canvas with a desaturated slate-blue primary and a warm sand secondary — the only
+  warm note in the system, and the one that keeps the app from reading as generic shadcn. Display
+  type is Prosto One, a geometric slab reserved for the h1 and for strong emphasis; everything else
+  is Geist. Charts are dense text, so body rhythm and contrast matter more than ornament.
+# The contract: these mirror the CSS variables in src/app/[locale]/globals.css. Never hardcode a
+# colour, radius or size in a component — reference the token, and add it to globals.css first if
+# it does not exist.
+colors:
+  primary: 'var(--primary)' # oklch(52.7% 0.046 245.4) light | oklch(92.9% 0.013 255.5) dark
+  primary-foreground: 'var(--primary-foreground)'
+  secondary: 'var(--secondary)' # oklch(92.4% 0.031 70.5) — warm sand, light mode only
+  secondary-foreground: 'var(--secondary-foreground)'
+  background: 'var(--background)' # near-white canvas | near-black slate
+  foreground: 'var(--foreground)' # mid-grey body text, not pure black
+  card: 'var(--card)'
+  card-foreground: 'var(--card-foreground)'
+  popover: 'var(--popover)'
+  muted: 'var(--muted)'
+  muted-foreground: 'var(--muted-foreground)'
+  accent: 'var(--accent)' # near-white tint; hover/pressed surface for ghost controls
+  accent-foreground: 'var(--accent-foreground)'
+  border: 'var(--border)'
+  input: 'var(--input)'
+  ring: 'var(--ring)' # focus ring, always visible
+  destructive: 'var(--destructive)' # oklch(35.2% 0.245 27.3) deep red | brighter red in dark
+  chart-1..5: 'var(--chart-N)' # data series only, never chrome
+  sidebar-*: 'var(--sidebar-*)' # sidebar shell, tracks the slate palette not the brand
+typography:
+  display:
+    fontFamily: 'var(--font-prosto-one)' # Prosto One, via next/font/google
+    usage: h1 and <strong> only — utility `.font-prosto`
+  body:
+    fontFamily: 'var(--font-geist-sans)' # Geist
+  mono:
+    fontFamily: 'var(--font-geist-mono)' # Geist Mono — chord grids, code
+  scale:
+    h1: 'font-prosto text-4xl font-extrabold tracking-tight text-balance text-center'
+    h2: 'text-3xl font-semibold tracking-tight'
+    h3: 'text-2xl font-semibold tracking-tight'
+    h4: 'text-xl font-semibold tracking-tight'
+    p: 'leading-7 [&:not(:first-child)]:mt-6'
+    small: 'text-sm leading-none font-medium'
+    span: 'inline-block text-sm'
+    blockquote: 'mt-6 border-l-2 pl-6 italic'
+radius:
+  base: 'var(--radius)' # 0.625rem
+  scale: 'rounded-sm (−4px) | rounded-md (−2px) | rounded-lg (base) | rounded-xl (+4px) … rounded-4xl (+16px)'
+spacing:
+  unit: 4px
+  rhythm: 'gap-2 inside a control, gap-4 within a card, gap-6+ between sections; p-6 card padding'
+components:
+  button: # src/components/ui/button.tsx (shadcn) wrapped by src/components/Button.tsx
+    variants: default | destructive | outline | secondary | ghost | link
+    sizes: sm (h-8) | default (h-9) | lg (h-10) | icon | icon-sm | icon-lg
+    states: 'active:bg-*/50, disabled:opacity-50 + cursor-default, focus-visible ring-[3px] ring-ring/50, aria-invalid ring-destructive/20'
+  typography: # src/components/Typography.tsx
+    as: h1 | h2 | h3 | h4 | p | b | span | small | strong | blockquote
+    note: 'renders through TextualComponent, carries data-i18nkey, needs isServer inside a client component'
+  input: 'src/components/Input.tsx over ui/input.tsx'
+  field: 'ui/field.tsx + ui/form.tsx — inline validation messages'
+  card: 'ui/card.tsx'
+  dialog: 'ui/dialog.tsx, sheet.tsx (side panel), popover.tsx, tooltip.tsx'
+  navigation: 'ui/navigation-menu.tsx via components/layout/HeaderNavigation.tsx'
+  table: 'ui/table.tsx'
+  skeleton: 'ui/skeleton.tsx via components/Skeleton.tsx'
+  alert: 'ui/alert.tsx'
+  switchers: 'components/layout/ThemeSwitcher.tsx, LanguageSwitcher.tsx'
+---
+
+# Design — client-web
+
+The YAML above is the contract an agent generates against. The prose below is for the judgement
+calls. Tokens live in `src/app/[locale]/globals.css`; components in `src/components` (ours) and
+`src/components/ui` (shadcn, generated — do not hand-edit, re-add with the CLI).
+
+## Overview
+
+Two surfaces:
+
+- **Marketing / auth**: centred, generous whitespace, the h1 in Prosto One, a Three.js bubble scene
+  available but currently unmounted (see Known gaps).
+- **App**: chart list and chart editor. Dense text, mono for chord grids, chrome kept out of the way.
+
+Both run light and dark from the same token set. The thing that must stay recognisable is the
+**slate-blue + warm-sand pairing in light mode** and the **slab h1**; everything else is replaceable.
+
+## Colors
+
+- **Brand**: `primary` is a desaturated slate blue, used for the main action on a screen and for
+  links. One primary action per view.
+- **Secondary** is the only warm token (sand, `oklch(92.4% 0.031 70.5)`). Use it to mark a
+  secondary path, not decoration.
+- **Surfaces**: `background` for the page, `card`/`popover` for raised content. In light mode
+  `background`, `card` and `popover` are the same near-white — separation comes from `border`,
+  not elevation.
+- **Text**: `foreground` is mid-grey (≈47% lightness), not black; `muted-foreground` for secondary
+  text. Do not introduce a third grey.
+- **Semantic**: only `destructive` exists. There is no success or warning token — if a screen needs
+  one, add it to `globals.css` and to this file rather than reaching for a raw colour.
+- **Dark mode**: a real theme, but the brand does not survive it: `primary` becomes near-white and
+  `secondary` loses its warmth (both fall back to the stock shadcn slate ramp). Treat dark as
+  "legible, neutral", and check any brand-dependent screen in both themes.
+
+## Typography
+
+- **Prosto One** (display) is loaded via `next/font/google` and used for `h1` and `strong` only.
+  It is geometric and heavy; at small sizes it stops being readable.
+- **Geist** carries everything else; **Geist Mono** is for chord grids and code.
+- Emphasis goes **size before weight**, then the display family — never all three at once.
+- `h1` is centred and balanced (`text-balance`); `h2`–`h4` are left-aligned section headings.
+
+## Layout
+
+- Spacing is Tailwind's 4px step. The rhythm in use: `gap-2` inside a control, `gap-4` within a
+  card, `gap-6`+ between sections, `p-6` for card padding.
+- `body` is `flex min-h-dvh max-w-dvw flex-col` — page shells are columns, and nothing may exceed
+  the viewport width.
+- Whitespace is generous on marketing and auth, tight in the chart views.
+
+## Elevation & shape
+
+Borders do the work: `border-border` is applied globally in `@layer base`, and `outline-ring/50`
+gives every focusable element a visible ring. Shadows are minimal (`shadow-xs` on outline buttons).
+Radius comes from one base (`0.625rem`) with a calculated scale — never an arbitrary value.
+
+## Components
+
+- **Button** — six variants, six sizes. `default` is the single primary action per view; `outline`
+  and `ghost` for secondary and toolbar actions; `link` only inside prose. Pressed state is the
+  variant colour at 50% (`active:bg-*/50`); disabled is `opacity-50` with `cursor-default`.
+- **Typography** — the only way to render text with a heading level. It takes a translation `label`
+  and emits `data-i18nkey`; pass `isServer` when calling it from a client component.
+- **Input / Field / Form** — validation messages render inline, next to the field, not only as
+  `aria-invalid`. Invalid controls take `aria-invalid`, which drives the destructive ring.
+- **Card / Dialog / Sheet / Popover / Tooltip** — raised surfaces use `card`/`popover` tokens;
+  a sheet is for a side flow, a dialog for a decision.
+- **Table** — the chart list. Dense, mono where values are musical.
+- **Skeleton** — the loading state for anything fetched; do not use a spinner for page content.
+- **ThemeSwitcher / LanguageSwitcher** — every string goes through `next-intl`; the app is FR/EN.
+
+## States
+
+- **Loading**: skeletons shaped like the content they replace.
+- **Empty**: distinguish "no charts yet" (invite creating one) from "nothing matches this filter"
+  (offer to clear it).
+- **Error**: inline per field; cross-cutting failures surface once, visibly, near the action.
+- **Disabled**: if the blocked action can scroll out of view, say why in a visible message — a
+  greyed-out button off-screen communicates nothing.
+- **Focus**: `focus-visible` ring is global. Never remove it.
+
+## Do's and don'ts
+
+**Do**
+
+- Reference tokens (`bg-primary`, `text-muted-foreground`, `rounded-lg`).
+- Keep one primary action per view.
+- Compose from `src/components`; reach into `src/components/ui` only to build one.
+- Check contrast in light **and** dark before shipping a status colour.
+- Use `cn()` for conditional classes.
+
+**Don't**
+
+- Hardcode a colour, radius or font-size, or use an arbitrary Tailwind value (`text-[13px]`).
+- Hand-edit `src/components/ui/*` — re-add with `pnpm dlx shadcn@latest add <name>`.
+- Put Prosto One on body text, or on more than one element per screen.
+- Add a third grey, a second warm tone, or a success/warning colour without adding the token first.
+- Style hover as the only affordance — it does not exist on touch.
+
+## Responsive
+
+- Tailwind's default breakpoints; the header navigation collapses to a menu below `md`.
+- Touch targets stay at least 36px (`h-9`, `size-9`); `icon-sm` is for pointer-dense toolbars only.
+- The smallest supported viewport is 390px with no horizontal scroll. Chord grids scroll inside
+  their container rather than wrapping.
+
+## Accessibility
+
+- Contrast holds in both themes, including toast and alert text.
+- Semantic elements first; `aria-*` only where semantics run out. `aria-invalid` drives error styling.
+- Every action is keyboard reachable, with the focus ring intact.
+- All copy is translated (FR/EN) through `next-intl`; never hardcode a user-visible string.
+
+## Iteration guide
+
+1. One component at a time; reference its YAML key.
+2. Token references only — no inline hex, px or arbitrary values.
+3. A new variant is an entry here before it is code.
+4. Document default, active, disabled, focus-visible and invalid. Not hover.
+5. Prosto One is h1 and `strong`. Geist is everything else. That split does not bend.
+6. If this file and the code disagree, one of them is a bug — fix it and say which.
+
+## Known gaps
+
+- **`--font-alpha-slab` is referenced but never defined.** `@theme` maps `--font-alpha` to it and
+  `.font-alpha` uses it, yet no font sets the variable (`layout.tsx` loads Geist, Geist Mono and
+  Prosto One). Any element using `font-alpha` silently falls back. Remove the token or load the font.
+- **Dark mode loses the brand**: `primary` and `secondary` fall back to the stock shadcn slate ramp.
+  Deliberate or not, it is undocumented — decide before designing more dark-mode screens.
+- **No success or warning token**, so status UI has nothing to use but `destructive`.
+- **Motion is undocumented.** `tw-animate-css` and framer-motion are installed; durations, easing
+  and which elements may animate are not specified.
+- **The Three.js scene** (`src/components/three/*`) is written but never mounted. Wire it up or
+  delete it — do not design around it.
+- **Chart-specific UI** (the chord grid itself, section labels, transposition controls) is not
+  documented here; it is the app's most important surface and deserves its own section once stable.
+- **Clerk's auth screens** are themed through `@clerk/themes/shadcn.css` and only partly follow
+  these tokens.
