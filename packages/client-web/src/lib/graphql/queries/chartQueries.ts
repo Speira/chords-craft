@@ -7,7 +7,7 @@ export const CREATE_CHART = gql`
       title
       author
       root
-      sections
+      structure
       plan
       tags
       links
@@ -25,7 +25,7 @@ export const GET_CHART = gql`
       title
       author
       root
-      sections
+      structure
       plan
       tags
       links

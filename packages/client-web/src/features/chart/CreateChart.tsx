@@ -19,7 +19,7 @@ export function CreateChart() {
       const chart = await createChart({
         title,
         root: Note.C,
-        sections: { [Section.Verse]: [] },
+        structure: { [Section.Verse]: { default: [] } },
         plan: [Section.Verse],
         tags: [],
         links: [],
