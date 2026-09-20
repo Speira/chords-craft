@@ -1,4 +1,4 @@
-export type LoggerMethod = "log" | "error" | "warn" | "info" | "debug" | "trace";
+export type LoggerMethod = 'log' | 'error' | 'warn' | 'info' | 'debug' | 'trace';
 /**
  * Logger helper class to be used as the main logger of the application
  *
@@ -20,7 +20,7 @@ export type LoggerMethod = "log" | "error" | "warn" | "info" | "debug" | "trace"
  */
 export class Logger {
   private static get isProduction() {
-    return process.env.NODE_ENV === "production";
+    return process.env.NODE_ENV === 'production';
   }
 
   static log = this.isProduction ? () => {} : console.log?.bind(console);
@@ -29,22 +29,10 @@ export class Logger {
   static info = this.isProduction ? () => {} : console.info?.bind(console);
   static debug = this.isProduction ? () => {} : console.debug?.bind(console);
   static trace = this.isProduction ? () => {} : console.trace?.bind(console);
-  static table = this.isProduction
-    ? () => {}
-    : console.table?.bind(console) || (() => {});
-  static group = this.isProduction
-    ? () => {}
-    : console.group?.bind(console) || (() => {});
-  static groupEnd = this.isProduction
-    ? () => {}
-    : console.groupEnd?.bind(console) || (() => {});
-  static count = this.isProduction
-    ? () => {}
-    : console.count?.bind(console) || (() => {});
-  static timeStart = this.isProduction
-    ? () => {}
-    : console.time?.bind(console) || (() => {});
-  static timeEnd = this.isProduction
-    ? () => {}
-    : console.timeEnd?.bind(console) || (() => {});
+  static table = this.isProduction ? () => {} : console.table?.bind(console) || (() => {});
+  static group = this.isProduction ? () => {} : console.group?.bind(console) || (() => {});
+  static groupEnd = this.isProduction ? () => {} : console.groupEnd?.bind(console) || (() => {});
+  static count = this.isProduction ? () => {} : console.count?.bind(console) || (() => {});
+  static timeStart = this.isProduction ? () => {} : console.time?.bind(console) || (() => {});
+  static timeEnd = this.isProduction ? () => {} : console.timeEnd?.bind(console) || (() => {});
 }

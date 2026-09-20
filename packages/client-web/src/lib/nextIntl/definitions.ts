@@ -1,18 +1,19 @@
-import { type NestedKeyOf } from "next-intl";
+import type { NestedKeyOf } from 'next-intl';
 
-import type enTranslations from "./dictionaries/en.json";
+import type enTranslations from './dictionaries/en.json';
 
-export const locales = ["en", "fr"] as const;
+export const locales = ['en', 'fr'] as const;
 export type Locale = (typeof locales)[number];
 
 export const localeLabels: Record<Locale, string> = {
-  en: "English",
-  fr: "Français",
+  en: 'English',
+  fr: 'Français',
 };
 
-export const defaultLocale: Locale = "en";
+export const defaultLocale: Locale = 'en';
 
 export const checkIsLocale = (locale: string): locale is Locale => {
+  // eslint-disable-next-line unicorn/prefer-includes -- `includes` would require a Locale, which is what this guard establishes
   return locales.some((l) => l === locale);
 };
 

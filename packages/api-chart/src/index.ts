@@ -1,12 +1,11 @@
-import type { AppSyncResolverEvent } from "aws-lambda";
+import { ChartInterface } from '@chordcraft/context-chart';
+import type { AppSyncResolverEvent } from 'aws-lambda';
 
-import { ChartInterface } from "@speira/chordschart-context-chart";
-
-type ResolverContext = {
+interface ResolverContext {
   userId: string;
   tenantId: string;
   orgId?: string;
-};
+}
 
 export const handler = async (
   event: AppSyncResolverEvent<Record<string, unknown>>,
@@ -14,14 +13,14 @@ export const handler = async (
   const { fieldName } = event.info;
 
   // Type guard for Lambda authorizer identity
-  if (!event.identity || !("resolverContext" in event.identity)) {
-    throw new Error("Unauthorized: No identity context");
+  if (!event.identity || !('resolverContext' in event.identity)) {
+    throw new Error('Unauthorized: No identity context');
   }
 
   const context = event.identity.resolverContext as ResolverContext;
 
   if (!context.tenantId) {
-    throw new Error("Unauthorized: No tenant");
+    throw new Error('Unauthorized: No tenant');
   }
 
   // Translate the AppSync transport envelope into the agnostic input the
@@ -32,11 +31,11 @@ export const handler = async (
   };
 
   switch (fieldName) {
-    case "createChart":
+    case 'createChart':
       return ChartInterface.graphql.resolvers.createChart(input);
-    case "getChart":
+    case 'getChart':
       return ChartInterface.graphql.resolvers.getChart(input);
-    case "listCharts":
+    case 'listCharts':
       return ChartInterface.graphql.resolvers.listCharts(input);
     default:
       throw new Error(`Unknown field: ${fieldName}`);

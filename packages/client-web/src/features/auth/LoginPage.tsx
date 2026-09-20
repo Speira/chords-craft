@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { useSignIn } from "@clerk/nextjs";
+import { useSignIn } from '@clerk/nextjs';
 
-import { Button, Input, Link, Skeleton, Typography } from "~/components";
-import K from "~/constants";
-import { Logger } from "~/lib/logger";
-import { type AppTranslation, useRouter } from "~/lib/next-intl";
-import { useAppTranslations } from "~/lib/next-intl/useAppTranslation";
-import { checkIsDarkMode, cn } from "~/lib/shadcn";
+import { Button, Input, Link, Skeleton, Typography } from '#client-web/components';
+import K from '#client-web/constants';
+import { Logger } from '#client-web/lib/logger';
+import { type AppTranslation, useRouter } from '#client-web/lib/nextIntl';
+import { useAppTranslations } from '#client-web/lib/nextIntl/useAppTranslation';
+import { checkIsDarkMode, cn } from '#client-web/lib/shadcn';
 
-import { clerkLocalAdapter, getClerkError } from "./utils";
+import { clerkLocalAdapter, getClerkError } from './utils';
 
 export function LoginPage(props: { locale: string }) {
   const locale = clerkLocalAdapter(props.locale);
@@ -19,37 +19,37 @@ export function LoginPage(props: { locale: string }) {
   const router = useRouter();
   const t = useAppTranslations();
   const { setActive, signIn } = useSignIn();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<AppTranslation | "">("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<AppTranslation | ''>('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     if (!signIn || isLoading) return;
     try {
       setIsLoading(true);
       const result = await signIn.create({ identifier: email });
-      if (result.status === "needs_first_factor") {
+      if (result.status === 'needs_first_factor') {
         const attemptFirstFactor = await signIn.attemptFirstFactor({
-          strategy: "password",
+          strategy: 'password',
           password,
         });
-        if (attemptFirstFactor.status === "complete") {
+        if (attemptFirstFactor.status === 'complete') {
           await setActive({ session: attemptFirstFactor.createdSessionId });
-          router.push("/");
+          router.push('/');
         } else {
-          Logger.warn("LoginPage.handleSubmit", { attemptFirstFactor });
+          Logger.warn('LoginPage.handleSubmit', { attemptFirstFactor });
         }
       }
       if (isLoading) setIsLoading(false);
     } catch (err) {
-      Logger.error("SignUpPage.handleSubmit", { err });
+      Logger.error('SignUpPage.handleSubmit', { err });
       setIsLoading(false);
       const code = getClerkError(err);
       if (t.has(code)) setError(code as AppTranslation);
-      else setError("auth.error.invalidCredentials");
+      else setError('auth.error.invalidCredentials');
     }
   };
 
@@ -57,13 +57,13 @@ export function LoginPage(props: { locale: string }) {
     setIsLoading(true);
     signIn
       ?.authenticateWithRedirect({
-        strategy: "oauth_google",
-        redirectUrl: "/auth/callback",
-        redirectUrlComplete: "/",
+        strategy: 'oauth_google',
+        redirectUrl: '/auth/callback',
+        redirectUrlComplete: '/',
       })
       .catch((err) => {
-        Logger.error("LoginPage.signInWithGoogle", { err });
-        setError("auth.error.googleAuthError");
+        Logger.error('LoginPage.signInWithGoogle', { err });
+        setError('auth.error.googleAuthError');
       })
       .finally(() => {
         setIsLoading(false);
@@ -92,12 +92,12 @@ export function LoginPage(props: { locale: string }) {
             disabled={isLoading}
             required
           />
-          {error && <Typography className="text-destructive text-sm" label={error} />}
+          {error && <Typography className="text-sm text-destructive" label={error} />}
 
           <div
             id="clerk-captcha"
             data-cl-language={locale}
-            data-cl-theme={isDarkMode ? "dark" : "light"}
+            data-cl-theme={isDarkMode ? 'dark' : 'light'}
           />
           {isLoading ? (
             <Skeleton />
@@ -125,17 +125,11 @@ export function LoginPage(props: { locale: string }) {
           className="w-full"
           label="auth.signInGoogle"
           disabled={isLoading}
-          startNode={
-            <img height="16" width="16" src="/google-logo.svg" alt="google-logo" />
-          }
+          startNode={<img height="16" width="16" src="/google-logo.svg" alt="google-logo" />}
         />
 
-        <div className={cn("flex gap-3 text-center text-sm", { invisible: isLoading })}>
-          <Typography
-            as="span"
-            label="auth.hasNoAccount"
-            className="text-muted-foreground"
-          />{" "}
+        <div className={cn('flex gap-3 text-center text-sm', { invisible: isLoading })}>
+          <Typography as="span" label="auth.hasNoAccount" className="text-muted-foreground" />{' '}
           <Link
             href={K.PATHS.SIGNUP}
             className="text-primary hover:underline"

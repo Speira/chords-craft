@@ -1,10 +1,10 @@
-import { Effect, ParseResult, Schema } from "effect";
+import { Effect, ParseResult, Schema } from 'effect';
 
-import * as Addition from "./Addition";
-import * as Extension from "./Extension";
-import * as Modifier from "./Modifier";
-import * as Note from "./Note";
-import * as Quality from "./Quality";
+import * as Addition from './Addition';
+import * as Extension from './Extension';
+import * as Modifier from './Modifier';
+import * as Note from './Note';
+import * as Quality from './Quality';
 
 export interface ChordImput {
   root: Note.Note;
@@ -22,12 +22,12 @@ export interface ChordImput {
  * ```
  *
  * ```ts
- * Chord.parse("Cm7"); // {root: Note.C, quality: Quality.Minor, extension: Extension._7}
+ * Chord.parse('Cm7'); // {root: Note.C, quality: Quality.Minor, extension: Extension._7}
  * ```
  *
  * TODO: modifiers and additions not yet available
  */
-export class Chord extends Schema.Class<Chord>("Chord")({
+export class Chord extends Schema.Class<Chord>('Chord')({
   notes: Schema.optional(Schema.Array(Note.schema)),
   root: Note.schema,
   tonic: Schema.optional(Note.schema),
@@ -54,16 +54,16 @@ export class Chord extends Schema.Class<Chord>("Chord")({
     });
   }
 
-  get toString(): string {
+  override get toString(): string {
     return [
       this.root,
       this.quality,
       this.extension,
-      this.modifiers?.join(""),
-      this.additions?.join(""),
+      this.modifiers?.join(''),
+      this.additions?.join(''),
     ]
       .filter(Boolean)
-      .join("");
+      .join('');
   }
 }
 

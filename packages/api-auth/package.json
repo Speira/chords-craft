@@ -1,10 +1,13 @@
 {
-  "name": "@speira/chordschart-api-auth",
+  "name": "@chordcraft/api-auth",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
   "license": "ISC",
   "author": "Speira",
+  "imports": {
+    "#api-auth/*": "./src/*"
+  },
   "exports": {
     ".": {
       "types": "./build/index.d.ts",
@@ -17,7 +20,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "check": "tsc -b tsconfig.json --noEmit",
-    "test": "vitest"
+    "test": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.971.0",

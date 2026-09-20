@@ -1,34 +1,34 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono, Prosto_One } from "next/font/google";
-import { ThemeProvider } from "next-themes";
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono, Prosto_One } from 'next/font/google';
+import { ThemeProvider } from 'next-themes';
 
-import { Footer, Header } from "~/components";
-import { AuthHeaderNav, AuthProvider } from "~/features/auth";
-import { I18nProvider } from "~/lib/next-intl";
+import { Footer, Header } from '#client-web/components';
+import { AuthHeaderNav, AuthProvider } from '#client-web/features/auth';
+import { I18nProvider } from '#client-web/lib/nextIntl';
 
-import "./globals.css";
+import './globals.css';
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
 
 const prostoOne = Prosto_One({
-  variable: "--font-prosto-one",
-  subsets: ["latin"],
-  weight: "400",
+  variable: '--font-prosto-one',
+  subsets: ['latin'],
+  weight: '400',
 });
 
 export const metadata: Metadata = {
-  title: "Chords Craft",
-  description: "Create and share musical chord charts",
-  manifest: "/manifest.webmanifest",
+  title: 'Chords Craft',
+  description: 'Create and share musical chord charts',
+  manifest: '/manifest.webmanifest',
   icons: {
-    icon: "/favicon/favicon.ico",
-    apple: "/favicon/favicon-apple-180x180.png",
+    icon: '/favicon/favicon.ico',
+    apple: '/favicon/favicon-apple-180x180.png',
   },
 };
 export const viewport = {
-  themeColor: "#556e84",
+  themeColor: '#556e84',
 };
 export default async function RootLayout({
   children,

@@ -1,8 +1,8 @@
-import { AuthenticateWithRedirectCallback } from "@clerk/nextjs";
+import { AuthenticateWithRedirectCallback } from '@clerk/nextjs';
 
 export function AuthCallback() {
   return (
-    <div className="flex flex-col min-h-20 w-full">
+    <div className="flex min-h-20 w-full flex-col">
       <AuthenticateWithRedirectCallback />
     </div>
   );

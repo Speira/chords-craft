@@ -1,39 +1,46 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "allowJs": false,
-    "checkJs": false,
-    "composite": false,
-    "declaration": true,
-    "declarationMap": true,
-    "downlevelIteration": true,
-    "emitDecoratorMetadata": true,
-    "esModuleInterop": false,
-    "exactOptionalPropertyTypes": true,
-    "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "incremental": false,
-    "isolatedModules": true,
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleDetection": "force",
+    /* Language & modules: every package is ESM, source-first, bundled or run by tsx/node */
+    "target": "ES2024",
+    "lib": ["ES2024"],
+    "module": "preserve",
     "moduleResolution": "bundler",
-    "noEmitOnError": false,
-    "noErrorTruncation": false,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
+    "moduleDetection": "force",
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "erasableSyntaxOnly": true,
+    "noUncheckedSideEffectImports": true,
+    "noEmit": true,
+    "types": [],
+
+    /* Package-local aliases: one per package, so a program-wide map can never mix two
+       packages up when one package type-checks another's source (see documentation). */
+    "paths": {
+      "#shared/*": ["./packages/shared/src/*"],
+      "#context-band/*": ["./packages/context-band/src/*"],
+      "#context-chart/*": ["./packages/context-chart/src/*"],
+      "#context-user/*": ["./packages/context-user/src/*"],
+      "#api-auth/*": ["./packages/api-auth/src/*"],
+      "#api-chart/*": ["./packages/api-chart/src/*"],
+      "#client-web/*": ["./packages/client-web/src/*"],
+      "#deployment/*": ["./packages/deployment/src/*"]
+    },
+
+    /* Strictness */
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
     "noImplicitReturns": false,
-    "noImplicitThis": true,
+    "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": false,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
-    "plugins": [{ "name": "@effect/language-service" }],
-    "removeComments": false,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
-    "strictNullChecks": true,
-    "target": "ES2022",
-    "types": []
+    "allowUnreachableCode": false,
+    "forceConsistentCasingInFileNames": true,
+
+    /* DX */
+    "skipLibCheck": true
   }
 }

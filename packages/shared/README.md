@@ -1,4 +1,4 @@
-## @speira/chordschart-shared
+## @chordcraft/shared
 
 Shared package to be used in front/back (no heavy dependencies).
 

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    /* React ergonomics: `<C prop={maybeUndefined} />` against `prop?: T` (React/Radix typings),
+       and side-effect imports of CSS/asset files. Back-end packages keep both checks on. */
+    "exactOptionalPropertyTypes": false,
+    "noUncheckedSideEffectImports": false,
+
+    "allowJs": false,
+    "incremental": true,
+    "types": ["node"],
+    "plugins": [{ "name": "next" }]
+  }
+}

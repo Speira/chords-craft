@@ -1,7 +1,7 @@
-import type { Brand } from "./types";
+import type { Brand } from './types';
 
-export type SafePrice = Brand<number, "SafePrice">;
-export type UnsafePrice = Brand<number, "UnsafePrice">;
+export type SafePrice = Brand<number, 'SafePrice'>;
+export type UnsafePrice = Brand<number, 'UnsafePrice'>;
 
 /**
  * Utility class for common number operations.
@@ -29,9 +29,9 @@ export class NumberUtils {
    * @example
    *   NumberUtils.formatPrice(100); // $100.00
    */
-  static formatPrice(amount: number, currency = "USD", locale = "en-US"): string {
+  static formatPrice(amount: number, currency = 'USD', locale = 'en-US'): string {
     return new Intl.NumberFormat(locale, {
-      style: "currency",
+      style: 'currency',
       currency,
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
@@ -39,8 +39,8 @@ export class NumberUtils {
   }
 
   /**
-   * Converts a price to an integer price to make precise calculations. The result is an
-   * integer number.
+   * Converts a price to an integer price to make precise calculations. The result is an integer
+   * number.
    *
    * @example
    *   NumberUtils.toIntPrice(100.123456); // 10012
@@ -52,8 +52,8 @@ export class NumberUtils {
   }
 
   /**
-   * Converts an integer price to a price to be displayed to the user. The result is a
-   * float number with two decimal places.
+   * Converts an integer price to a price to be displayed to the user. The result is a float number
+   * with two decimal places.
    *
    * @example
    *   NumberUtils.toFloatPrice(10012); // 100.123456
@@ -74,7 +74,7 @@ export class NumberUtils {
    * @example
    *   NumberUtils.formatNumber(100); // 100
    */
-  static formatNumber(value: number, locale = "en-US"): string {
+  static formatNumber(value: number, locale = 'en-US'): string {
     return new Intl.NumberFormat(locale).format(value);
   }
 
@@ -84,9 +84,9 @@ export class NumberUtils {
    * @example
    *   NumberUtils.formatPercent(100); // 100%
    */
-  static formatPercent(value: number, locale = "en-US"): string {
+  static formatPercent(value: number, locale = 'en-US'): string {
     return new Intl.NumberFormat(locale, {
-      style: "percent",
+      style: 'percent',
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     }).format(value / 100);

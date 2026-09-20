@@ -1,13 +1,13 @@
-import { Effect } from "effect";
+import { Effect } from 'effect';
 
 import {
   type Chart,
   type ChartError,
   ChartProjection,
   type ChartRepository,
-} from "~/domain";
+} from '#context-chart/domain';
 
-import { type GetChartQuery } from "./GetChartQuery";
+import type { GetChartQuery } from './GetChartQuery';
 
 export class GetChartHandler {
   static execute(

@@ -1,16 +1,15 @@
-import type { AppSyncResolverEvent } from "aws-lambda";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { ChartInterface } from '@chordcraft/context-chart';
+import type { AppSyncResolverEvent } from 'aws-lambda';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ChartInterface } from "@speira/chordschart-context-chart";
+import { handler } from '#api-chart/index';
 
-import { handler } from "../src/index";
-
-vi.mock("@speira/chordschart-context-chart", () => ({
+vi.mock('@chordcraft/context-chart', () => ({
   ChartInterface: {
     graphql: {
       resolvers: {
-        createChart: vi.fn(() => Promise.resolve({ id: "chart_1" })),
-        getChart: vi.fn(() => Promise.resolve({ id: "chart_1" })),
+        createChart: vi.fn(() => Promise.resolve({ id: 'chart_1' })),
+        getChart: vi.fn(() => Promise.resolve({ id: 'chart_1' })),
         listCharts: vi.fn(() => Promise.resolve([])),
       },
     },
@@ -25,68 +24,68 @@ const makeEvent = (opts: {
   identity?: unknown;
 }): AppSyncResolverEvent<Record<string, unknown>> =>
   ({
-    info: { fieldName: opts.fieldName ?? "createChart" },
+    info: { fieldName: opts.fieldName ?? 'createChart' },
     arguments: opts.args ?? {},
     identity:
-      "identity" in opts
+      'identity' in opts
         ? opts.identity
-        : { resolverContext: { userId: "user_1", tenantId: "tenant_real" } },
+        : { resolverContext: { userId: 'user_1', tenantId: 'tenant_real' } },
   }) as unknown as AppSyncResolverEvent<Record<string, unknown>>;
 
 // Shared resolver mocks are asserted on; keep serial under concurrent default.
-describe.sequential("api-chart handler", () => {
+describe('api-chart handler', { concurrent: false }, () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe("authorization guards", () => {
-    it("rejects when identity has no resolver context", async () => {
+  describe('authorization guards', () => {
+    it('rejects when identity has no resolver context', async () => {
       await expect(handler(makeEvent({ identity: null }))).rejects.toThrow(
-        "Unauthorized: No identity context",
+        'Unauthorized: No identity context',
       );
       expect(createChart).not.toHaveBeenCalled();
     });
 
-    it("rejects when the resolver context has no tenantId", async () => {
+    it('rejects when the resolver context has no tenantId', async () => {
       await expect(
-        handler(makeEvent({ identity: { resolverContext: { userId: "user_1" } } })),
-      ).rejects.toThrow("Unauthorized: No tenant");
+        handler(makeEvent({ identity: { resolverContext: { userId: 'user_1' } } })),
+      ).rejects.toThrow('Unauthorized: No tenant');
     });
   });
 
-  describe("tenant isolation", () => {
-    it("injects the authenticated tenantId, overriding any client-supplied value", async () => {
+  describe('tenant isolation', () => {
+    it('injects the authenticated tenantId, overriding any client-supplied value', async () => {
       await handler(
         makeEvent({
-          fieldName: "createChart",
-          args: { tenantId: "tenant_attacker", title: "Song" },
+          fieldName: 'createChart',
+          args: { tenantId: 'tenant_attacker', title: 'Song' },
         }),
       );
 
       expect(createChart).toHaveBeenCalledWith({
-        title: "Song",
-        tenantId: "tenant_real",
+        title: 'Song',
+        tenantId: 'tenant_real',
       });
     });
   });
 
-  describe("routing", () => {
-    it("routes getChart to the getChart resolver", async () => {
-      await handler(makeEvent({ fieldName: "getChart", args: { chartId: "c1" } }));
+  describe('routing', () => {
+    it('routes getChart to the getChart resolver', async () => {
+      await handler(makeEvent({ fieldName: 'getChart', args: { chartId: 'c1' } }));
 
       expect(getChart).toHaveBeenCalledOnce();
       expect(createChart).not.toHaveBeenCalled();
     });
 
-    it("routes listCharts to the listCharts resolver", async () => {
-      await handler(makeEvent({ fieldName: "listCharts" }));
+    it('routes listCharts to the listCharts resolver', async () => {
+      await handler(makeEvent({ fieldName: 'listCharts' }));
 
       expect(listCharts).toHaveBeenCalledOnce();
     });
 
-    it("throws on an unknown field", async () => {
-      await expect(handler(makeEvent({ fieldName: "deleteEverything" }))).rejects.toThrow(
-        "Unknown field: deleteEverything",
+    it('throws on an unknown field', async () => {
+      await expect(handler(makeEvent({ fieldName: 'deleteEverything' }))).rejects.toThrow(
+        'Unknown field: deleteEverything',
       );
     });
   });

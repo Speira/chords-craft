@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
+import { useRef } from 'react';
 
-import { useFrame } from "@react-three/fiber";
-import type * as THREE from "three";
+import { useFrame } from '@react-three/fiber';
+import type * as THREE from 'three';
 
 export function BubbleEntity({
   color,

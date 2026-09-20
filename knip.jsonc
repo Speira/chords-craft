@@ -1,0 +1,69 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": ["scripts/*.{ts,mjs}", "vitest.config.ts", "vitest.shared.ts", "setupTests.ts"]
+    },
+    "packages/client-web": {
+      "entry": ["src/app/**/*.{ts,tsx}", "src/proxy.ts", "next.config.ts", "postcss.config.mjs"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/deployment": {
+      "entry": ["bin/*.ts"],
+      "project": ["src/**/*.ts", "bin/**/*.ts", "test/**/*.ts"]
+    },
+    "packages/*": {
+      "entry": ["src/index.ts", "src/**/index.ts", "setupTests.ts", "vitest.config*.ts"],
+      "project": ["src/**/*.ts", "test/**/*.ts"]
+    }
+  },
+
+  // shadcn components are generated on demand and may legitimately sit unused.
+  "ignore": [
+    "**/components/ui/**",
+
+    // MIGRATION DEBT (see MIGRATION.md): code that is written but not wired up yet.
+    // Delete the entry and the code, or wire it up.
+    "packages/client-web/src/components/three/**", // 3D scene, never mounted
+    "packages/client-web/src/types.ts",
+    "packages/context-band/src/domain/valueObjects/BandMember.ts", // context not started
+    "packages/context-user/src/application/**" // context not started
+  ],
+
+  // MIGRATION DEBT: dependencies of the unused code above, plus tooling knip cannot see.
+  "ignoreDependencies": [
+    "tailwindcss", // used through the PostCSS config
+    "tw-animate-css", // imported from globals.css
+    "@effect/build-utils", // `pnpm codegen`
+    "@effect/schema",
+    "pretty-format",
+    "tsx",
+    "effect", // re-exported types only, in api-auth and api-chart
+    "@chordcraft/shared",
+    "@chordcraft/api-chart", // deployment bundles them as Lambda assets
+    "@chordcraft/context-chart",
+    "@clerk/themes",
+    "@hookform/resolvers",
+    "zod",
+    "@react-three/drei",
+    "@react-three/fiber",
+    "three",
+    "@types/three",
+    "framer-motion",
+    "eslint-config-next",
+    "eslint-plugin-simple-import-sort",
+    "@types/aws-lambda",
+    "tsup"
+  ],
+  // The Next TS plugin is declared in the shared tsconfig, where `next` is not a dependency.
+  "ignoreUnresolved": ["next"],
+  "ignoreExportsUsedInFile": true,
+
+  // MIGRATION DEBT (see MIGRATION.md): unused exports are reported but do not fail the gate,
+  // unlike unused files and dependencies.
+  "rules": {
+    "exports": "warn",
+    "types": "warn",
+    "enumMembers": "warn"
+  }
+}

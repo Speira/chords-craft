@@ -1,10 +1,13 @@
 {
-  "name": "@speira/chordschart-api-chart",
+  "name": "@chordcraft/api-chart",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
   "license": "ISC",
   "author": "Speira",
+  "imports": {
+    "#api-chart/*": "./src/*"
+  },
   "exports": {
     ".": {
       "types": "./build/index.d.ts",
@@ -17,11 +20,12 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "check": "tsc -b tsconfig.json --noEmit",
-    "test": "vitest"
+    "test": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@speira/chordschart-context-chart": "workspace:*",
-    "@speira/chordschart-shared": "workspace:*",
+    "@chordcraft/context-chart": "workspace:*",
+    "@chordcraft/shared": "workspace:*",
     "effect": "^3.19.12"
   },
   "devDependencies": {

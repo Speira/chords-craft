@@ -1,1 +1,1 @@
-export * from "./consoleLogger";
+export * from './consoleLogger';

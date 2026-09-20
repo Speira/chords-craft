@@ -1,18 +1,18 @@
-import { type ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 import {
   type AppTranslation,
   ClientTranslation,
   ServerTranslation,
-} from "~/lib/next-intl";
+} from '#client-web/lib/nextIntl';
 
 export interface ITextualComponent {
   children?: ReactNode;
   /** Decorational node */
   endNode?: ReactNode;
   /**
-   * Help Typography to call the right TranslationComponent, isServer allows a better SEO
-   * but throw error when called in client component
+   * Help Typography to call the right TranslationComponent, isServer allows a better SEO but throw
+   * error when called in client component
    */
   isServer?: boolean;
   /** The label code corresponding to the translation key */

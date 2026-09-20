@@ -1,7 +1,7 @@
-import { verifyToken } from "@clerk/backend";
-import type { AppSyncAuthorizerEvent, AppSyncAuthorizerResult } from "aws-lambda";
+import { verifyToken } from '@clerk/backend';
+import type { AppSyncAuthorizerEvent, AppSyncAuthorizerResult } from 'aws-lambda';
 
-import { type AuthContextObject, type AuthResponseObject, getClerkSecret } from "./utils";
+import { type AuthContextObject, type AuthResponseObject, getClerkSecret } from './utils';
 
 const defaultResponse: AuthResponseObject = {
   isAuthorized: false,
@@ -12,7 +12,7 @@ const defaultResponse: AuthResponseObject = {
 export const handler = async (
   event: AppSyncAuthorizerEvent,
 ): Promise<AppSyncAuthorizerResult<AuthContextObject>> => {
-  const token = event.authorizationToken?.replace("Bearer ", "").trim();
+  const token = event.authorizationToken?.replace('Bearer ', '').trim();
   if (!token) {
     return defaultResponse;
   }
@@ -37,7 +37,7 @@ export const handler = async (
 
     return fullResponse;
   } catch (error) {
-    console.error("Token verification failed:", error);
+    console.error('Token verification failed:', error);
     return defaultResponse;
   }
 };

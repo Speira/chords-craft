@@ -1,13 +1,13 @@
-import { Effect } from "effect";
+import { Effect } from 'effect';
 
-import { type DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import type { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
   DynamoDBDocument,
   PutCommand,
   type PutCommandInput,
   QueryCommand,
   TransactWriteCommand,
-} from "@aws-sdk/lib-dynamodb";
+} from '@aws-sdk/lib-dynamodb';
 
 import {
   type ChartError,
@@ -18,10 +18,10 @@ import {
   ChartWriteError,
   deserializeEvent,
   serializeEvent,
-} from "~/domain";
+} from '#context-chart/domain';
 
 export class DynamoDBChartRepository implements ChartRepository {
-  private readonly tableName = "charts_events";
+  private readonly tableName = 'charts_events';
   private readonly client: DynamoDBClient;
   private readonly withChartKey = (str: string) => `CHART#${str}`;
   private readonly withVersionKey = (num: number) => `VERSION#${num}`;
@@ -30,10 +30,7 @@ export class DynamoDBChartRepository implements ChartRepository {
     this.client = DynamoDBDocument.from(client);
   }
 
-  save(
-    id: ChartID.ChartID,
-    events: Array<ChartEvent>,
-  ): Effect.Effect<void, ChartWriteError> {
+  save(id: ChartID.ChartID, events: Array<ChartEvent>): Effect.Effect<void, ChartWriteError> {
     return Effect.tryPromise({
       try: async () => {
         const items: Array<{ PUT: PutCommandInput }> = events.map((evt) => ({
@@ -68,9 +65,9 @@ export class DynamoDBChartRepository implements ChartRepository {
         this.client.send(
           new QueryCommand({
             TableName: this.tableName,
-            KeyConditionExpression: "PK = :pk",
+            KeyConditionExpression: 'PK = :pk',
             ExpressionAttributeValues: {
-              ":pk": this.withChartKey(id),
+              ':pk': this.withChartKey(id),
             },
             ScanIndexForward: true,
           }),
@@ -80,7 +77,7 @@ export class DynamoDBChartRepository implements ChartRepository {
       Effect.flatMap((result) => {
         const items = result.Items;
         if (!items) {
-          throw new ChartReadError({ reason: "Not event found" });
+          throw new ChartReadError({ reason: 'Not event found' });
         }
         return Effect.all(items.map((item) => deserializeEvent(item)));
       }),

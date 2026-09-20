@@ -1,13 +1,17 @@
 {
-  "name": "@speira/chordschart-context-user",
+  "name": "@chordcraft/context-user",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
   "license": "ISC",
   "author": "Speira",
+  "imports": {
+    "#context-user/*": "./src/*"
+  },
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "effect": "^3.19.12"

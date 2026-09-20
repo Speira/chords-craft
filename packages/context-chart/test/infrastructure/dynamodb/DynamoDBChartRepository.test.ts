@@ -1,9 +1,9 @@
-import { Effect } from "effect";
+import { Effect } from 'effect';
 
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { ChartID } from "../../../src/domain/valueObjects";
-import { DynamoDBChartRepository } from "../../../src/infrastructure/dynamodb/DynamoDBChartRepository";
+import { ChartID } from '#context-chart/domain/valueObjects';
+import { DynamoDBChartRepository } from '#context-chart/infrastructure/dynamodb/DynamoDBChartRepository';
 
 import {
   createEventsTable,
@@ -11,9 +11,9 @@ import {
   deleteTable,
   EVENTS_TABLE,
   makeChartCreatedEvent,
-} from "./helpers";
+} from './helpers';
 
-describe("DynamoDBChartRepository", () => {
+describe('DynamoDBChartRepository', () => {
   const client = createTestClient();
   const repository = new DynamoDBChartRepository(client);
 
@@ -25,7 +25,7 @@ describe("DynamoDBChartRepository", () => {
     await deleteTable(client, EVENTS_TABLE);
   });
 
-  it("saves a single event and loads it back", async () => {
+  it('saves a single event and loads it back', async () => {
     const chartId = ChartID.generate();
     const event = makeChartCreatedEvent(chartId, 1);
 
@@ -33,13 +33,16 @@ describe("DynamoDBChartRepository", () => {
     const events = await Effect.runPromise(repository.load(chartId));
 
     expect(events).toHaveLength(1);
-    expect(events[0]._tag).toBe("ChartCreated");
-    expect(events[0].aggregateId).toBe(chartId);
-    expect(events[0].version).toBe(1);
-    expect(events[0].title).toBe("Test Chart");
+    const [loaded] = events;
+    expect(loaded._tag).toBe('ChartCreated');
+    expect(loaded.aggregateId).toBe(chartId);
+    expect(loaded.version).toBe(1);
+    // `title` only exists on ChartCreated, so narrow the union before reading it.
+    if (loaded._tag !== 'ChartCreated') throw new Error('expected a ChartCreated event');
+    expect(loaded.title).toBe('Test Chart');
   });
 
-  it("saves multiple events via transaction and loads them in version order", async () => {
+  it('saves multiple events via transaction and loads them in version order', async () => {
     const chartId = ChartID.generate();
     const event1 = makeChartCreatedEvent(chartId, 1);
     const event2 = makeChartCreatedEvent(chartId, 2);
@@ -52,7 +55,7 @@ describe("DynamoDBChartRepository", () => {
     expect(events[1].version).toBe(2);
   });
 
-  it("returns empty array for a non-existent chart", async () => {
+  it('returns empty array for a non-existent chart', async () => {
     const chartId = ChartID.generate();
     const events = await Effect.runPromise(repository.load(chartId));
     expect(events).toHaveLength(0);

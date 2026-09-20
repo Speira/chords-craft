@@ -1,10 +1,13 @@
 {
-  "name": "@speira/chordschart-context-band",
+  "name": "@chordcraft/context-band",
   "version": "1.0.0",
   "description": "Band bounded context",
   "keywords": [],
   "license": "ISC",
   "author": "Speira",
+  "imports": {
+    "#context-band/*": "./src/*"
+  },
   "exports": {
     ".": {
       "types": "./build/index.d.ts",
@@ -17,7 +20,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "check": "tsc -b tsconfig.json --noEmit",
-    "test": "vitest"
+    "test": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "packageManager": "pnpm@10.14.0",
   "effect": {

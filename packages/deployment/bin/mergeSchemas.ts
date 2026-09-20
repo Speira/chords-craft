@@ -1,23 +1,19 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 export const CONTEXTS_PATHS = [
-  "../../context-chart",
+  '../../context-chart',
   // "../../contexts/user",
 ];
 
 export const contextsSchemas = CONTEXTS_PATHS.map((context) => {
-  const schemaPath = path.join(
-    __dirname,
-    context,
-    "src/interface/graphql/schema.graphql",
-  );
-  if (!fs.existsSync(schemaPath)) return "";
-  return fs.readFileSync(schemaPath, "utf-8");
+  const schemaPath = path.join(__dirname, context, 'src/interface/graphql/schema.graphql');
+  if (!fs.existsSync(schemaPath)) return '';
+  return fs.readFileSync(schemaPath, 'utf-8');
 }).filter(Boolean);
 
-const mergedSchema = contextsSchemas.join("\n\n");
-const outPath = path.join(__dirname, "../src/generated/schema.graphql");
+const mergedSchema = contextsSchemas.join('\n\n');
+const outPath = path.join(__dirname, '../src/generated/schema.graphql');
 
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(outPath, mergedSchema);

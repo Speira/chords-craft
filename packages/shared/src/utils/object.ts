@@ -1,5 +1,5 @@
-import { Typeguards } from "./typeguards";
-import type { DeepPartial, PlainObject } from "./types";
+import { Typeguards } from './typeguards';
+import type { DeepPartial, PlainObject } from './types';
 
 /**
  * ObjectUtils
@@ -10,12 +10,12 @@ import type { DeepPartial, PlainObject } from "./types";
  *   // keysToString
  *   const object1 = { header: true, blue: 3, warning: false };
  *   const result1 = ObjectUtils.keysToString(object1); // "header blue"
- *   const options = { prefix: "pre_", suffix: "_suf" };
+ *   const options = { prefix: 'pre_', suffix: '_suf' };
  *   const result2 = ObjectUtils.keysToString(object1, options); // "pre_header_suf pre_blue_suf"
  *
  *   // displayValue
- *   const item = { name: "Alice", age: 30, active: true, admin: false };
- *   ObjectUtils.displayValue(item, "name"); // "Alice"
+ *   const item = { name: 'Alice', age: 30, active: true, admin: false };
+ *   ObjectUtils.displayValue(item, 'name'); // "Alice"
  *
  *   // mergeDeep
  *   const a = { foo: { bar: 1, baz: 2 }, arr: [1, 2] };
@@ -47,10 +47,8 @@ export class ObjectUtils {
     return Object.keys(obj)
       .reduce(
         (acc, cur) =>
-          obj[cur]
-            ? acc + ` ${options?.prefix || ""}${cur}${options?.suffix || ""}`
-            : acc,
-        "",
+          obj[cur] ? `${acc} ${options?.prefix || ''}${cur}${options?.suffix || ''}` : acc,
+        '',
       )
       .trim();
   }
@@ -59,30 +57,30 @@ export class ObjectUtils {
    * Displays the value of an object key.
    *
    * @example
-   *   ObjectUtils.displayValue({ a: 1, b: 2 }, "a"); // 1
-   *   ObjectUtils.displayValue({ nested: { a: 1, b: 2 } }, "nested"); // "a:1; b:2"
+   *   ObjectUtils.displayValue({ a: 1, b: 2 }, 'a'); // 1
+   *   ObjectUtils.displayValue({ nested: { a: 1, b: 2 } }, 'nested'); // "a:1; b:2"
    */
   static displayValue(
     item: object,
     key: string,
-    booleanAsValue: [string, string] = ["yes", "no"],
+    booleanAsValue: [string, string] = ['yes', 'no'],
   ): string {
     if (Typeguards.checkIsKeyof(item, key)) {
       const value = item[key];
-      if (["string", "number"].includes(typeof value)) {
+      if (['string', 'number'].includes(typeof value)) {
         return value;
       }
-      if (typeof value === "boolean") {
+      if (typeof value === 'boolean') {
         return value ? booleanAsValue[0] : booleanAsValue[1];
       }
       if (Array.isArray(value)) {
         return ObjectUtils.formatArray(value);
       }
-      if (typeof value === "object" && value !== null) {
+      if (typeof value === 'object' && value !== null) {
         return ObjectUtils.flattenObject(value);
       }
     }
-    return "";
+    return '';
   }
 
   /**
@@ -96,13 +94,13 @@ export class ObjectUtils {
       if (Array.isArray(item)) {
         return ObjectUtils.formatArray(item);
       }
-      if (typeof item === "object" && item !== null) {
+      if (typeof item === 'object' && item !== null) {
         return `{${ObjectUtils.flattenObject(item)}}`;
       }
       return String(item);
     });
 
-    return `[${formattedItems.join(", ")}]`;
+    return `[${formattedItems.join(', ')}]`;
   }
 
   /**
@@ -111,7 +109,7 @@ export class ObjectUtils {
    * @example
    *   ObjectUtils.flattenObject({ a: 1, b: { c: 2 } }); // "a:1; b.c:2"
    */
-  static flattenObject(obj: object, prefix: string = ""): string {
+  static flattenObject(obj: object, prefix = ''): string {
     const entries: Array<string> = [];
 
     for (const [key, value] of Object.entries(obj)) {
@@ -119,21 +117,21 @@ export class ObjectUtils {
 
       if (Array.isArray(value)) {
         entries.push(`${fullKey}:${ObjectUtils.formatArray(value)}`);
-      } else if (typeof value === "object" && value !== null) {
+      } else if (typeof value === 'object' && value !== null) {
         entries.push(ObjectUtils.flattenObject(value, fullKey));
       } else {
         entries.push(`${fullKey}:${value}`);
       }
     }
 
-    return entries.join("; ");
+    return entries.join('; ');
   }
 
   /**
    * Picks the keys from an object.
    *
    * @example
-   *   ObjectUtils.pick({ a: 1, b: 2 }, ["a"]); // { a: 1 }
+   *   ObjectUtils.pick({ a: 1, b: 2 }, ['a']); // { a: 1 }
    */
   static pick<T extends object = object, K extends keyof T = keyof T>(
     obj: T,
@@ -151,8 +149,8 @@ export class ObjectUtils {
   }
 
   /**
-   * Merges multiple objects deeply, only updating the target object with the values from
-   * the modifiers.
+   * Merges multiple objects deeply, only updating the target object with the values from the
+   * modifiers.
    *
    * @example
    *   ObjectUtils.mergeDeepPartial({ a: 1, b: 2 }, { a: 3, c: 4 }); // { a: 3, b: 2, c: 4 }
@@ -170,9 +168,7 @@ export class ObjectUtils {
       if (Typeguards.checkIsPlainObject(modifier)) {
         Object.keys(modifier).forEach((key) => {
           if (Typeguards.checkIsKeyof(modifier, key)) {
-            const targetValue = Typeguards.checkIsKeyof(result, key)
-              ? result[key]
-              : undefined;
+            const targetValue = Typeguards.checkIsKeyof(result, key) ? result[key] : undefined;
             const modifierValue = modifier[key];
             if (Typeguards.checkIsPlainObject(modifierValue)) {
               if (Typeguards.checkIsPlainObject(targetValue)) {

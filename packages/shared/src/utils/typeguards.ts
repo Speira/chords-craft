@@ -1,4 +1,4 @@
-import type { Primitive } from "./types";
+import type { Primitive } from './types';
 
 /**
  * Typeguard class for runtime type checking.
@@ -29,37 +29,31 @@ export class Typeguards {
   }
 
   static checkIsBoolean(arg: unknown): arg is boolean {
-    return typeof arg === "boolean";
+    return typeof arg === 'boolean';
   }
 
   static checkIsClass(item: unknown): item is new (...args: Array<unknown>) => unknown {
-    return (
-      typeof item === "function" &&
-      /^class\s/.test(Function.prototype.toString.call(item))
-    );
+    return typeof item === 'function' && /^class\s/.test(Function.prototype.toString.call(item));
   }
 
   static checkIsFunction(item: unknown): item is (...args: Array<unknown>) => unknown {
-    return typeof item === "function" && !this.checkIsClass(item);
+    return typeof item === 'function' && !this.checkIsClass(item);
   }
 
-  static checkIsKeyof<T extends object = object>(
-    obj: T,
-    key: PropertyKey,
-  ): key is keyof T {
+  static checkIsKeyof<T extends object = object>(obj: T, key: PropertyKey): key is keyof T {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }
 
   static checkIsNumber(arg: unknown): arg is number {
-    return typeof arg === "number" && !Number.isNaN(arg);
+    return typeof arg === 'number' && !Number.isNaN(arg);
   }
 
   static checkIsObject(arg: unknown): arg is Record<PropertyKey, unknown> {
-    return typeof arg === "object" && arg !== null && !Array.isArray(arg);
+    return typeof arg === 'object' && arg !== null && !Array.isArray(arg);
   }
 
   static checkIsPlainObject(arg: unknown): arg is Record<PropertyKey, unknown> {
-    if (arg === null || typeof arg !== "object") return false;
+    if (arg === null || typeof arg !== 'object') return false;
     const proto = Object.getPrototypeOf(arg);
     return proto === Object.prototype || proto === null; // allow null-proto
   }
@@ -69,12 +63,12 @@ export class Typeguards {
       this.checkIsString(arg) ||
       this.checkIsNumber(arg) ||
       this.checkIsBoolean(arg) ||
-      typeof arg === "symbol" ||
-      typeof arg === "bigint"
+      typeof arg === 'symbol' ||
+      typeof arg === 'bigint'
     );
   }
 
   static checkIsString(arg: unknown): arg is string {
-    return typeof arg === "string";
+    return typeof arg === 'string';
   }
 }

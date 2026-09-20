@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Note, Section } from "@speira/chordschart-shared/valueObjects";
+import { Note, Section } from '@chordcraft/shared/valueObjects';
 
-import { Button, Input } from "~/components";
-import { Logger } from "~/lib/logger";
+import { Button, Input } from '#client-web/components';
+import { Logger } from '#client-web/lib/logger';
 
-import { useCreateChart } from "./hooks";
+import { useCreateChart } from './hooks';
 
 export function CreateChart() {
   const { createChart, error, loading } = useCreateChart();
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,10 +25,10 @@ export function CreateChart() {
         links: [],
       });
 
-      Logger.info("Chart created:", chart);
+      Logger.info('Chart created:', chart);
       // Redirect or show success
     } catch (err) {
-      Logger.error("Failed to create chart:", err);
+      Logger.error('Failed to create chart:', err);
     }
   };
 
@@ -44,7 +44,7 @@ export function CreateChart() {
       {error && <p className="text-destructive">{error}</p>}
 
       <Button type="submit" disabled={loading}>
-        {loading ? "Creating..." : "Create Chart"}
+        {loading ? 'Creating...' : 'Create Chart'}
       </Button>
     </form>
   );

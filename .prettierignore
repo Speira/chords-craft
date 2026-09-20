@@ -1,0 +1,12 @@
+# generated / build output
+**/dist
+**/build
+**/coverage
+**/.next
+**/out
+**/cdk.out
+**/*.gen.ts
+**/generated
+**/next-env.d.ts
+pnpm-lock.yaml
+.changeset/*.md

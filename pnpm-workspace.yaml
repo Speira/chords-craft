@@ -1,6 +1,28 @@
 packages:
   - packages/*
 
-ignoredBuiltDependencies:
-  - sharp
-  - unrs-resolver
+allowBuilds:
+  '@clerk/shared': true
+  '@parcel/watcher': true
+  '@swc/core': true
+  esbuild: true
+  # installed by the `prepare` script instead of its postinstall
+  lefthook: false
+  sharp: false
+  unrs-resolver: false
+
+minimumReleaseAgeExclude:
+  - '@eslint-react/ast@5.20.0'
+  - '@eslint-react/core@5.20.0'
+  - '@eslint-react/eslint-plugin@5.20.0'
+  - '@eslint-react/eslint@5.20.0'
+  - '@eslint-react/jsx@5.20.0'
+  - '@eslint-react/shared@5.20.0'
+  - '@eslint-react/var@5.20.0'
+  - eslint-plugin-react-dom@5.20.0
+  - eslint-plugin-react-jsx@5.20.0
+  - eslint-plugin-react-naming-convention@5.20.0
+  - eslint-plugin-react-rsc@5.20.0
+  - eslint-plugin-react-web-api@5.20.0
+  - eslint-plugin-react-x@5.20.0
+  - eslint-plugin-unicorn@76.0.0

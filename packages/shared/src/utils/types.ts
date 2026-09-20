@@ -1,14 +1,14 @@
 /** Status types */
-export type Status = "success" | "info" | "warning" | "danger";
+export type Status = 'success' | 'info' | 'warning' | 'danger';
 
 /** Priority types */
-export type Priority = "low" | "medium" | "high";
+export type Priority = 'low' | 'medium' | 'high';
 
 /** Log level types */
-export type LogLevel = "debug" | "info" | "warn" | "error" | "fatal";
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal';
 
 /** Sort direction types */
-export type SortDirection = "asc" | "desc";
+export type SortDirection = 'asc' | 'desc';
 
 /** Define the basic type at once */
 export type Primitive = string | number | boolean | bigint | symbol;
@@ -91,7 +91,7 @@ export type DeepPartial<T> =
  *   NestedKey<{a: {b: string}}> => "a" | "a.b"
  *   - Recurse only into plain object-ish records; do not descend into arrays/functions/built-ins.
  */
-export type NestedKey<T, Prefix extends string = ""> = {
+export type NestedKey<T, Prefix extends string = ''> = {
   [K in StringKeyOf<T>]: T[K] extends ReadonlyArray<unknown>
     ? `${Prefix}${K}` // stop at arrays
     : T[K] extends (...args: Array<unknown>) => unknown
@@ -120,16 +120,15 @@ export type NestedKey<T, Prefix extends string = ""> = {
 export type NestedKeyOf<T> = T extends object
   ? {
       [Property in keyof T]:
-        | `${Property & string}`
-        | `${Property & string}.${NestedKeyOf<T[Property]>}`;
+        (Property & string) | `${Property & string}.${NestedKeyOf<T[Property]>}`;
     }[keyof T]
   : never;
 
 /**
  * Branded type (nominal-ish typing)
  *
- * - Using a unique symbol avoids accidental structural compatibility. Example: type UserId
- *   = Brand<string, "UserId">
+ * - Using a unique symbol avoids accidental structural compatibility. Example: type UserId =
+ *   Brand<string, "UserId">
  */
 declare const __brand: unique symbol;
 export type Brand<T, BrandName extends string> = T & {

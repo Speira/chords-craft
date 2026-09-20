@@ -1,2 +1,2 @@
-export * as commands from "./commands";
-export * as queries from "./queries";
+export * as commands from './commands';
+export * as queries from './queries';

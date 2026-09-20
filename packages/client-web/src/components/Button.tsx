@@ -1,7 +1,7 @@
-import { type AppTranslation } from "~/lib/next-intl";
+import type { AppTranslation } from '#client-web/lib/nextIntl';
 
-import { type ITextualComponent, TextualComponent } from "./composites/TextualComponent";
-import { Button as UiButton, type ButtonProps } from "./ui/button";
+import { type ITextualComponent, TextualComponent } from './composites/TextualComponent';
+import { Button as UiButton, type ButtonProps } from './ui/button';
 
 interface IButton extends ButtonProps, ITextualComponent {
   label?: AppTranslation;
@@ -10,12 +10,8 @@ interface IButton extends ButtonProps, ITextualComponent {
 export function Button(props: IButton) {
   const { children, endNode, isServer, label, startNode, ...rest } = props;
   return (
-    <UiButton {...rest} data-i18nkey={label ?? ""}>
-      <TextualComponent
-        isServer={isServer}
-        endNode={endNode}
-        label={label}
-        startNode={startNode}>
+    <UiButton {...rest} data-i18nkey={label ?? ''}>
+      <TextualComponent isServer={isServer} endNode={endNode} label={label} startNode={startNode}>
         {children}
       </TextualComponent>
     </UiButton>

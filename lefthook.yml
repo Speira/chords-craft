@@ -1,0 +1,27 @@
+# Git hooks (https://lefthook.dev), installed by the root `prepare` script on `pnpm install`.
+# Skip once with `LEFTHOOK=0 git commit ...`; disable locally in lefthook-local.yml (gitignored).
+
+pre-commit:
+  piped: true # format first, then lint the formatted files
+  jobs:
+    - name: format
+      glob: '*'
+      run: pnpm exec prettier --write --ignore-unknown {staged_files}
+      stage_fixed: true
+    - name: lint
+      glob: '*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}'
+      run: pnpm exec eslint --fix --no-warn-ignored --cache --cache-location node_modules/.cache/eslint/ {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  jobs:
+    - name: conventional-commit
+      run: node scripts/checkCommitMessage.ts {1}
+
+pre-push:
+  parallel: true
+  jobs:
+    - name: typecheck
+      run: pnpm typecheck
+    - name: test
+      run: pnpm test:run

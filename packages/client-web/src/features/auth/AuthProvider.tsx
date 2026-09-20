@@ -1,8 +1,7 @@
-import { type ReactNode } from "react";
+import { ClerkProvider } from '@clerk/nextjs';
+import type { ReactNode } from 'react';
 
-import { ClerkProvider } from "@clerk/nextjs";
-
-import { clerkLocalesMap, defaultClerkLocal } from "./utils";
+import { clerkLocalesMap, defaultClerkLocal } from './utils';
 
 interface IAuthProvider {
   children: ReactNode;
@@ -11,7 +10,7 @@ interface IAuthProvider {
 export const AuthProvider = ({ children, locale }: IAuthProvider) => (
   <ClerkProvider
     localization={clerkLocalesMap[locale] ?? defaultClerkLocal}
-    appearance={{ variables: { colorPrimary: "oklch(52.7% 0.046 245.4)" } }}>
+    appearance={{ variables: { colorPrimary: 'oklch(52.7% 0.046 245.4)' } }}>
     {children}
   </ClerkProvider>
 );

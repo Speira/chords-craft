@@ -1,13 +1,13 @@
-import { Effect } from "effect";
+import { Effect } from 'effect';
 
-import { type DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import type { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
   DeleteCommand,
   DynamoDBDocument,
   GetCommand,
   PutCommand,
   QueryCommand,
-} from "@aws-sdk/lib-dynamodb";
+} from '@aws-sdk/lib-dynamodb';
 
 import {
   Chart,
@@ -16,11 +16,11 @@ import {
   type ChartProjection,
   ChartReadError,
   ChartWriteError,
-} from "~/domain";
+} from '#context-chart/domain';
 
 export class DynamoDBChartProjection implements ChartProjection {
   private readonly client: DynamoDBClient;
-  private readonly tableName = "charts_projection";
+  private readonly tableName = 'charts_projection';
   private readonly withTenantKey = (str: string) => `TENANT#${str}`;
   private readonly withChartKey = (str: string) => `CHART#${str}`;
 
@@ -43,8 +43,7 @@ export class DynamoDBChartProjection implements ChartProjection {
       catch: (error) => new ChartReadError({ reason: error }),
     }).pipe(
       Effect.flatMap((result) => {
-        if (!result.Item)
-          return new ChartReadError({ reason: "Chart not found (findById)" });
+        if (!result.Item) return new ChartReadError({ reason: 'Chart not found (findById)' });
         return Chart.parse(result.Item);
       }),
     );
@@ -56,9 +55,9 @@ export class DynamoDBChartProjection implements ChartProjection {
         this.client.send(
           new QueryCommand({
             TableName: this.tableName,
-            KeyConditionExpression: "PK = :pk",
+            KeyConditionExpression: 'PK = :pk',
             ExpressionAttributeValues: {
-              ":pk": this.withTenantKey(tenantId),
+              ':pk': this.withTenantKey(tenantId),
             },
           }),
         ),

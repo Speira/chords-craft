@@ -1,5 +1,5 @@
-import { Main } from "~/components";
-import { CreateChart } from "~/features/chart";
+import { Main } from '#client-web/components';
+import { CreateChart } from '#client-web/features/chart';
 
 export default function NewChartPage() {
   return (

@@ -1,7 +1,10 @@
 {
-  "name": "@speira/chordschart-deployment",
+  "name": "@chordcraft/deployment",
   "version": "0.1.0",
   "description": "Infrastructure as code using AWS CDK for chordschart",
+  "imports": {
+    "#deployment/*": "./src/*"
+  },
   "bin": {
     "app": "bin/app.js"
   },
@@ -14,11 +17,12 @@
     "merge-schemas": "ts-node ./bin/mergeSchemas.ts",
     "synth": "pnpm merge-schemas && cdk synth",
     "test": "jest",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
     "watch": "tsc -w"
   },
   "dependencies": {
-    "@speira/chordschart-api-chart": "workspace:*",
-    "@speira/chordschart-context-chart": "workspace:*",
+    "@chordcraft/api-chart": "workspace:*",
+    "@chordcraft/context-chart": "workspace:*",
     "aws-cdk-lib": "2.215.0",
     "constructs": "^10.0.0"
   },

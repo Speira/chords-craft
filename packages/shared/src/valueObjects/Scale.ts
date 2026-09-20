@@ -1,14 +1,14 @@
-import { Schema } from "effect";
+import { Schema } from 'effect';
 
-import * as Note from "./Note";
+import * as Note from './Note';
 
 export const CHROMATIC_SCALE:  Array<Note.Note> = [Note.A, Note.ASharp, Note.B, Note.C, Note.CSharp, Note.D, Note.DSharp, Note.E, Note.F, Note.FSharp, Note.G, Note.GSharp]; // prettier-ignore
 
 /**
- * Scale manages a group of notes in a structural way. should use the static function
- * `Scale.create` instead of `new Scale()`
+ * Scale manages a group of notes in a structural way. should use the static function `Scale.create`
+ * instead of `new Scale()`
  */
-export class Scale extends Schema.Class<Scale>("Scale")({
+export class Scale extends Schema.Class<Scale>('Scale')({
   root: Note.schema,
   chromatic: Schema.Array(Note.schema),
 }) {

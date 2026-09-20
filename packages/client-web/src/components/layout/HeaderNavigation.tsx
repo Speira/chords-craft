@@ -1,16 +1,15 @@
-import { type AppTranslation } from "~/lib/next-intl";
-
-import { LinkButton } from "../Link";
+import { LinkButton } from '#client-web/components/Link';
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-} from "../ui/navigation-menu";
+} from '#client-web/components/ui/navigation-menu';
+import type { AppTranslation } from '#client-web/lib/nextIntl';
 
 export async function HeaderNavigation() {
   const navItems: Array<{ href: string; label: AppTranslation }> = [
-    { href: "/", label: "home.title" },
-    { href: "/charts", label: "chart.myMusicalCharts" },
+    { href: '/', label: 'home.title' },
+    { href: '/charts', label: 'chart.myMusicalCharts' },
   ];
 
   return (

@@ -6,7 +6,14 @@
     "outDir": "./build",
     "declaration": true,
     "declarationMap": true,
-    "noEmit": false
+    "noEmit": false,
+    "rootDir": "./src"
   },
-  "exclude": ["test", "**/*.test.ts"]
+  "exclude": [
+    "**/*.test.ts",
+    "setupTests.ts",
+    "test",
+    "vitest.config.integration.ts",
+    "vitest.config.ts"
+  ]
 }

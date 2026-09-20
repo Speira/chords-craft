@@ -1,0 +1,86 @@
+# Dependabot version updates: GitHub Actions + the pnpm catalog (pnpm-workspace.yaml).
+# Titles follow Conventional Commits (`ci(deps): …`, `build(deps): …`) to pass pr-title.yml.
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    # `/` only covers .github/workflows: composite actions must be listed too.
+    directories: [/, /.github/actions/*]
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: ci
+      include: scope
+    groups:
+      github-actions:
+        patterns: ['*']
+
+  # pnpm: Dependabot bumps the catalog entries in pnpm-workspace.yaml and the lockfile.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    # Stay behind pnpm's minimumReleaseAge (1 day), which would reject a fresher version.
+    cooldown:
+      default-days: 3
+      semver-major-days: 7
+    versioning-strategy: increase
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: build
+      include: scope
+    ignore:
+      # typescript-eslint 8 supports TypeScript <6.1: bump manually once it supports more.
+      - dependency-name: typescript
+        versions: ['>=6.1.0']
+      # Types must match the Node.js major pinned in CI (node@24).
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
+    # Grouped by package name, not `dependency-type`: Dependabot counts every catalog entry as a
+    # production dependency (dependabot-core#14824). A dependency joins the first group that
+    # matches it. Major versions come as separate PRs so breaking changes are reviewed alone.
+    groups:
+      lint-format:
+        patterns:
+          - eslint
+          - eslint-*
+          - '@eslint/*'
+          - '@eslint-react/*'
+          - '@next/eslint-plugin-next'
+          - '@vitest/eslint-plugin'
+          - typescript-eslint
+          - globals
+          - jiti
+          - prettier
+          - prettier-plugin-*
+          - knip
+        update-types: [minor, patch]
+      test:
+        patterns:
+          - vitest
+          - '@vitest/*'
+          - jsdom
+        update-types: [minor, patch]
+      react:
+        patterns:
+          - react
+          - react-dom
+          - '@types/react'
+          - '@types/react-dom'
+        update-types: [minor, patch]
+      effect:
+        patterns:
+          - effect
+          - '@effect/*'
+        update-types: [minor, patch]
+      tooling:
+        patterns:
+          - typescript
+          - '@types/*'
+          - vite
+          - '@vitejs/*'
+          - lefthook
+          - '@changesets/*'
+        update-types: [minor, patch]
