@@ -3,10 +3,16 @@
 Started 2026-09-20 on `chore/adopt-coding-profile`, from the template in
 `sass/coding-profile/template` (ADR-001 to ADR-005 in `sass/shared-AI/adr`).
 
-`pnpm check` is green: format, lint (0 errors), types, knip and 345 tests. What is left is
-tracked as **warnings**, in the `chordcraft/migration-debt` blocks at the end of
-`eslint.config.ts`. Each entry carries its count; delete the entry when it reaches zero, and
-delete the blocks when the list is empty.
+`pnpm check` is green: format, lint (0 errors, 259 warnings), types, knip and 345 tests.
+
+What is left is tracked, not hidden:
+
+- **Lint**: the `chordcraft/migration-debt` blocks at the end of `eslint.config.ts` downgrade
+  the rules the code does not satisfy yet, with a count each. Delete an entry when its count
+  reaches zero, and the blocks when the list is empty.
+- **Dead code**: `knip.jsonc` lists the unused files and dependencies under `ignore` /
+  `ignoreDependencies`, each with a reason; unused _exports_ are reported as warnings. Anything
+  newly unused still fails the gate.
 
 ## Done
 
@@ -68,6 +74,17 @@ Suggested order, one PR per package:
    - `react-hooks/set-state-in-effect`: derive during render instead.
 4. Then turn on `noUncheckedIndexedAccess` and fix the fallout.
 5. Delete the `chordcraft/migration-debt` blocks.
+
+## Dead code knip found (parked in knip.jsonc)
+
+- `client-web/src/components/three/**`: a 3D scene that is never mounted, plus the deps it
+  pulls in (`three`, `@react-three/*`, `@types/three`). Wire it up or delete both.
+- `context-band` and `context-user`: scaffolding for contexts that have not been started.
+- `client-web/src/types.ts`, and 11 unused exports/types (`GlobalError`, `useGetChart`,
+  `useListCharts`, `toDarkMode`/`toLightMode`/`toggleMode`, `RoleConstruct`, …).
+- Unused dependencies worth a look: `@clerk/themes`, `@hookform/resolvers`, `zod` and
+  `framer-motion` in `client-web`, and `eslint-config-next`, now that the client has no ESLint
+  config of its own.
 
 ## Not done, decide separately
 
