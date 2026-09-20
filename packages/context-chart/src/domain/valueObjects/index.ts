@@ -1,1 +1,1 @@
-export * as ChartID from "./ChartID";
+export * as ChartID from './ChartID';

@@ -1,5 +1,5 @@
-import * as cdk from "aws-cdk-lib/core";
-import { type Construct } from "constructs";
+import * as cdk from 'aws-cdk-lib/core';
+import { type Construct } from 'constructs';
 
 import {
   AppSynConstruct,
@@ -8,36 +8,34 @@ import {
   MonitoringConstruct,
   SecurityConstruct,
   StorageConstruct,
-} from "./constructParts";
+} from './constructParts';
 
 export class ChordsChartStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-    const environment = this.node.tryGetContext("env") || "dev";
+    const environment = this.node.tryGetContext('env') || 'dev';
     console.log({ environment_stack: environment });
-    const IS_PRODUCTION = environment === "prod";
+    const IS_PRODUCTION = environment === 'prod';
 
-    const removalPolicy = IS_PRODUCTION
-      ? cdk.RemovalPolicy.RETAIN
-      : cdk.RemovalPolicy.DESTROY;
+    const removalPolicy = IS_PRODUCTION ? cdk.RemovalPolicy.RETAIN : cdk.RemovalPolicy.DESTROY;
 
     const clerkAuthSecretPath = IS_PRODUCTION
-      ? "chordschart/clerk-secret-key_prod"
-      : "chordschart/clerk-secret-key_dev";
+      ? 'chordschart/clerk-secret-key_prod'
+      : 'chordschart/clerk-secret-key_dev';
 
-    const database = new DatabaseConstruct(this, "Database", {
+    const database = new DatabaseConstruct(this, 'Database', {
       stackName: this.stackName,
       removalPolicy,
     });
 
-    const storage = new StorageConstruct(this, "Construct", {
+    const storage = new StorageConstruct(this, 'Construct', {
       account: this.account,
       stackName: this.stackName,
       removalPolicy,
       autoDeleteObjects: !IS_PRODUCTION,
     });
 
-    const lambdas = new LambdasConstruct(this, "Lambdas", {
+    const lambdas = new LambdasConstruct(this, 'Lambdas', {
       projectionTable: database.projectionTable,
       eventsTable: database.eventsTable,
       chartBucket: storage.chartBucket,
@@ -46,13 +44,13 @@ export class ChordsChartStack extends cdk.Stack {
       clerkAuthSecretPath,
     });
 
-    const appSyncApi = new AppSynConstruct(this, "AppSync", {
+    const appSyncApi = new AppSynConstruct(this, 'AppSync', {
       authorizerFunction: lambdas.authorizerFunction,
       chartFunction: lambdas.chartFunction,
       isProduction: IS_PRODUCTION,
     });
 
-    new MonitoringConstruct(this, "Monitoring", {
+    new MonitoringConstruct(this, 'Monitoring', {
       stackName: this.stackName,
       authorizerFunction: lambdas.authorizerFunction,
       chartFunction: lambdas.chartFunction,
@@ -60,51 +58,51 @@ export class ChordsChartStack extends cdk.Stack {
       apiId: appSyncApi.graphqlApi.apiId,
     });
 
-    new SecurityConstruct(this, "Security", {
+    new SecurityConstruct(this, 'Security', {
       resourceArn: appSyncApi.graphqlApi.arn,
     });
 
     // Outputs:
 
-    new cdk.CfnOutput(this, "GraphQLApiUrl", {
+    new cdk.CfnOutput(this, 'GraphQLApiUrl', {
       value: appSyncApi.graphqlApi.graphqlUrl,
-      description: "AppSync GraphQL API URL",
+      description: 'AppSync GraphQL API URL',
       exportName: `${this.stackName}-graphql-url`,
     });
 
-    new cdk.CfnOutput(this, "GraphQLApiKey", {
-      value: appSyncApi.graphqlApi.apiKey || "No API Key",
-      description: "AppSync GraphQL API Key",
+    new cdk.CfnOutput(this, 'GraphQLApiKey', {
+      value: appSyncApi.graphqlApi.apiKey || 'No API Key',
+      description: 'AppSync GraphQL API Key',
       exportName: `${this.stackName}-graphql-key`,
     });
 
-    new cdk.CfnOutput(this, "ChartBucketName", {
+    new cdk.CfnOutput(this, 'ChartBucketName', {
       value: storage.chartBucket.bucketName,
-      description: "Charts S3 bucket name",
+      description: 'Charts S3 bucket name',
       exportName: `${this.stackName}-chart-bucket`,
     });
 
-    new cdk.CfnOutput(this, "UserBucketName", {
+    new cdk.CfnOutput(this, 'UserBucketName', {
       value: storage.userBucket.bucketName,
-      description: "User S3 bucket name",
+      description: 'User S3 bucket name',
       exportName: `${this.stackName}-user-bucket`,
     });
 
-    new cdk.CfnOutput(this, "EventsTableName", {
+    new cdk.CfnOutput(this, 'EventsTableName', {
       value: database.eventsTable.tableName,
-      description: "DynamoDB Events table name",
+      description: 'DynamoDB Events table name',
       exportName: `${this.stackName}-events-table`,
     });
 
-    new cdk.CfnOutput(this, "ProjectionTableName", {
+    new cdk.CfnOutput(this, 'ProjectionTableName', {
       value: database.projectionTable.tableName,
-      description: "DynamoDB Projection table name",
+      description: 'DynamoDB Projection table name',
       exportName: `${this.stackName}-projection-table`,
     });
 
-    new cdk.CfnOutput(this, "chartsDLQName", {
+    new cdk.CfnOutput(this, 'chartsDLQName', {
       value: lambdas.chartsDLQ.queueName,
-      description: "SQS Chart DLQ name",
+      description: 'SQS Chart DLQ name',
       exportName: `${this.stackName}-charts-dlq`,
     });
   }

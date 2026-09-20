@@ -1,21 +1,16 @@
-import { Effect } from "effect";
+import { Effect } from 'effect';
 
 import {
   type Note,
   type Section,
   type Structure,
   TenantID,
-} from "@speira/chordschart-shared/valueObjects";
+} from '@speira/chordschart-shared/valueObjects';
 
-import { Chart } from "./Chart";
-import { type ChartError, ChartValidationError } from "./errors";
-import {
-  ChartArchived,
-  ChartCreated,
-  type ChartEvent,
-  removeBaseEventFields,
-} from "./events";
-import { ChartID } from "./valueObjects";
+import { Chart } from './Chart';
+import { type ChartError, ChartValidationError } from './errors';
+import { ChartArchived, ChartCreated, type ChartEvent, removeBaseEventFields } from './events';
+import { ChartID } from './valueObjects';
 
 export class ChartAggregate {
   static create(data: {
@@ -32,7 +27,7 @@ export class ChartAggregate {
       new ChartCreated({
         ...data,
         isActive: true,
-        author: data.author ?? "",
+        author: data.author ?? '',
         aggregateId: ChartID.generate(),
         occuredAt: new Date(),
         version: 1,
@@ -42,9 +37,7 @@ export class ChartAggregate {
 
   static archive(chart: Chart): Effect.Effect<Array<ChartEvent>, ChartError> {
     if (!chart.isActive) {
-      return Effect.fail(
-        new ChartValidationError({ reason: "Chart is already archived" }),
-      );
+      return Effect.fail(new ChartValidationError({ reason: 'Chart is already archived' }));
     }
     return Effect.succeed([
       new ChartArchived({
@@ -59,9 +52,9 @@ export class ChartAggregate {
   static fromEvents(events: Array<ChartEvent>): Effect.Effect<Chart, ChartError> {
     return Effect.gen(function* () {
       const [firstEvent, ...restEvents] = events;
-      if (firstEvent._tag !== "ChartCreated") {
+      if (firstEvent._tag !== 'ChartCreated') {
         return yield* new ChartValidationError({
-          reason: "First event must be an event with a full chart",
+          reason: 'First event must be an event with a full chart',
         });
       }
       const chart = Chart.create({
@@ -76,14 +69,14 @@ export class ChartAggregate {
       let aggregatedChart = chart;
       for (const cur of restEvents) {
         switch (cur._tag) {
-          case "ChartUpdated": {
+          case 'ChartUpdated': {
             aggregatedChart = yield* Chart.update(aggregatedChart, {
               ...removeBaseEventFields(cur),
               updatedAt: cur.occuredAt,
             });
             break;
           }
-          case "ChartArchived":
+          case 'ChartArchived':
             aggregatedChart = yield* Chart.update(aggregatedChart, {
               isActive: false,
               updatedAt: cur.occuredAt,

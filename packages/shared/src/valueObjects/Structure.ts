@@ -1,7 +1,7 @@
-import { Schema } from "effect";
+import { Schema } from 'effect';
 
-import { ChordTransform } from "./Chord";
-import * as Section from "./Section";
+import { ChordTransform } from './Chord';
+import * as Section from './Section';
 
 const StyleChordsMap = Schema.optional(
   Schema.Record({ key: Schema.String, value: Schema.Array(ChordTransform) }),

@@ -1,8 +1,8 @@
-import { Context, type Effect } from "effect";
+import { Context, type Effect } from 'effect';
 
-import type { ChartError } from "./errors";
-import type { ChartEvent } from "./events";
-import { type ChartID } from "./valueObjects";
+import type { ChartError } from './errors';
+import type { ChartEvent } from './events';
+import { type ChartID } from './valueObjects';
 
 export interface ChartRepository {
   readonly save: (
@@ -13,4 +13,4 @@ export interface ChartRepository {
   readonly load: (id: ChartID.ChartID) => Effect.Effect<Array<ChartEvent>, ChartError>;
 }
 
-export const ChartRepository = Context.GenericTag<ChartRepository>("ChartRepository");
+export const ChartRepository = Context.GenericTag<ChartRepository>('ChartRepository');

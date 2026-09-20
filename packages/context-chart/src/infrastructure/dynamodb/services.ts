@@ -1,18 +1,18 @@
-import { Context, Effect, Layer } from "effect";
+import { Context, Effect, Layer } from 'effect';
 
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
-import { ChartProjection } from "~/domain/ChartProjection";
-import { ChartRepository } from "~/domain/ChartRepository";
+import { ChartProjection } from '~/domain/ChartProjection';
+import { ChartRepository } from '~/domain/ChartRepository';
 
-import { DynamoDBChartProjection } from "./DynamoDBChartProjection";
-import { DynamoDBChartRepository } from "./DynamoDBChartRepository";
+import { DynamoDBChartProjection } from './DynamoDBChartProjection';
+import { DynamoDBChartRepository } from './DynamoDBChartRepository';
 
-const DynamoDBClientTag = Context.GenericTag<DynamoDBClient>("DynamoDBClient");
+const DynamoDBClientTag = Context.GenericTag<DynamoDBClient>('DynamoDBClient');
 
 export const DynamoDBClientLive = Layer.succeed(
   DynamoDBClientTag,
-  new DynamoDBClient({ region: process.env.AWS_REGION || "eu-west-3" }),
+  new DynamoDBClient({ region: process.env.AWS_REGION || 'eu-west-3' }),
 );
 
 export const ChartRepositoryLive = Layer.effect(

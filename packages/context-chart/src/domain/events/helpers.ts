@@ -1,14 +1,14 @@
-import { Effect, Schema } from "effect";
+import { Effect, Schema } from 'effect';
 
-import { Typeguards } from "@speira/chordschart-shared/utils";
+import { Typeguards } from '@speira/chordschart-shared/utils';
 
-import { ChartParseError } from "../errors";
+import { ChartParseError } from '../errors';
 
-import { ChartArchived, ChartCreated, type ChartEvent, ChartUpdated } from "./ChartEvent";
+import { ChartArchived, ChartCreated, type ChartEvent, ChartUpdated } from './ChartEvent';
 
 export function serializeEvent(event: ChartEvent): Record<string, unknown> {
   switch (event._tag) {
-    case "ChartCreated":
+    case 'ChartCreated':
       return {
         author: event.author,
         isActive: event.isActive,
@@ -19,7 +19,7 @@ export function serializeEvent(event: ChartEvent): Record<string, unknown> {
         tags: event.tags,
         title: event.title,
       };
-    case "ChartUpdated":
+    case 'ChartUpdated':
       return {
         ...(event.author !== undefined && { author: event.author }),
         ...(event.title !== undefined && { title: event.title }),
@@ -45,33 +45,31 @@ export const deserializeEvent = Effect.fn(
         aggregateId: item.aggregateId,
         tenantId: item.tenantId,
         version: item.version,
-        occuredAt:
-          typeof item.occuredAt === "string" ? new Date(item.occuredAt) : new Date(),
+        occuredAt: typeof item.occuredAt === 'string' ? new Date(item.occuredAt) : new Date(),
       };
 
       if (!Typeguards.checkIsPlainObject(item.data)) {
         return yield* new ChartParseError({
-          reason: "item data could not parse",
+          reason: 'item data could not parse',
         });
       }
 
-      const mapToChartParseError = (error: unknown) =>
-        new ChartParseError({ reason: error });
+      const mapToChartParseError = (error: unknown) => new ChartParseError({ reason: error });
 
       switch (eventType) {
-        case "ChartCreated":
+        case 'ChartCreated':
           return yield* Schema.decodeUnknown(ChartCreated)({
             ...baseData,
             ...item.data,
           }).pipe(Effect.mapError(mapToChartParseError));
 
-        case "ChartUpdated":
+        case 'ChartUpdated':
           return yield* Schema.decodeUnknown(ChartUpdated)({
             ...baseData,
             ...item.data,
           }).pipe(Effect.mapError(mapToChartParseError));
 
-        case "ChartArchived":
+        case 'ChartArchived':
           return yield* Schema.decodeUnknown(ChartArchived)(baseData).pipe(
             Effect.mapError(mapToChartParseError),
           );

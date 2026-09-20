@@ -1,24 +1,24 @@
-import * as path from "node:path";
-import type { ViteUserConfig } from "vitest/config";
+import * as path from 'node:path';
+import type { ViteUserConfig } from 'vitest/config';
 
 const config: ViteUserConfig = {
   esbuild: {
-    target: "es2020",
+    target: 'es2020',
   },
   resolve: {
     alias: {
-      "~": path.resolve(__dirname, "src"),
+      '~': path.resolve(__dirname, 'src'),
     },
   },
   test: {
-    setupFiles: [path.join(__dirname, "setupTests.ts")],
+    setupFiles: [path.join(__dirname, 'setupTests.ts')],
     fakeTimers: {
       toFake: undefined,
     },
     sequence: {
       concurrent: true,
     },
-    include: ["test/**/*.test.ts"],
+    include: ['test/**/*.test.ts'],
   },
 };
 

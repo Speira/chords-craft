@@ -1,37 +1,37 @@
 // Note Management (Only notes A,A#,Bb,...)
 
-import { type Brand, Effect, type ParseResult, Schema } from "effect";
-import { ParseError, Unexpected } from "effect/ParseResult";
+import { type Brand, Effect, type ParseResult, Schema } from 'effect';
+import { ParseError, Unexpected } from 'effect/ParseResult';
 
-import { getTransform } from "./_helper";
+import { getTransform } from './_helper';
 
-export type Note = string & Brand.Brand<"Note">;
+export type Note = string & Brand.Brand<'Note'>;
 
-export const SHARP = "♯";
-export const FLAT = "♭";
-export const addSharp = (l: string) => l.replace(SHARP, "").concat(SHARP);
-export const addFlat = (l: string) => l.replace(FLAT, "").concat(FLAT);
+export const SHARP = '♯';
+export const FLAT = '♭';
+export const addSharp = (l: string) => l.replace(SHARP, '').concat(SHARP);
+export const addFlat = (l: string) => l.replace(FLAT, '').concat(FLAT);
 export const checkIsSharp = (a: Note) => a.includes(SHARP);
 export const checkIsFlat = (a: Note) => a.includes(FLAT);
-export const sanitize = (l: string) => l.replace("#", SHARP).replace("b", FLAT);
+export const sanitize = (l: string) => l.replace('#', SHARP).replace('b', FLAT);
 export const checkAccidental = (str: string) =>
-  [SHARP, FLAT, "#", "b"].some((item) => str.includes(item));
+  [SHARP, FLAT, '#', 'b'].some((item) => str.includes(item));
 
-export const A = "A" as Note;
+export const A = 'A' as Note;
 export const ASharp = addSharp(A) as Note;
 export const AFlat = addFlat(A) as Note;
-export const B = "B" as Note;
+export const B = 'B' as Note;
 export const BFlat = addFlat(B) as Note;
-export const C = "C" as Note;
+export const C = 'C' as Note;
 export const CSharp = addSharp(C) as Note;
-export const D = "D" as Note;
+export const D = 'D' as Note;
 export const DSharp = addSharp(D) as Note;
 export const DFlat = addFlat(D) as Note;
-export const E = "E" as Note;
+export const E = 'E' as Note;
 export const EFlat = addFlat(E) as Note;
-export const F = "F" as Note;
+export const F = 'F' as Note;
 export const FSharp = addSharp(F) as Note;
-export const G = "G" as Note;
+export const G = 'G' as Note;
 export const GSharp = addSharp(G) as Note;
 export const GFlat = addFlat(G) as Note;
 
@@ -59,20 +59,18 @@ export const parse = (a: string): Effect.Effect<Note, ParseResult.ParseError> =>
 };
 
 /**
- * Try to build a Note from a string chart. It is the first build method called in Chart
- * parse function
+ * Try to build a Note from a string chart. It is the first build method called in Chart parse
+ * function
  */
 export const build = Effect.fn(
   (str: string): Effect.Effect<[Note, string], ParseResult.ParseError> => {
     return Effect.gen(function* () {
       const [noteStr, ...afterNote] = str;
       const [maybeAccidental, ...afterAccidental] = afterNote;
-      const accidental = [SHARP, FLAT, "#", "b"].includes(maybeAccidental)
-        ? maybeAccidental
-        : "";
+      const accidental = [SHARP, FLAT, '#', 'b'].includes(maybeAccidental) ? maybeAccidental : '';
       const strNote = `${noteStr}${accidental}`;
       const note = yield* parse(strNote);
-      const restStr = accidental ? afterAccidental.join("") : afterNote.join("");
+      const restStr = accidental ? afterAccidental.join('') : afterNote.join('');
       return [note, restStr];
     });
   },

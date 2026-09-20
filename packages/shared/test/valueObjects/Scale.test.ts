@@ -1,11 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from 'vitest';
 
-import { Note, Scale as ScaleRoot } from "../../src";
+import { Note, Scale as ScaleRoot } from '../../src';
 
 const { CHROMATIC_SCALE, Scale } = ScaleRoot;
 
-describe("Scale tests suite", () => {
-  it("Should have a complete chromatic scale const", () => {
+describe('Scale tests suite', () => {
+  it('Should have a complete chromatic scale const', () => {
     expect(CHROMATIC_SCALE).toContain(Note.A);
     expect(CHROMATIC_SCALE).toContain(Note.ASharp);
     expect(CHROMATIC_SCALE).toContain(Note.B);
@@ -20,7 +20,7 @@ describe("Scale tests suite", () => {
     expect(CHROMATIC_SCALE).toContain(Note.GSharp);
   });
 
-  it("Should not have flat note in chromatic scale", () => {
+  it('Should not have flat note in chromatic scale', () => {
     expect(CHROMATIC_SCALE).not.toContain(Note.AFlat);
     expect(CHROMATIC_SCALE).not.toContain(Note.BFlat);
     expect(CHROMATIC_SCALE).not.toContain(Note.DFlat);
@@ -28,7 +28,7 @@ describe("Scale tests suite", () => {
     expect(CHROMATIC_SCALE).not.toContain(Note.GFlat);
   });
 
-  it("Should correctly initialise new instance of Scale", () => {
+  it('Should correctly initialise new instance of Scale', () => {
     const myScale = Scale.create(Note.C);
     expect(myScale.chromatic[0]).toEqual(Note.C);
     expect(myScale.chromatic[1]).toEqual(Note.CSharp);
@@ -44,7 +44,7 @@ describe("Scale tests suite", () => {
     expect(myScale.chromatic[11]).toEqual(Note.B);
   });
 
-  it("Should instanciate correctly a Flat note scale", () => {
+  it('Should instanciate correctly a Flat note scale', () => {
     const myScale = Scale.create(Note.GFlat);
     expect(myScale.chromatic[0]).toEqual(Note.FSharp);
     expect(myScale.chromatic[1]).toEqual(Note.G);

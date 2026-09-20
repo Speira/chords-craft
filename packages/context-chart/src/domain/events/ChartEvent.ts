@@ -1,8 +1,8 @@
-import { Schema } from "effect";
+import { Schema } from 'effect';
 
-import { Note, Section, Structure } from "@speira/chordschart-shared/valueObjects";
+import { Note, Section, Structure } from '@speira/chordschart-shared/valueObjects';
 
-import { ChartID } from "../valueObjects";
+import { ChartID } from '../valueObjects';
 
 const BaseEvent = Schema.Struct({
   aggregateId: ChartID.schema,
@@ -11,7 +11,7 @@ const BaseEvent = Schema.Struct({
   version: Schema.Number,
 });
 
-export class ChartCreated extends Schema.TaggedClass<ChartCreated>()("ChartCreated", {
+export class ChartCreated extends Schema.TaggedClass<ChartCreated>()('ChartCreated', {
   ...BaseEvent.fields,
   author: Schema.String,
   isActive: Schema.Boolean,
@@ -23,7 +23,7 @@ export class ChartCreated extends Schema.TaggedClass<ChartCreated>()("ChartCreat
   title: Schema.String,
 }) {}
 
-export class ChartUpdated extends Schema.TaggedClass<ChartUpdated>()("ChartUpdated", {
+export class ChartUpdated extends Schema.TaggedClass<ChartUpdated>()('ChartUpdated', {
   ...BaseEvent.fields,
   author: Schema.optionalWith(Schema.String, { exact: true }),
   isActive: Schema.optionalWith(Schema.Boolean, { exact: true }),
@@ -35,7 +35,7 @@ export class ChartUpdated extends Schema.TaggedClass<ChartUpdated>()("ChartUpdat
   title: Schema.optionalWith(Schema.String, { exact: true }),
 }) {}
 
-export class ChartArchived extends Schema.TaggedClass<ChartArchived>()("ChartArchived", {
+export class ChartArchived extends Schema.TaggedClass<ChartArchived>()('ChartArchived', {
   ...BaseEvent.fields,
 }) {}
 
@@ -43,7 +43,7 @@ export type ChartEvent = ChartCreated | ChartArchived | ChartUpdated;
 
 export const removeBaseEventFields = (
   event: ChartEvent,
-): Omit<ChartEvent, "aggregateId" | "tenantId" | "occuredAt" | "version"> => {
+): Omit<ChartEvent, 'aggregateId' | 'tenantId' | 'occuredAt' | 'version'> => {
   const {
     aggregateId: _aggregateId,
     occuredAt: _occuredAt,

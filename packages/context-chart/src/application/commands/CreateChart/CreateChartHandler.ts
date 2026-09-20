@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect } from 'effect';
 
 import {
   type Chart,
@@ -6,9 +6,9 @@ import {
   type ChartError,
   ChartProjection,
   ChartRepository,
-} from "~/domain";
+} from '~/domain';
 
-import { type CreateChartCommand } from "./CreateChartCommand";
+import { type CreateChartCommand } from './CreateChartCommand';
 
 export class CreateChartHandler {
   static execute(
@@ -23,7 +23,7 @@ export class CreateChartHandler {
         tenantId: command.tenantId,
         title: command.title,
         tags: command.tags,
-        author: command.author ?? "",
+        author: command.author ?? '',
       });
       const chart = yield* ChartAggregate.fromEvents(events);
 

@@ -1,18 +1,18 @@
-import { type Brand, Effect, type ParseResult, Schema } from "effect";
+import { type Brand, Effect, type ParseResult, Schema } from 'effect';
 
-import { getTransform } from "./_helper";
+import { getTransform } from './_helper';
 
-export type Extension = string & Brand.Brand<"Extension">;
+export type Extension = string & Brand.Brand<'Extension'>;
 
-export const DELTA = "Δ";
+export const DELTA = 'Δ';
 const withDelta = (e: Extension) => `${DELTA}${e}` as Extension;
-const toDelta = (e: string) => e.replace("Maj", "M").replace("M", DELTA);
+const toDelta = (e: string) => e.replace('Maj', 'M').replace('M', DELTA);
 
-export const _6 = "6" as Extension;
-export const _7 = "7" as Extension;
-export const _9 = "9" as Extension;
-export const _11 = "11" as Extension;
-export const _13 = "13" as Extension;
+export const _6 = '6' as Extension;
+export const _7 = '7' as Extension;
+export const _9 = '9' as Extension;
+export const _11 = '11' as Extension;
+export const _13 = '13' as Extension;
 export const M7 = withDelta(_7); // "Δ7"
 export const M9 = withDelta(_9);
 export const M11 = withDelta(_11);

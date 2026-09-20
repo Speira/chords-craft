@@ -1,8 +1,8 @@
-import { Effect, type Layer, ParseResult, pipe, Schema } from "effect";
+import { Effect, type Layer, ParseResult, pipe, Schema } from 'effect';
 
-import { GetChartHandler, GetChartQuery } from "~/application/queries";
-import { type Chart, type ChartProjection, type ChartRepository } from "~/domain";
-import { ChartServicesLive } from "~/infrastructure/dynamodb";
+import { GetChartHandler, GetChartQuery } from '~/application/queries';
+import { type Chart, type ChartProjection, type ChartRepository } from '~/domain';
+import { ChartServicesLive } from '~/infrastructure/dynamodb';
 
 export const getChart = (
   input: unknown,
@@ -15,9 +15,9 @@ export const getChart = (
       Effect.sync(() => {
         if (error instanceof ParseResult.ParseError) {
           // Invalid client input — a 400-class mistake, not a server fault.
-          console.warn("GetChart rejected invalid input", error);
+          console.warn('GetChart rejected invalid input', error);
         } else {
-          console.error("GetChart resolver handler failed:", error);
+          console.error('GetChart resolver handler failed:', error);
         }
       }),
     ),

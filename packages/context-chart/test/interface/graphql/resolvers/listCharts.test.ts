@@ -1,92 +1,92 @@
-import { Effect, Layer } from "effect";
+import { Effect, Layer } from 'effect';
 
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from 'vitest';
 
-import { Chord, Note, Section, TenantID } from "@speira/chordschart-shared/valueObjects";
+import { Chord, Note, Section, TenantID } from '@speira/chordschart-shared/valueObjects';
 
-import { ChartID, ChartProjection, ChartReadError } from "../../../../src/domain";
-import { Chart } from "../../../../src/domain/Chart";
-import { listCharts } from "../../../../src/interface/graphql/resolvers/listCharts";
+import { ChartID, ChartProjection, ChartReadError } from '../../../../src/domain';
+import { Chart } from '../../../../src/domain/Chart';
+import { listCharts } from '../../../../src/interface/graphql/resolvers/listCharts';
 
-describe("listCharts resolver", () => {
-  describe("validation tests", () => {
-    it("should reject missing required tenantId", async () => {
+describe('listCharts resolver', () => {
+  describe('validation tests', () => {
+    it('should reject missing required tenantId', async () => {
       const invalidInput = {
         tenantId: undefined,
       };
       await expect(listCharts(invalidInput)).rejects.toThrow();
     });
 
-    it("should reject empty tenantId", async () => {
+    it('should reject empty tenantId', async () => {
       const invalidInput = {
-        tenantId: "",
+        tenantId: '',
       };
       await expect(listCharts(invalidInput)).rejects.toThrow();
     });
 
-    it("should reject null tenantId", async () => {
+    it('should reject null tenantId', async () => {
       const invalidInput = {
         tenantId: null,
       };
       await expect(listCharts(invalidInput)).rejects.toThrow();
     });
 
-    it("should reject numeric tenantId", async () => {
+    it('should reject numeric tenantId', async () => {
       const invalidInput = {
         tenantId: 12345,
       };
       await expect(listCharts(invalidInput)).rejects.toThrow();
     });
 
-    it("should reject boolean tenantId", async () => {
+    it('should reject boolean tenantId', async () => {
       const invalidInput = {
         tenantId: true,
       };
       await expect(listCharts(invalidInput)).rejects.toThrow();
     });
 
-    it("should reject object as tenantId", async () => {
+    it('should reject object as tenantId', async () => {
       const invalidInput = {
-        tenantId: { id: "tenant-123" },
+        tenantId: { id: 'tenant-123' },
       };
       await expect(listCharts(invalidInput)).rejects.toThrow();
     });
 
-    it("should reject array as tenantId", async () => {
+    it('should reject array as tenantId', async () => {
       const invalidInput = {
-        tenantId: ["tenant-1", "tenant-2"],
+        tenantId: ['tenant-1', 'tenant-2'],
       };
       await expect(listCharts(invalidInput)).rejects.toThrow();
     });
 
-    it("should reject tenantId that is too long", async () => {
+    it('should reject tenantId that is too long', async () => {
       const invalidInput = {
-        tenantId: "A".repeat(256),
+        tenantId: 'A'.repeat(256),
       };
       await expect(listCharts(invalidInput)).rejects.toThrow();
     });
 
-    it("should reject tenantId with only whitespace", async () => {
+    it('should reject tenantId with only whitespace', async () => {
       const invalidInput = {
-        tenantId: "   ",
+        tenantId: '   ',
       };
       await expect(listCharts(invalidInput)).rejects.toThrow();
     });
 
-    it("should reject undefined input", async () => {
+    it('should reject undefined input', async () => {
       await expect(listCharts(undefined)).rejects.toThrow();
     });
   });
 
-  describe("error handling", () => {
-    it("should rethrow errors", async () => {
+  describe('error handling', () => {
+    it('should rethrow errors', async () => {
       const invalidInput = {
         tenantId: null,
       };
       await expect(listCharts(invalidInput)).rejects.toThrow();
     });
 
-    it("should handle empty arguments object", async () => {
+    it('should handle empty arguments object', async () => {
       await expect(listCharts({})).rejects.toThrow();
     });
   });
@@ -94,31 +94,31 @@ describe("listCharts resolver", () => {
   // The handler's own logic is covered in test/application with mocked infra.
   // Here the resolver runs against the real handler with a mocked infrastructure
   // layer, verifying delegation and error propagation.
-  describe("handler delegation", () => {
-    const validInput = { tenantId: "tenant-123" };
+  describe('handler delegation', () => {
+    const validInput = { tenantId: 'tenant-123' };
 
     const charts = [
       Chart.create({
         root: Note.A,
         id: ChartID.generate(),
-        author: "John Doe",
-        tenantId: TenantID.schema.make("tenant-123"),
-        title: "Test Chart",
+        author: 'John Doe',
+        tenantId: TenantID.schema.make('tenant-123'),
+        title: 'Test Chart',
         structure: {
           [Section.Verse]: {
             default: [Chord.create({ root: Note.A })],
           },
         },
         plan: [Section.Verse],
-        links: ["https://example.com"],
-        tags: ["jazz"],
+        links: ['https://example.com'],
+        tags: ['jazz'],
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
       }),
     ];
 
-    it("returns the charts found by the projection", async () => {
+    it('returns the charts found by the projection', async () => {
       const findByTenant = vi.fn(() => Effect.succeed(charts));
       const layer = Layer.succeed(ChartProjection, {
         findByTenant,
@@ -131,9 +131,9 @@ describe("listCharts resolver", () => {
       expect(findByTenant).toHaveBeenCalledWith(validInput.tenantId);
     });
 
-    it("rethrows projection failures", async () => {
+    it('rethrows projection failures', async () => {
       const layer = Layer.succeed(ChartProjection, {
-        findByTenant: vi.fn(() => Effect.fail(new ChartReadError({ reason: "boom" }))),
+        findByTenant: vi.fn(() => Effect.fail(new ChartReadError({ reason: 'boom' }))),
         findById: vi.fn(),
         upsert: vi.fn(),
         delete: vi.fn(),

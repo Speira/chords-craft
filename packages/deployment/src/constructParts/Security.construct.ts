@@ -1,5 +1,5 @@
-import * as wafv2 from "aws-cdk-lib/aws-wafv2";
-import { Construct } from "constructs";
+import * as wafv2 from 'aws-cdk-lib/aws-wafv2';
+import { Construct } from 'constructs';
 
 export interface ISecurityConstruct {
   resourceArn: string;
@@ -12,51 +12,51 @@ export class SecurityConstruct extends Construct {
     super(scope, id);
 
     // WAF Web ACL for AppSync protection
-    this.webAcl = new wafv2.CfnWebACL(this, "ChordsChartWebACL", {
+    this.webAcl = new wafv2.CfnWebACL(this, 'ChordsChartWebACL', {
       defaultAction: { allow: {} },
-      scope: "REGIONAL",
+      scope: 'REGIONAL',
       visibilityConfig: {
         cloudWatchMetricsEnabled: true,
-        metricName: "ChordsChartWebACLMetric",
+        metricName: 'ChordsChartWebACLMetric',
         sampledRequestsEnabled: true,
       },
       rules: [
         {
-          name: "RateLimitRule",
+          name: 'RateLimitRule',
           priority: 1,
           statement: {
             rateBasedStatement: {
               limit: 2000,
-              aggregateKeyType: "IP",
+              aggregateKeyType: 'IP',
             },
           },
           action: { block: {} },
           visibilityConfig: {
             cloudWatchMetricsEnabled: true,
-            metricName: "RateLimitRuleMetric",
+            metricName: 'RateLimitRuleMetric',
             sampledRequestsEnabled: true,
           },
         },
         {
-          name: "SQLInjectionRule",
+          name: 'SQLInjectionRule',
           priority: 2,
           statement: {
             managedRuleGroupStatement: {
-              vendorName: "AWS",
-              name: "AWSManagedRulesSQLiRuleSet",
+              vendorName: 'AWS',
+              name: 'AWSManagedRulesSQLiRuleSet',
             },
           },
           overrideAction: { none: {} },
           visibilityConfig: {
             cloudWatchMetricsEnabled: true,
-            metricName: "SQLInjectionRuleMetric",
+            metricName: 'SQLInjectionRuleMetric',
             sampledRequestsEnabled: true,
           },
         },
       ],
     });
 
-    new wafv2.CfnWebACLAssociation(this, "AppSyncWebACLAssociation", {
+    new wafv2.CfnWebACLAssociation(this, 'AppSyncWebACLAssociation', {
       resourceArn: props.resourceArn,
       webAclArn: this.webAcl.attrArn,
     });

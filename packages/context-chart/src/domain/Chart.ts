@@ -1,16 +1,16 @@
-import { Data, Effect, Schema } from "effect";
+import { Data, Effect, Schema } from 'effect';
 
-import { ObjectUtils } from "@speira/chordschart-shared/utils";
+import { ObjectUtils } from '@speira/chordschart-shared/utils';
 
 import {
   ChartSchema,
   type ChartSchemaType,
   type ChartUpdateInputType,
   ChartUpdateSchema,
-} from "./valueObjects/Chart.schema";
-import { type ChartError, ChartParseError } from "./errors";
+} from './valueObjects/Chart.schema';
+import { type ChartError, ChartParseError } from './errors';
 
-export type ChartRecord = Omit<ChartSchemaType, "createdAt" | "updatedAt"> & {
+export type ChartRecord = Omit<ChartSchemaType, 'createdAt' | 'updatedAt'> & {
   createdAt?: string;
   updatedAt?: string;
 };
@@ -37,13 +37,10 @@ export class Chart extends Data.Class<ChartSchemaType> {
     });
   }
 
-  static update(
-    chart: Chart,
-    update: ChartUpdateInputType,
-  ): Effect.Effect<Chart, ChartError> {
+  static update(chart: Chart, update: ChartUpdateInputType): Effect.Effect<Chart, ChartError> {
     return Effect.gen(function* () {
       const validatedUpdate = yield* Schema.decodeUnknown(ChartUpdateSchema)(update, {
-        onExcessProperty: "error",
+        onExcessProperty: 'error',
       }).pipe(Effect.mapError((reason) => new ChartParseError({ reason })));
       return Chart.create({
         id: chart.id,
@@ -65,7 +62,7 @@ export class Chart extends Data.Class<ChartSchemaType> {
   static parse(data: unknown): Effect.Effect<Chart, ChartError> {
     return Effect.gen(function* () {
       const decoded = yield* Schema.decodeUnknown(ChartSchema)(data, {
-        onExcessProperty: "error",
+        onExcessProperty: 'error',
       }).pipe(Effect.mapError((reason) => new ChartParseError({ reason })));
       return new Chart(decoded);
     });
@@ -74,15 +71,15 @@ export class Chart extends Data.Class<ChartSchemaType> {
   static toRecord(chart: Chart): ChartRecord {
     return {
       ...ObjectUtils.pick<Chart>(chart, [
-        "author",
-        "isActive",
-        "links",
-        "plan",
-        "root",
-        "structure",
-        "tags",
-        "tenantId",
-        "title",
+        'author',
+        'isActive',
+        'links',
+        'plan',
+        'root',
+        'structure',
+        'tags',
+        'tenantId',
+        'title',
       ]),
       createdAt: chart.createdAt.toISOString(),
       updatedAt: chart.updatedAt.toISOString(),

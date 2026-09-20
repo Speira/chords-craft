@@ -1,30 +1,22 @@
-import { Effect, Layer, pipe } from "effect";
+import { Effect, Layer, pipe } from 'effect';
 
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from 'vitest';
 
-import { Chord, Note, Section, TenantID } from "@speira/chordschart-shared/valueObjects";
+import { Chord, Note, Section, TenantID } from '@speira/chordschart-shared/valueObjects';
 
-import {
-  ListChartHandler,
-  ListChartQuery,
-} from "../../../src/application/queries/ListChart";
-import {
-  type ChartError,
-  ChartID,
-  ChartProjection,
-  ChartReadError,
-} from "../../../src/domain";
-import { Chart } from "../../../src/domain/Chart";
+import { ListChartHandler, ListChartQuery } from '../../../src/application/queries/ListChart';
+import { type ChartError, ChartID, ChartProjection, ChartReadError } from '../../../src/domain';
+import { Chart } from '../../../src/domain/Chart';
 
-describe("ListChartHandler", () => {
+describe('ListChartHandler', () => {
   const date = new Date();
-  const tenantId = TenantID.schema.make("tenant-test");
+  const tenantId = TenantID.schema.make('tenant-test');
 
   const createTestChart = (title: string): Chart => {
     return Chart.create({
       root: Note.A,
       id: ChartID.generate(),
-      author: "Test Author",
+      author: 'Test Author',
       tenantId,
       title,
       structure: {
@@ -33,18 +25,18 @@ describe("ListChartHandler", () => {
         },
       },
       plan: [Section.Verse, Section.Verse],
-      links: ["www.test.test"],
-      tags: ["jazz"],
+      links: ['www.test.test'],
+      tags: ['jazz'],
       isActive: true,
       createdAt: date,
       updatedAt: date,
     });
   };
 
-  it("should list all charts for a tenant", async () => {
-    const chart1 = createTestChart("Chart 1");
-    const chart2 = createTestChart("Chart 2");
-    const chart3 = createTestChart("Chart 3");
+  it('should list all charts for a tenant', async () => {
+    const chart1 = createTestChart('Chart 1');
+    const chart2 = createTestChart('Chart 2');
+    const chart3 = createTestChart('Chart 3');
     const charts = [chart1, chart2, chart3];
 
     const mockProjection = {
@@ -65,14 +57,14 @@ describe("ListChartHandler", () => {
     );
 
     expect(result).toHaveLength(3);
-    expect(result[0].title).toBe("Chart 1");
-    expect(result[1].title).toBe("Chart 2");
-    expect(result[2].title).toBe("Chart 3");
+    expect(result[0].title).toBe('Chart 1');
+    expect(result[1].title).toBe('Chart 2');
+    expect(result[2].title).toBe('Chart 3');
     expect(mockProjection.findByTenant).toHaveBeenCalledOnce();
     expect(mockProjection.findByTenant).toHaveBeenCalledWith(tenantId);
   });
 
-  it("should return empty array when no charts exist for tenant", async () => {
+  it('should return empty array when no charts exist for tenant', async () => {
     const mockProjection = {
       upsert: vi.fn(() => Effect.void),
       findById: vi.fn(),
@@ -96,8 +88,8 @@ describe("ListChartHandler", () => {
     expect(mockProjection.findByTenant).toHaveBeenCalledOnce();
   });
 
-  it("should propagate error when projection fails", async () => {
-    const error = new ChartReadError({ reason: "Database connection failed" });
+  it('should propagate error when projection fails', async () => {
+    const error = new ChartReadError({ reason: 'Database connection failed' });
     const mockProjection = {
       upsert: vi.fn(() => Effect.void),
       findById: vi.fn(),

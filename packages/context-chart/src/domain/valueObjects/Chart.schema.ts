@@ -1,13 +1,8 @@
-import { Schema } from "effect";
+import { Schema } from 'effect';
 
-import {
-  Note,
-  Section,
-  Structure,
-  TenantID,
-} from "@speira/chordschart-shared/valueObjects";
+import { Note, Section, Structure, TenantID } from '@speira/chordschart-shared/valueObjects';
 
-import * as ChartID from "./ChartID";
+import * as ChartID from './ChartID';
 
 const ChartBaseSchema = Schema.Struct({
   author: Schema.String,

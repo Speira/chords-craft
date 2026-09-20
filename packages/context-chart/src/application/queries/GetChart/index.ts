@@ -1,2 +1,2 @@
-export * from "./GetChartHandler";
-export * from "./GetChartQuery";
+export * from './GetChartHandler';
+export * from './GetChartQuery';
