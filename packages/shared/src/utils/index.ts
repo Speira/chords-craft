@@ -2,4 +2,4 @@ export * from './number';
 export * from './object';
 export * from './string';
 export * from './typeguards';
-export * from './types';
+export type * from './types';

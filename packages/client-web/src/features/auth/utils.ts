@@ -1,6 +1,5 @@
-import { enUS, frFR } from "@clerk/localizations";
-
 import { Typeguards } from "@chordcraft/shared/utils";
+import { enUS, frFR } from "@clerk/localizations";
 
 export const clerkLocalesMap: Record<string, typeof enUS> = {
   fr: frFR,

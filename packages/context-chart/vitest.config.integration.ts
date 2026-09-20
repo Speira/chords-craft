@@ -11,9 +11,6 @@ const config: ViteUserConfig = {
   resolve: { alias: workspaceAliases },
   test: {
     setupFiles: ['./setupTests.ts'],
-    fakeTimers: {
-      toFake: undefined,
-    },
     include: ['test/infrastructure/**/*.test.ts'],
     sequence: { concurrent: false },
   },

@@ -1,6 +1,5 @@
-import { type ReactNode } from "react";
-
 import Image from "next/image";
+import type { ReactNode } from "react";
 
 import { HeaderNavigation, LanguageSwitcher, ThemeSwitcher } from "./layout";
 import { Typography } from "./Typography";

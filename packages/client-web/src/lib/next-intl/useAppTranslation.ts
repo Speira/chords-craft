@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import { type AppTranslation } from "./definitions";
+import type { AppTranslation } from "./definitions";
 
 export const useAppTranslations = () => {
   return useTranslations<AppTranslation>();

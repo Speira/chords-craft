@@ -1,6 +1,5 @@
-import { type HTMLAttributes } from "react";
-
-import { type LinkProps as NextLinkProps } from "next/link";
+import type { LinkProps as NextLinkProps } from "next/link";
+import type { HTMLAttributes } from "react";
 
 import { Link as NextLink } from "#client-web/lib/next-intl";
 

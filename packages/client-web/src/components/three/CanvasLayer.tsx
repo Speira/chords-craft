@@ -1,7 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
 import { Canvas } from "@react-three/fiber";
+import type { ReactNode } from "react";
 
 export function CanvasLayer({ children }: { children: ReactNode }) {
   return (

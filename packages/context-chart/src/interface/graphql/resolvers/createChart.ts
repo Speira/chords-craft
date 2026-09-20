@@ -1,7 +1,7 @@
 import { Effect, type Layer, ParseResult, pipe, Schema } from 'effect';
 
 import { CreateChartCommand, CreateChartHandler } from '#context-chart/application/commands';
-import { type Chart, type ChartProjection, type ChartRepository } from '#context-chart/domain';
+import type { Chart, ChartProjection, ChartRepository } from '#context-chart/domain';
 import { ChartServicesLive } from '#context-chart/infrastructure/dynamodb';
 
 export const createChart = (

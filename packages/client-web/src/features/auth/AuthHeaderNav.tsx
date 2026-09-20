@@ -1,6 +1,4 @@
 "use client";
-import { type PropsWithChildren } from "react";
-
 import {
   SignedIn,
   SignedOut,
@@ -10,6 +8,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import { LogInIcon, LogOutIcon } from "lucide-react";
+import type { PropsWithChildren } from "react";
 
 import { Button } from "#client-web/components";
 

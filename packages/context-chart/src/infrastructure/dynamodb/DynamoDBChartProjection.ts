@@ -1,6 +1,6 @@
 import { Effect } from 'effect';
 
-import { type DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import type { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
   DeleteCommand,
   DynamoDBDocument,

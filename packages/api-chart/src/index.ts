@@ -1,12 +1,11 @@
+import { ChartInterface } from '@chordcraft/context-chart';
 import type { AppSyncResolverEvent } from 'aws-lambda';
 
-import { ChartInterface } from '@chordcraft/context-chart';
-
-type ResolverContext = {
+interface ResolverContext {
   userId: string;
   tenantId: string;
   orgId?: string;
-};
+}
 
 export const handler = async (
   event: AppSyncResolverEvent<Record<string, unknown>>,

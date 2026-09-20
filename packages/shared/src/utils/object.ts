@@ -47,7 +47,7 @@ export class ObjectUtils {
     return Object.keys(obj)
       .reduce(
         (acc, cur) =>
-          obj[cur] ? acc + ` ${options?.prefix || ''}${cur}${options?.suffix || ''}` : acc,
+          obj[cur] ? `${acc} ${options?.prefix || ''}${cur}${options?.suffix || ''}` : acc,
         '',
       )
       .trim();
@@ -109,7 +109,7 @@ export class ObjectUtils {
    * @example
    *   ObjectUtils.flattenObject({ a: 1, b: { c: 2 } }); // "a:1; b.c:2"
    */
-  static flattenObject(obj: object, prefix: string = ''): string {
+  static flattenObject(obj: object, prefix = ''): string {
     const entries: Array<string> = [];
 
     for (const [key, value] of Object.entries(obj)) {

@@ -7,7 +7,7 @@ import { useSignUp } from "@clerk/nextjs";
 import { Button, Input, Link, Typography } from "#client-web/components";
 import K from "#client-web/constants";
 import { Logger } from "#client-web/lib/logger";
-import { type AppTranslation } from "#client-web/lib/next-intl";
+import type { AppTranslation } from "#client-web/lib/next-intl";
 import { checkIsDarkMode, cn } from "#client-web/lib/shadcn";
 
 import { SignUpVerification } from "./SignUpVerification";

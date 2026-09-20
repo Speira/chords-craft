@@ -120,7 +120,7 @@ export type NestedKey<T, Prefix extends string = ''> = {
 export type NestedKeyOf<T> = T extends object
   ? {
       [Property in keyof T]:
-        `${Property & string}` | `${Property & string}.${NestedKeyOf<T[Property]>}`;
+        (Property & string) | `${Property & string}.${NestedKeyOf<T[Property]>}`;
     }[keyof T]
   : never;
 

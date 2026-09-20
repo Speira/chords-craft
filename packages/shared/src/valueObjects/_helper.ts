@@ -1,9 +1,9 @@
 import { Effect, ParseResult, Schema } from 'effect';
 
-type GetTransformProps<T> = {
-  schema: Schema.SchemaClass<T, T, never>;
-  parse: (e: string) => Effect.Effect<T, ParseResult.ParseError, never>;
-};
+interface GetTransformProps<T> {
+  schema: Schema.SchemaClass<T, T>;
+  parse: (e: string) => Effect.Effect<T, ParseResult.ParseError>;
+}
 
 export const getTransform = <T extends string>({ parse, schema }: GetTransformProps<T>) =>
   Schema.transformOrFail(Schema.String, schema, {

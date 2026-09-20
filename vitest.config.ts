@@ -26,9 +26,6 @@ const config: ViteUserConfig = {
   },
   test: {
     setupFiles: [path.join(__dirname, 'setupTests.ts')],
-    fakeTimers: {
-      toFake: undefined,
-    },
     // Files already run in parallel. Tests inside a file stay sequential: since Vitest 5,
     // `sequence.concurrent` also makes assertions on shared per-suite state unreliable
     // (and the global `expect` is not safe in concurrent tests). Opt in per suite with

@@ -1,4 +1,4 @@
-import { type AppTranslation } from "./definitions";
+import type { AppTranslation } from "./definitions";
 import { getAppTranslations } from "./getAppTranslation";
 
 export async function ServerTranslation({ label }: { label: AppTranslation }) {

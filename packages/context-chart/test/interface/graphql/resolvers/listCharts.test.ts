@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { Chord, Note, Section, TenantID } from '@chordcraft/shared/valueObjects';
 
-import { ChartID, ChartProjection, ChartReadError } from '#context-chart/domain';
+import { ChartID, ChartProjection, ChartReadError, ChartRepository } from '#context-chart/domain';
 import { Chart } from '#context-chart/domain/Chart';
 import { listCharts } from '#context-chart/interface/graphql/resolvers/listCharts';
 
@@ -120,24 +120,30 @@ describe('listCharts resolver', () => {
 
     it('returns the charts found by the projection', async () => {
       const findByTenant = vi.fn(() => Effect.succeed(charts));
-      const layer = Layer.succeed(ChartProjection, {
-        findByTenant,
-        findById: vi.fn(),
-        upsert: vi.fn(),
-        delete: vi.fn(),
-      });
+      const layer = Layer.merge(
+        Layer.succeed(ChartProjection, {
+          findByTenant,
+          findById: vi.fn(),
+          upsert: vi.fn(),
+          delete: vi.fn(),
+        }),
+        Layer.succeed(ChartRepository, { save: vi.fn(), load: vi.fn() }),
+      );
 
       await expect(listCharts(validInput, layer)).resolves.toBe(charts);
       expect(findByTenant).toHaveBeenCalledWith(validInput.tenantId);
     });
 
     it('rethrows projection failures', async () => {
-      const layer = Layer.succeed(ChartProjection, {
-        findByTenant: vi.fn(() => Effect.fail(new ChartReadError({ reason: 'boom' }))),
-        findById: vi.fn(),
-        upsert: vi.fn(),
-        delete: vi.fn(),
-      });
+      const layer = Layer.merge(
+        Layer.succeed(ChartProjection, {
+          findByTenant: vi.fn(() => Effect.fail(new ChartReadError({ reason: 'boom' }))),
+          findById: vi.fn(),
+          upsert: vi.fn(),
+          delete: vi.fn(),
+        }),
+        Layer.succeed(ChartRepository, { save: vi.fn(), load: vi.fn() }),
+      );
 
       await expect(listCharts(validInput, layer)).rejects.toThrow();
     });

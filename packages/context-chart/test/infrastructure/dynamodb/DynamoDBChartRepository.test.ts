@@ -33,10 +33,13 @@ describe('DynamoDBChartRepository', () => {
     const events = await Effect.runPromise(repository.load(chartId));
 
     expect(events).toHaveLength(1);
-    expect(events[0]._tag).toBe('ChartCreated');
-    expect(events[0].aggregateId).toBe(chartId);
-    expect(events[0].version).toBe(1);
-    expect(events[0].title).toBe('Test Chart');
+    const [loaded] = events;
+    expect(loaded._tag).toBe('ChartCreated');
+    expect(loaded.aggregateId).toBe(chartId);
+    expect(loaded.version).toBe(1);
+    // `title` only exists on ChartCreated, so narrow the union before reading it.
+    if (loaded._tag !== 'ChartCreated') throw new Error('expected a ChartCreated event');
+    expect(loaded.title).toBe('Test Chart');
   });
 
   it('saves multiple events via transaction and loads them in version order', async () => {

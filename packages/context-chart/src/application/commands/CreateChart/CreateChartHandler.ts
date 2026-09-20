@@ -8,7 +8,7 @@ import {
   ChartRepository,
 } from '#context-chart/domain';
 
-import { type CreateChartCommand } from './CreateChartCommand';
+import type { CreateChartCommand } from './CreateChartCommand';
 
 export class CreateChartHandler {
   static execute(

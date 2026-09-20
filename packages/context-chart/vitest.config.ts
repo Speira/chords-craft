@@ -1,7 +1,6 @@
+import { workspaceAliases } from '../../vitest.shared';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import type { ViteUserConfig } from 'vitest/config';
-
-import { workspaceAliases } from '../../vitest.shared';
 
 const config: ViteUserConfig = {
   plugins: [tsconfigPaths()],
@@ -11,9 +10,6 @@ const config: ViteUserConfig = {
   resolve: { alias: workspaceAliases },
   test: {
     setupFiles: ['./setupTests.ts'],
-    fakeTimers: {
-      toFake: undefined,
-    },
     include: ['test/**/*.test.ts'],
     exclude: ['test/infrastructure/**/*.test.ts'],
   },

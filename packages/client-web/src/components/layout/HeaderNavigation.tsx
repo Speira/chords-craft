@@ -1,4 +1,4 @@
-import { type AppTranslation } from "#client-web/lib/next-intl";
+import type { AppTranslation } from "#client-web/lib/next-intl";
 
 import { LinkButton } from "../Link";
 import {

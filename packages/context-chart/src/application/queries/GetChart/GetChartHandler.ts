@@ -7,7 +7,7 @@ import {
   type ChartRepository,
 } from '#context-chart/domain';
 
-import { type GetChartQuery } from './GetChartQuery';
+import type { GetChartQuery } from './GetChartQuery';
 
 export class GetChartHandler {
   static execute(
