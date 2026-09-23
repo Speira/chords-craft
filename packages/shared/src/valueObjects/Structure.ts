@@ -30,4 +30,10 @@ export const schema = Schema.Struct({
 
 export type Structure = typeof schema.Type;
 
+/**
+ * The encoded side of {@link schema}: chords are still shorthand strings (`"Cm7"`). This is what
+ * crosses the wire, so it is the shape a client builds before the API decodes it.
+ */
+export type StructureInput = typeof schema.Encoded;
+
 export const parse = (params: unknown) => Schema.decodeUnknown(schema)(params);

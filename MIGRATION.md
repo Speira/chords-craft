@@ -3,7 +3,7 @@
 Started 2026-09-20 on `chore/adopt-coding-profile`, from the template in
 `sass/coding-profile/template` (ADR-001 to ADR-005 in `sass/shared-AI/adr`).
 
-`pnpm check` is green: format, lint (0 errors, 259 warnings), types, knip and 345 tests.
+`pnpm check` is green: format, lint (0 errors, 252 warnings), types, knip and 345 tests.
 
 What is left is tracked, not hidden:
 
@@ -47,15 +47,18 @@ What is left is tracked, not hidden:
   (Radix/React optional props, CSS side-effect imports). This is also the template's default
   for `tsconfig.react.json` / `tsconfig.next.json`.
 
-## Remaining work (259 warnings)
+## Remaining work (252 warnings)
 
-| Package                                 | Warnings | Main themes                                                                                                 |
-| --------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------- |
-| `client-web`                            | 139      | unsafe `any` from graphql-request, unnecessary conditions, `console` → `Logger`, React context/effect rules |
-| `deployment`                            | 53       | unsafe `any` from CDK/`mergeSchemas`, `console`, naming                                                     |
-| `shared`                                | 45       | `vitest/no-conditional-expect` in the value-object tests, top-level arrows                                  |
-| `context-chart`                         | 17       | top-level arrows in resolvers, `no-conditional-expect`, type-argument noise                                 |
-| `api-auth`, `api-chart`, `context-user` | 5        | top-level arrows, a default export                                                                          |
+| Package                                 | Warnings | Main themes                                                                                                              |
+| --------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `client-web`                            | 135      | unnecessary conditions, empty functions, default exports (Next.js pages), top-level arrows, `console` → `Logger`, naming |
+| `deployment`                            | 51       | unsafe `any` from CDK/`mergeSchemas`, nullish coalescing, `console`                                                      |
+| `shared`                                | 45       | `vitest/no-conditional-expect` in the value-object tests, empty functions, top-level arrows                              |
+| `context-chart`                         | 16       | `no-conditional-expect`, top-level arrows in resolvers, type-argument noise                                              |
+| `api-auth`, `api-chart`, `context-user` | 5        | top-level arrows, default exports                                                                                        |
+
+Counts are from `pnpm lint` on `main`; regenerate them when a package is cleaned up rather
+than trusting the table.
 
 Suggested order, one PR per package:
 
@@ -96,5 +99,15 @@ Suggested order, one PR per package:
   package here is private. `deploy.yml` is untouched.
 - **Branch protection**: enable squash-merge only, and make the check jobs and the PR-title
   check required on `main`.
+- **The pnpm pin in `.github/actions/setup/action.yml` is temporary.** `devEngines.packageManager`
+  is `^11.17.0`, which resolves to 11.27.1 — a release whose binary reports itself as 11.27.0, so
+  `pnpm/setup@v2`'s own version check fails and every job dies before installing. The action pins
+  `version: 11.27.0` to get around it. pnpm's `latest` is already 12.6.0, so a corrected 11.27.2
+  may never ship: the real fix is probably moving the range off `^11.17.0`, not waiting.
+- **CI does not enforce a fresh lockfile.** `.github/actions/setup/action.yml` passes
+  `require-lockfile: true`, which `pnpm/setup@v2` does not accept — it logs
+  `Unexpected input(s) 'require-lockfile'` and ignores it, so a stale `pnpm-lock.yaml` passes.
+  Making the intent real means another mechanism (`pnpm install --frozen-lockfile`, which `pnpm ci`
+  already uses).
 - **`pnpm-workspace.yaml` catalog**: dependency versions are still per package; the template
   centralises them under `catalog:`.

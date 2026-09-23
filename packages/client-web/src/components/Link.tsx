@@ -11,7 +11,7 @@ interface LinkProps
   children?: React.ReactNode;
   target?: '_blank' | '_self' | '_parent' | '_top';
 }
-/** @warning: Add "isServer" props when called inside a Client component */
+/** @warning: Add "isServer" only when called from a Server component */
 export function Link(props: LinkProps) {
   const { children, endNode, isServer, label, startNode, ...rest } = props;
   return (
@@ -30,7 +30,7 @@ interface LinkButtonProps
     TextualComponentProps {
   children?: React.ReactNode;
 }
-/** @warning: Add "isServer" props when called inside a Client component */
+/** @warning: Add "isServer" only when called from a Server component */
 export function LinkButton(props: LinkButtonProps) {
   const { children, endNode, href, isServer, label, startNode, ...rest } = props;
   return (

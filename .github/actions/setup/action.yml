@@ -1,5 +1,5 @@
 name: Setup
-description: Install pnpm + Node.js (versions from package.json devEngines) and the workspace dependencies.
+description: Install pnpm + Node.js and the workspace dependencies. Both versions are pinned here; see the notes below.
 
 runs:
   using: composite
@@ -7,8 +7,16 @@ runs:
     - name: Install pnpm, Node.js and dependencies
       uses: pnpm/setup@v2
       with:
-        # pnpm comes from devEngines.packageManager. Node is pinned to the LTS major here so CI
-        # stays reproducible while devEngines.runtime only sets a minimum.
+        # TEMPORARY PIN. pnpm comes from devEngines.packageManager (`^11.17.0`), which now
+        # resolves to 11.27.1 — a release whose binary reports itself as 11.27.0, so this
+        # action's own version check fails and no job gets as far as installing:
+        #   Error: The installed pnpm reports version 11.27.0, expected 11.27.1
+        # Drop this line once pnpm ships a release that reports its own version correctly.
+        version: 11.27.0
+        # Node is pinned to the LTS major here so CI stays reproducible while
+        # devEngines.runtime only sets a minimum.
         runtime: node@24
         cache: true
+        # NOTE: pnpm/setup@v2 does not accept this input — it warns `Unexpected input(s)` and
+        # ignores it, so a stale pnpm-lock.yaml does NOT fail CI. Tracked in MIGRATION.md.
         require-lockfile: true

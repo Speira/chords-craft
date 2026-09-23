@@ -1,9 +1,12 @@
 'use client';
+import { useEffect } from 'react';
+
 import { LinkButton } from '#client-web/components/Link';
 import { Main } from '#client-web/components/Main';
 import { Typography } from '#client-web/components/Typography';
 import { Button } from '#client-web/components/ui/button';
 import K from '#client-web/constants';
+import { Logger } from '#client-web/lib/logger';
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -11,19 +14,21 @@ interface ErrorProps {
 }
 
 export function Error({ error, reset }: ErrorProps) {
+  useEffect(() => {
+    Logger.error(error);
+  }, [error]);
+
   return (
     <Main>
-      <Typography isServer as="h1" className="text-6xl font-bold text-destructive">
+      <Typography as="h1" className="text-6xl font-bold text-destructive">
         500
       </Typography>
       <Typography
-        isServer
         as="h2"
         className="mt-4 text-2xl font-semibold text-foreground"
         label="error.serverError"
       />
       <Typography
-        isServer
         as="p"
         className="mt-2 text-center text-muted-foreground"
         label="error.serverErrorDescription"
@@ -37,7 +42,7 @@ export function Error({ error, reset }: ErrorProps) {
         <Button onClick={reset} variant="default">
           <Typography as="span" label="error.tryAgain" />
         </Button>
-        <LinkButton isServer href={K.PATHS.HOME} variant="secondary" label="general.back" />
+        <LinkButton href={K.PATHS.HOME} variant="secondary" label="general.back" />
       </div>
     </Main>
   );

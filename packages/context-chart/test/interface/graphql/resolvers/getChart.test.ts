@@ -175,6 +175,7 @@ describe('getChart resolver', () => {
         Layer.succeed(ChartProjection, {
           findById,
           findByTenant: vi.fn(),
+          findAllByTenant: vi.fn(),
           upsert: vi.fn(),
           delete: vi.fn(),
         }),
@@ -190,6 +191,7 @@ describe('getChart resolver', () => {
         Layer.succeed(ChartProjection, {
           findById: vi.fn(() => Effect.fail(new ChartReadError({ reason: 'boom' }))),
           findByTenant: vi.fn(),
+          findAllByTenant: vi.fn(),
           upsert: vi.fn(),
           delete: vi.fn(),
         }),

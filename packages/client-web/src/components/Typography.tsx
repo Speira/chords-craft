@@ -26,7 +26,7 @@ const baseClasses: Record<Required<TypographyProps>['as'], ClassNameValue> = {
   blockquote: 'mt-6 border-l-2 pl-6 italic',
 };
 
-/** @warning: Add "isServer" props when called inside a Client component */
+/** @warning: Add "isServer" only when called from a Server component */
 export function Typography(props: TypographyProps) {
   const { as = 'span', children, className, endNode, isServer, label, startNode, ...rest } = props;
 
