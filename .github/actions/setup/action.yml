@@ -17,4 +17,6 @@ runs:
         # devEngines.runtime only sets a minimum.
         runtime: node@24
         cache: true
+        # NOTE: pnpm/setup@v2 does not accept this input — it warns `Unexpected input(s)` and
+        # ignores it, so a stale pnpm-lock.yaml does NOT fail CI. Tracked in MIGRATION.md.
         require-lockfile: true

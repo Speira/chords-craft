@@ -99,5 +99,15 @@ Suggested order, one PR per package:
   package here is private. `deploy.yml` is untouched.
 - **Branch protection**: enable squash-merge only, and make the check jobs and the PR-title
   check required on `main`.
+- **The pnpm pin in `.github/actions/setup/action.yml` is temporary.** `devEngines.packageManager`
+  is `^11.17.0`, which resolves to 11.27.1 — a release whose binary reports itself as 11.27.0, so
+  `pnpm/setup@v2`'s own version check fails and every job dies before installing. The action pins
+  `version: 11.27.0` to get around it. pnpm's `latest` is already 12.6.0, so a corrected 11.27.2
+  may never ship: the real fix is probably moving the range off `^11.17.0`, not waiting.
+- **CI does not enforce a fresh lockfile.** `.github/actions/setup/action.yml` passes
+  `require-lockfile: true`, which `pnpm/setup@v2` does not accept — it logs
+  `Unexpected input(s) 'require-lockfile'` and ignores it, so a stale `pnpm-lock.yaml` passes.
+  Making the intent real means another mechanism (`pnpm install --frozen-lockfile`, which `pnpm ci`
+  already uses).
 - **`pnpm-workspace.yaml` catalog**: dependency versions are still per package; the template
   centralises them under `catalog:`.
