@@ -162,6 +162,7 @@ describe('createChart resolver', () => {
           upsert,
           findById: vi.fn(),
           findByTenant: vi.fn(),
+          findAllByTenant: vi.fn(),
           delete: vi.fn(),
         }),
       );
@@ -183,6 +184,7 @@ describe('createChart resolver', () => {
           upsert: vi.fn(() => Effect.void),
           findById: vi.fn(),
           findByTenant: vi.fn(),
+          findAllByTenant: vi.fn(),
           delete: vi.fn(),
         }),
       );

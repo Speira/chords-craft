@@ -51,6 +51,65 @@ describe('DynamoDBChartProjection', () => {
     expect(ids).toContain(chart2.id);
   });
 
+  it('findByTenant leaves archived charts out, findAllByTenant keeps them', async () => {
+    const tenantId = 'tenant-archived';
+    const active = makeChart(ChartID.generate(), tenantId, { title: 'Active' });
+    const archived = makeChart(ChartID.generate(), tenantId, {
+      title: 'Archived',
+      isActive: false,
+    });
+
+    await Effect.runPromise(Effect.all([projection.upsert(active), projection.upsert(archived)]));
+
+    const visible = await Effect.runPromise(projection.findByTenant(tenantId));
+    expect(visible.map((c) => c.id)).toEqual([active.id]);
+
+    const all = await Effect.runPromise(projection.findAllByTenant(tenantId));
+    expect(all.map((c) => c.id).sort()).toEqual([active.id, archived.id].sort());
+  });
+
+  it('findByTenant returns the most recently updated chart first', async () => {
+    const tenantId = 'tenant-ordering';
+    const oldest = makeChart(ChartID.generate(), tenantId, {
+      updatedAt: new Date('2024-01-01T00:00:00.000Z'),
+    });
+    const newest = makeChart(ChartID.generate(), tenantId, {
+      updatedAt: new Date('2024-06-01T00:00:00.000Z'),
+    });
+    const middle = makeChart(ChartID.generate(), tenantId, {
+      updatedAt: new Date('2024-03-01T00:00:00.000Z'),
+    });
+
+    await Effect.runPromise(
+      Effect.all([projection.upsert(oldest), projection.upsert(newest), projection.upsert(middle)]),
+    );
+
+    const charts = await Effect.runPromise(projection.findByTenant(tenantId));
+    expect(charts.map((c) => c.id)).toEqual([newest.id, middle.id, oldest.id]);
+  });
+
+  it('findByTenant pages past the 1MB query limit', async () => {
+    const tenantId = 'tenant-pagination';
+    // Each chart carries ~40KB of tags, so 40 of them exceed the 1MB a single Query returns.
+    const padding = Array.from({ length: 40 }, () => 'x'.repeat(1024));
+    const charts = Array.from({ length: 40 }, (_, index) =>
+      makeChart(ChartID.generate(), tenantId, {
+        tags: padding,
+        updatedAt: new Date(Date.UTC(2024, 0, index + 1)),
+      }),
+    );
+
+    await Effect.runPromise(
+      Effect.all(
+        charts.map((chart) => projection.upsert(chart)),
+        { concurrency: 10 },
+      ),
+    );
+
+    const found = await Effect.runPromise(projection.findByTenant(tenantId));
+    expect(found).toHaveLength(charts.length);
+  });
+
   it('deletes a chart and findById returns a ChartReadError', async () => {
     const chart = makeChart();
 

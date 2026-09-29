@@ -1,13 +1,23 @@
+'use client';
+import { useEffect } from 'react';
+
 import { Logger } from '#client-web/lib/logger';
 
-export function GlobalError({
-  error,
-  reset,
-}: {
-  reset: () => void;
+interface GlobalErrorProps {
   error: Error & { digest?: string };
-}) {
-  Logger.error(error);
+  reset: () => void;
+}
+
+/**
+ * Rendered by `app/global-error.tsx`, which replaces the root layout. No provider is mounted at
+ * that point, so this component cannot translate and cannot use the design tokens' components. Its
+ * copy is deliberately hardcoded in English.
+ */
+export function GlobalError({ error, reset }: GlobalErrorProps) {
+  useEffect(() => {
+    Logger.error(error);
+  }, [error]);
+
   return (
     <div className="flex min-h-screen w-dvw flex-col items-center justify-center">
       <h1 className="text-6xl font-bold text-red-300">500</h1>

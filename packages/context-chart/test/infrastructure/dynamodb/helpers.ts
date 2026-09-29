@@ -44,6 +44,19 @@ export async function createProjectionTable(client: DynamoDBClient): Promise<voi
       AttributeDefinitions: [
         { AttributeName: 'PK', AttributeType: 'S' },
         { AttributeName: 'SK', AttributeType: 'S' },
+        { AttributeName: 'GSI1PK', AttributeType: 'S' },
+        { AttributeName: 'GSI1SK', AttributeType: 'S' },
+      ],
+      GlobalSecondaryIndexes: [
+        {
+          IndexName: 'GSI1',
+          KeySchema: [
+            { AttributeName: 'GSI1PK', KeyType: 'HASH' },
+            { AttributeName: 'GSI1SK', KeyType: 'RANGE' },
+          ],
+          // Projects every attribute because findByTenant rebuilds a full Chart from the index.
+          Projection: { ProjectionType: 'ALL' },
+        },
       ],
       BillingMode: 'PAY_PER_REQUEST',
     }),
@@ -71,19 +84,23 @@ export function makeChartCreatedEvent(chartId: ChartID.ChartID, version = 1): Ch
   });
 }
 
-export function makeChart(chartId = ChartID.generate(), tenantId = 'tenant-test'): Chart {
+export function makeChart(
+  chartId = ChartID.generate(),
+  tenantId = 'tenant-test',
+  overrides: { isActive?: boolean; tags?: Array<string>; title?: string; updatedAt?: Date } = {},
+): Chart {
   return Chart.create({
     id: chartId,
     tenantId: TenantID.schema.make(tenantId),
     root: Note.C,
     author: 'Test Author',
-    title: 'Test Chart',
+    title: overrides.title ?? 'Test Chart',
     structure: { Verse: { default: [] } },
     plan: [Section.Verse],
     links: [],
-    tags: [],
-    isActive: true,
+    tags: overrides.tags ?? [],
+    isActive: overrides.isActive ?? true,
     createdAt: new Date('2024-01-01T00:00:00.000Z'),
-    updatedAt: new Date('2024-01-01T00:00:00.000Z'),
+    updatedAt: overrides.updatedAt ?? new Date('2024-01-01T00:00:00.000Z'),
   });
 }

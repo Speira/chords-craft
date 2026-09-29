@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import type { Structure } from '@chordcraft/shared/valueObjects';
 import { useAuth } from '@clerk/nextjs';
 
 import { getGraphQLClient, queries } from '#client-web/lib/graphql';
@@ -16,7 +17,7 @@ export function useCreateChart() {
     title: string;
     author?: string;
     root: string;
-    sections: any;
+    structure: Structure.StructureInput;
     plan: Array<string>;
     tags?: Array<string>;
     links?: Array<string>;

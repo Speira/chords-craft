@@ -1,7 +1,7 @@
 # Product Requirements Document (PRD): Chords Chart
 
 **Author:** Speira
-**Version:** 1.0
+**Version:** 1.1
 **Date:** September 2026
 **Status:** Reconstructed from codebase and existing documentation
 **Companion documents:** [High-Level Design](./HIGH_LEVEL_DESIGN.md), [README](../README.md)
@@ -117,8 +117,10 @@ part a PRD should not paraphrase loosely — the vocabulary below is the product
 | `isActive`                | boolean   | `false` once archived                          |
 | `createdAt` / `updatedAt` | timestamp |                                                |
 
-Charts are event-sourced. `ChartCreated` and `ChartArchived` are the implemented events;
-a chart is rebuilt by folding its event history.
+Charts are event-sourced. Three event types are defined and all three are folded when a
+chart is rebuilt from its history: `ChartCreated`, `ChartUpdated` and `ChartArchived`. Only
+`ChartCreated` and `ChartArchived` are ever _emitted_ — `ChartAggregate` has no method that
+produces a `ChartUpdated`, which is the domain half of the FR-2.5 gap.
 
 ---
 
@@ -134,8 +136,8 @@ a chart is rebuilt by folding its event history.
 | FR-1.4 | Every chart operation is scoped to a tenant; a user cannot read another tenant's charts. | **Shipped**   |
 | FR-1.5 | Roles are tiered: Free, Standard, Premium, Orga.                                         | **Specified** |
 
-Identity is provided by **Clerk**. The HLD specifies Cognito; the implementation moved to
-Clerk in December 2025 and the HLD has not been updated. See §9.
+Identity is provided by **Clerk**. The HLD specified Cognito until revision 1.1, which
+corrected it; the implementation moved to Clerk in December 2025.
 
 ### 5.2 Chart authoring
 
@@ -260,37 +262,87 @@ Explicitly not part of the current product:
 
 ## 9. Known inconsistencies
 
-These are documented rather than silently resolved; each needs a product or engineering
-decision.
+Recorded here rather than silently resolved; each needs a product or engineering decision.
 
-1. **Identity provider drift.** The HLD specifies AWS Cognito throughout §3.1 and §5.
-   The implementation uses Clerk (`packages/api-auth`, `@clerk/nextjs`). The README's
-   stack section also still says Cognito. The HLD and README should be corrected to match
-   the code.
-2. **Schema field drift.** `packages/context-chart/.../schema.graphql` defines the chart
-   field as `structure`; the generated
-   `packages/deployment/src/generated/schema.graphql` defines it as `sections`. The
-   domain model uses `structure`. The generated artefact appears stale and should be
-   regenerated.
-3. **Data model divergence.** The HLD describes a single `AppTable` keyed
-   `USER#<OwnerID>` / `CHART#<ChartID>` with GSIs for group and org boards. The
-   implementation uses two tables — an event store keyed `CHART#{chartId}` /
-   `VERSION#{version}` and a projection keyed `TENANT#{tenantId}` / `CHART#{chartId}`.
-   The implemented design is the better one; the HLD should be updated to it.
-4. **Undocumented contexts.** `context-band` and `context-user` exist as packages but are
-   absent from `CLAUDE.md`'s package map.
+### 9.1 Resolved in revision 1.1
 
----
+1. **Identity provider drift.** The HLD specified AWS Cognito throughout §3.1 and §5, and
+   the README's stack section said the same. Both now say Clerk. Cognito no longer appears
+   anywhere outside this paragraph.
+2. **Schema field drift.** `packages/deployment/src/generated/schema.graphql` defined the
+   chart field as `sections` while the context schema and the domain use `structure`. The
+   generated file was stale; regenerated with `pnpm merge-schemas`, and the deployment
+   README now states that it is build output.
+3. **Data model divergence.** The HLD described a single `AppTable` keyed `USER#<OwnerID>` /
+   `CHART#<ChartID>`. HLD §4 now documents the implemented two-table design — event store
+   plus tenant-partitioned projection — and defers users, memberships and boards to the
+   tenancy decision (Q5).
+4. **Undocumented contexts.** `context-band` and `context-user` are now in `CLAUDE.md`'s
+   package map and the README structure block, marked as scaffolded.
+5. **Inverted `isServer` guidance.** The JSDoc on `Typography` and `Link`, and `DESIGN.md`,
+   told the reader to pass `isServer` from a _client_ component. `isServer` renders the
+   async `ServerTranslation`, so it is valid only from a _server_ component. The wording is
+   corrected; the code that followed the wrong version is fixed in §9.2.1.
+
+### 9.2 Resolved while wiring the error boundary and the projection index
+
+1. **No error boundary existed.** `Error` and `GlobalError` were written but never mounted, so
+   an unhandled render error fell through to Next's default page. `app/[locale]/error.tsx` and
+   `app/global-error.tsx` now mount them, and `Error` no longer passes `isServer` (it is a
+   client component, as the App Router requires).
+2. ~~**`NEXT_PUBLIC_GRAPHQL_URL` undocumented in `env.example`.**~~ Added, pointing at the
+   stack's `GraphQLApiUrl` output.
+3. **GSI1 was written but never read.** `findByTenant` now queries it for a tenant's active
+   charts, newest first; `findAllByTenant` reads the base table for the projection rebuild,
+   which must still see archived charts.
+4. **Neither adapter honoured its table name.** `DynamoDBChartRepository` and
+   `DynamoDBChartProjection` hardcoded `charts_events` / `charts_projection` while the CDK
+   creates `{stack}-charts_*` and passes the real names as `EVENTS_TABLE` / `PROJECTION_TABLE`.
+   Every DynamoDB call in a deployed Lambda would have raised `ResourceNotFoundException`.
+   Both now read the environment, falling back to the bare names for local runs.
+5. **Neither query paginated.** `findByTenant` and `ChartRepository.load` ignored
+   `LastEvaluatedKey`, so a tenant's charts and a chart's history were both silently truncated
+   at DynamoDB's 1MB page. Both follow the cursor now.
+6. **The projection could not read back what it wrote.** `Chart.toRecord` omitted `id`, stored
+   the timestamps as ISO strings against a `Schema.DateFromSelf` field, and the stored item
+   carries `PK`/`SK`/`GSI1PK`/`GSI1SK` which `Chart.parse` rejects as excess properties. A new
+   `Chart.fromRecord` maps the stored shape back to the domain; `toRecord` keeps `id`.
+7. **Multi-event saves were rejected.** `ChartRepository.save` built `TransactWriteItems` with
+   the key `PUT`; DynamoDB expects `Put`, and answered
+   `ValidationException: TransactWriteRequest should contain Delete or Put or Update request`.
+8. **Stored events could not be replayed.** `deserializeEvent` converted `occuredAt` to a
+   `Date` before decoding, though `Schema.Date`'s encoded side is the ISO string, and never
+   supplied the `_tag` that `Schema.TaggedClass` requires. Event sourcing's read path was
+   therefore broken end to end.
+
+Items 6 to 8 were invisible because **`pnpm test:integration` never ran**: the script selects
+`--project integration` and no such project existed in `vitest.config.ts`. The project is now
+defined, the integration suite runs against `docker compose up` and passes (9 tests).
+
+### 9.3 Still open
+
+1. ~~**The web client still queries `sections`.**~~ Renamed to `structure` in
+   `chartQueries.ts` and `useCreateChart`. The hook's input was typed `any`, which had hidden a
+   second defect: `CreateChart` sent `{ Verse: [] }`, while a section maps _style variants_ to
+   chord sequences (`{ Verse: { default: [] } }`). The input is now typed
+   `Structure.StructureInput` — a new export in `@chordcraft/shared` for the encoded, over-the-
+   wire shape — and the form sends a valid structure.
+2. **`useCreateChart` swallows its own failure.** It catches the error into state and returns
+   `undefined`, so `CreateChart.handleSubmit`'s own `try/catch` never fires and it logs
+   `Chart created: undefined` on failure. The message it surfaces is the raw `graphql-request`
+   error, untranslated.
+3. **`deserializeEvent` invents a timestamp** when `occuredAt` is missing or not a string,
+   rather than failing. Kept as-is; it deserves a decision, not a silent default.
 
 ## 10. Open questions
 
-| #   | Question                                                                                                                  | Blocks                       |
-| :-- | :------------------------------------------------------------------------------------------------------------------------ | :--------------------------- |
-| Q1  | Where exactly do the Free / Standard / Premium / Orga boundaries fall, and at what price points?                          | FR-6.2, all entitlement work |
-| Q2  | What does "public" mean operationally — listed and searchable, or merely reachable by link?                               | FR-3.1, FR-3.2, §5.5         |
-| Q3  | Is a chart's visibility set per chart, or inherited from the band or organisation that owns it?                           | FR-3.1, §5.4                 |
-| Q4  | Does a band own charts directly, or reference charts owned by members?                                                    | FR-4.2, FR-4.4               |
-| Q5  | Is `tenantId` the user, the band, or the organisation? The code treats it as an opaque string, which defers the decision. | §5.4, FR-1.4                 |
+| #   | Question                                                                                                                                                                  | Blocks                       |
+| :-- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :--------------------------- |
+| Q1  | Where exactly do the Free / Standard / Premium / Orga boundaries fall, and at what price points?                                                                          | FR-6.2, all entitlement work |
+| Q2  | What does "public" mean operationally — listed and searchable, or merely reachable by link?                                                                               | FR-3.1, FR-3.2, §5.5         |
+| Q3  | Is a chart's visibility set per chart, or inherited from the band or organisation that owns it?                                                                           | FR-3.1, §5.4                 |
+| Q4  | Does a band own charts directly, or reference charts owned by members?                                                                                                    | FR-4.2, FR-4.4               |
+| Q5  | Is `tenantId` the user, the band, or the organisation? The authorizer currently sets `tenantId = userId` and marks multi-tenancy as a V2 TODO, which defers the decision. | §5.4, FR-1.4                 |
 
 Q5 is the one to settle first: band management cannot be designed until the tenancy
 boundary is decided, and the answer shapes every access-control rule that follows.
@@ -306,8 +358,10 @@ Ordered by what unblocks the most downstream work.
    on read (FR-3.1 – FR-3.3). This is the paid tier's anchor feature.
 3. **Complete the chart lifecycle.** Expose update (FR-2.5) and archive (FR-2.6) — both
    already exist in the domain and need only an application command and a mutation.
-4. **Regenerate the deployment schema** and fix the `structure` / `sections` drift (§9.2).
-5. **Update the HLD and README** to Clerk and to the two-table design (§9.1, §9.3).
+4. ~~**Regenerate the deployment schema** and fix the `structure` / `sections` drift.~~ Done
+   in revision 1.1 (§9.1.2).
+5. ~~**Update the HLD and README** to Clerk and to the two-table design.~~ Done in revision
+   1.1 (§9.1.1, §9.1.3).
 6. **Design the band context** (§5.4) once Q4 and Q5 are answered.
 7. **Finish chord parsing** for modifiers and additions (FR-2.8).
 8. **Build transposition** on top of `Scale` (FR-2.7).

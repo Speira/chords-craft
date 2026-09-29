@@ -36,6 +36,7 @@ describe('GetChartHandler', () => {
       upsert: vi.fn(() => Effect.void),
       findById: vi.fn(() => Effect.succeed(defaultChart)),
       findByTenant: vi.fn(),
+      findAllByTenant: vi.fn(),
       delete: vi.fn(),
     };
 
@@ -64,6 +65,7 @@ describe('GetChartHandler', () => {
       upsert: vi.fn(() => Effect.void),
       findById: vi.fn(() => Effect.fail(error)),
       findByTenant: vi.fn(),
+      findAllByTenant: vi.fn(),
       delete: vi.fn(),
     };
 

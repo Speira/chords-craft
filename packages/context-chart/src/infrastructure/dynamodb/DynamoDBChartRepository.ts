@@ -6,6 +6,7 @@ import {
   PutCommand,
   type PutCommandInput,
   QueryCommand,
+  type QueryCommandOutput,
   TransactWriteCommand,
 } from '@aws-sdk/lib-dynamodb';
 
@@ -20,8 +21,11 @@ import {
   serializeEvent,
 } from '#context-chart/domain';
 
+/** Set by the CDK stack, which prefixes the table with the stack name. */
+const TABLE_NAME = process.env.EVENTS_TABLE ?? 'charts_events';
+
 export class DynamoDBChartRepository implements ChartRepository {
-  private readonly tableName = 'charts_events';
+  private readonly tableName = TABLE_NAME;
   private readonly client: DynamoDBClient;
   private readonly withChartKey = (str: string) => `CHART#${str}`;
   private readonly withVersionKey = (num: number) => `VERSION#${num}`;
@@ -33,8 +37,8 @@ export class DynamoDBChartRepository implements ChartRepository {
   save(id: ChartID.ChartID, events: Array<ChartEvent>): Effect.Effect<void, ChartWriteError> {
     return Effect.tryPromise({
       try: async () => {
-        const items: Array<{ PUT: PutCommandInput }> = events.map((evt) => ({
-          PUT: {
+        const items: Array<{ Put: PutCommandInput }> = events.map((evt) => ({
+          Put: {
             TableName: this.tableName,
             Item: {
               PK: this.withChartKey(id),
@@ -50,7 +54,7 @@ export class DynamoDBChartRepository implements ChartRepository {
           },
         }));
         if (items.length === 1) {
-          await this.client.send(new PutCommand(items[0].PUT));
+          await this.client.send(new PutCommand(items[0].Put));
         } else {
           await this.client.send(new TransactWriteCommand({ TransactItems: items }));
         }
@@ -59,28 +63,35 @@ export class DynamoDBChartRepository implements ChartRepository {
     });
   }
 
+  /**
+   * The full history, oldest first. A query returns at most 1MB per call, so it follows
+   * `LastEvaluatedKey`: a truncated history would silently replay into the wrong state.
+   */
   load(id: ChartID.ChartID): Effect.Effect<Array<ChartEvent>, ChartError> {
     return Effect.tryPromise({
-      try: () =>
-        this.client.send(
-          new QueryCommand({
-            TableName: this.tableName,
-            KeyConditionExpression: 'PK = :pk',
-            ExpressionAttributeValues: {
-              ':pk': this.withChartKey(id),
-            },
-            ScanIndexForward: true,
-          }),
-        ),
+      try: async () => {
+        const items: Array<Record<string, unknown>> = [];
+        let startKey: QueryCommandOutput['LastEvaluatedKey'];
+
+        do {
+          const page: QueryCommandOutput = await this.client.send(
+            new QueryCommand({
+              TableName: this.tableName,
+              KeyConditionExpression: 'PK = :pk',
+              ExpressionAttributeValues: {
+                ':pk': this.withChartKey(id),
+              },
+              ScanIndexForward: true,
+              ExclusiveStartKey: startKey,
+            }),
+          );
+          for (const item of page.Items ?? []) items.push(item);
+          startKey = page.LastEvaluatedKey;
+        } while (startKey);
+
+        return items;
+      },
       catch: (error) => new ChartReadError({ reason: error }),
-    }).pipe(
-      Effect.flatMap((result) => {
-        const items = result.Items;
-        if (!items) {
-          throw new ChartReadError({ reason: 'Not event found' });
-        }
-        return Effect.all(items.map((item) => deserializeEvent(item)));
-      }),
-    );
+    }).pipe(Effect.flatMap((items) => Effect.all(items.map((item) => deserializeEvent(item)))));
   }
 }

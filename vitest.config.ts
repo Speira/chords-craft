@@ -16,6 +16,19 @@ const project = (name: string) => ({
   },
 });
 
+// Integration tests live in one place today (the DynamoDB adapters) and need a local
+// DynamoDB. They are their own project so `test:integration` can select them and the
+// default run can exclude them with `--project '!integration'`.
+const integrationProject = {
+  plugins: [tsconfigPaths()],
+  resolve: { alias: workspaceAliases },
+  test: {
+    name: 'integration',
+    root: 'packages/context-chart',
+    include: ['test/infrastructure/**/*.test.ts'],
+  },
+};
+
 // This is a workaround, see https://github.com/vitest-dev/vitest/issues/4744
 const config: ViteUserConfig = {
   esbuild: {
@@ -35,6 +48,7 @@ const config: ViteUserConfig = {
       project('api-chart'),
       project('context-chart'),
       project('shared'),
+      integrationProject,
     ],
   },
 };

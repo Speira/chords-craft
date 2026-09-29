@@ -4,7 +4,7 @@ type Chart {
   root: String!
   author: String!
   title: String!
-  sections: AWSJSON!
+  structure: AWSJSON!
   plan: [String!]!
   links: [String!]!
   tags: [String!]!
@@ -18,7 +18,7 @@ input CreateChartInput {
   tenantId: String!
   title: String!
   author: String
-  sections: AWSJSON!
+  structure: AWSJSON!
   plan: [String!]!
   links: [String!]
   tags: [String!]

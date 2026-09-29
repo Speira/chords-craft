@@ -122,6 +122,7 @@ describe('listCharts resolver', () => {
       const layer = Layer.merge(
         Layer.succeed(ChartProjection, {
           findByTenant,
+          findAllByTenant: vi.fn(),
           findById: vi.fn(),
           upsert: vi.fn(),
           delete: vi.fn(),
@@ -137,6 +138,7 @@ describe('listCharts resolver', () => {
       const layer = Layer.merge(
         Layer.succeed(ChartProjection, {
           findByTenant: vi.fn(() => Effect.fail(new ChartReadError({ reason: 'boom' }))),
+          findAllByTenant: vi.fn(),
           findById: vi.fn(),
           upsert: vi.fn(),
           delete: vi.fn(),
