@@ -9,6 +9,7 @@ Built with event sourcing, DDD, and serverless architecture.
 
 - [Product Requirements Document](documentation/PRD.md) — what the product does, and what is built versus specified.
 - [High Level Design](documentation/HIGH_LEVEL_DESIGN.md) — architecture design details.
+- [Band management spec](documentation/specs/2026-09-29-band-management-design.md) — the approved design for bands, musician profiles and the gig calendar.
 
 ## Overview
 
@@ -46,7 +47,8 @@ Built with event sourcing, DDD, and serverless architecture.
 ```
 
 `context-band` and `context-user` hold only their build setup and a value-object stub; they
-are parked in `knip.jsonc` until the contexts are designed (see the PRD backlog).
+are parked in `knip.jsonc` until they are built. Their design is in the
+[band management spec](documentation/specs/2026-09-29-band-management-design.md).
 
 ## Key Patterns
 

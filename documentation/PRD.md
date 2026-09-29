@@ -165,20 +165,39 @@ corrected it; the implementation moved to Clerk in December 2025.
 FR-3.1 is the largest single gap between the specified product and the built one: privacy
 is the headline paid feature and the data model has no field for it.
 
-### 5.4 Band management — _Planned_
+### 5.4 Band management — _Specified_
 
-Bands are in scope and not yet designed in detail. The agreed shape:
+Designed in the [band management spec](./specs/2026-09-29-band-management-design.md), which
+answers Q4 and Q5: **a band is a tenant and owns its charts**. Nothing is implemented yet;
+`packages/context-band` and `packages/context-user` still hold only their scaffolding.
 
-| ID     | Requirement                                                                | Status              |
-| :----- | :------------------------------------------------------------------------- | :------------------ |
-| FR-4.1 | A band has a set-up: members and the instrument or role each one holds.    | **Planned**         |
-| FR-4.2 | A band has a repertoire — the list of charts the band plays.               | **Planned**         |
-| FR-4.3 | A band can schedule dates: rehearsals, training sessions and performances. | **Planned**         |
-| FR-4.4 | Band members see the band's charts in addition to their own.               | **Planned**         |
-| FR-4.5 | A band holds at most 15 users; an organisation at most 100.                | **Specified** (HLD) |
+| ID      | Requirement                                                                                                                                   | Status              |
+| :------ | :-------------------------------------------------------------------------------------------------------------------------------------------- | :------------------ |
+| FR-4.1  | A band has a set-up: members and the roles each one holds, from a shared role catalogue.                                                      | **Specified**       |
+| FR-4.2  | A band has a repertoire: the band tenant's active charts.                                                                                     | **Specified**       |
+| FR-4.3  | A band can schedule performances and rehearsals, each with a time, a precise location, a line-up and an ordered setlist.                      | **Specified**       |
+| FR-4.4  | Band members see and edit the band's charts in addition to their own; a personal chart can be copied into a band.                             | **Specified**       |
+| FR-4.5  | A band holds at most 15 members; an organisation at most 100.                                                                                 | **Specified** (HLD) |
+| FR-4.6  | A band member is a signed-up user or a contact-only record kept by an admin; a user can claim a contact slot through an email invitation.     | **Specified**       |
+| FR-4.7  | Band permissions are Owner, Admin and Member, with exactly one owner.                                                                         | **Specified**       |
+| FR-4.8  | Each musician in a line-up answers the booking: pending, confirmed or declined.                                                               | **Specified**       |
+| FR-4.9  | Booking a musician who is unavailable that day is allowed, with a warning.                                                                    | **Specified**       |
+| FR-4.10 | An admin can contact a musician through their preferred channel, and announce a gig to the band's group chat, through deep links and sharing. | **Specified**       |
 
-`packages/context-band` currently contains a single value-object stub. The bounded
-context is scaffolded, not started.
+### 5.4.1 Musician profile — _Specified_
+
+| ID     | Requirement                                                                                                                         | Status        |
+| :----- | :---------------------------------------------------------------------------------------------------------------------------------- | :------------ |
+| FR-8.1 | A user keeps a musician profile: name, email, optional phone, preferred contact channel, optional region.                           | **Specified** |
+| FR-8.2 | A profile lists 1–10 roles from a shared catalogue, one of them primary, each with an optional self-assessed level of 1 to 5 stars. | **Specified** |
+| FR-8.3 | A profile lists preferred styles from a shared catalogue.                                                                           | **Specified** |
+| FR-8.4 | A user records unavailability as whole-day ranges, applying to all their bands or to chosen ones.                                   | **Specified** |
+| FR-8.5 | Contact details are visible only to members of a band the user belongs to.                                                          | **Specified** |
+| FR-8.6 | Deleting an account deletes the profile and removes the user from every band.                                                       | **Specified** |
+
+Roles and styles are stable slugs rather than free text, so that a future musician search
+("guitarist, France, 3 stars or more") works on canonical values. The search itself, and its
+opt-in flag, are out of scope for now.
 
 ### 5.5 Discovery
 
@@ -257,6 +276,9 @@ Explicitly not part of the current product:
 - A native mobile application. The HLD names React Native as a future client; the web
   app is the only client today.
 - Real-time collaborative editing. AppSync subscriptions are named as a V2 capability.
+- Sending notifications (email, SMS, WhatsApp). The app prepares messages and opens the
+  user's own apps through deep links; it never sends on their behalf.
+- A searchable musician directory. Profiles are shaped for it (§5.4.1), nothing is indexed.
 
 ---
 
@@ -336,16 +358,16 @@ defined, the integration suite runs against `docker compose up` and passes (9 te
 
 ## 10. Open questions
 
-| #   | Question                                                                                                                                                                  | Blocks                       |
-| :-- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :--------------------------- |
-| Q1  | Where exactly do the Free / Standard / Premium / Orga boundaries fall, and at what price points?                                                                          | FR-6.2, all entitlement work |
-| Q2  | What does "public" mean operationally — listed and searchable, or merely reachable by link?                                                                               | FR-3.1, FR-3.2, §5.5         |
-| Q3  | Is a chart's visibility set per chart, or inherited from the band or organisation that owns it?                                                                           | FR-3.1, §5.4                 |
-| Q4  | Does a band own charts directly, or reference charts owned by members?                                                                                                    | FR-4.2, FR-4.4               |
-| Q5  | Is `tenantId` the user, the band, or the organisation? The authorizer currently sets `tenantId = userId` and marks multi-tenancy as a V2 TODO, which defers the decision. | §5.4, FR-1.4                 |
+| #   | Question                                                                                                                                                                 | Blocks                       |
+| :-- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------- |
+| Q1  | Where exactly do the Free / Standard / Premium / Orga boundaries fall, and at what price points?                                                                         | FR-6.2, all entitlement work |
+| Q2  | What does "public" mean operationally — listed and searchable, or merely reachable by link?                                                                              | FR-3.1, FR-3.2, §5.5         |
+| Q3  | Is a chart's visibility set per chart, or inherited from the band or organisation that owns it?                                                                          | FR-3.1, §5.4                 |
+| Q4  | ~~Does a band own charts directly, or reference charts owned by members?~~ **Answered:** the band owns them; a personal chart can be copied in.                          | —                            |
+| Q5  | ~~Is `tenantId` the user, the band, or the organisation?~~ **Answered:** the user (personal tenant) or the band (`band_<uuid>`), checked against membership per request. | —                            |
 
-Q5 is the one to settle first: band management cannot be designed until the tenancy
-boundary is decided, and the answer shapes every access-control rule that follows.
+Q4 and Q5 were answered by the [band management spec](./specs/2026-09-29-band-management-design.md)
+(§2, §3). Organisations remain undesigned; the spec leaves room for an `org_…` tenant kind.
 
 ---
 
@@ -353,7 +375,7 @@ boundary is decided, and the answer shapes every access-control rule that follow
 
 Ordered by what unblocks the most downstream work.
 
-1. **Settle tenancy (Q5).** Everything in band management and access control depends on it.
+1. ~~**Settle tenancy (Q5).**~~ Done in the band management spec: a tenant is a user or a band.
 2. **Add chart visibility.** A `visibility` field, the events to change it, and enforcement
    on read (FR-3.1 – FR-3.3). This is the paid tier's anchor feature.
 3. **Complete the chart lifecycle.** Expose update (FR-2.5) and archive (FR-2.6) — both
@@ -362,7 +384,9 @@ Ordered by what unblocks the most downstream work.
    in revision 1.1 (§9.1.2).
 5. ~~**Update the HLD and README** to Clerk and to the two-table design.~~ Done in revision
    1.1 (§9.1.1, §9.1.3).
-6. **Design the band context** (§5.4) once Q4 and Q5 are answered.
+6. **Build band management** (§5.4, §5.4.1) in the eight phases of the
+   [band management spec](./specs/2026-09-29-band-management-design.md#10-delivery-phases).
+   Phase 3 also completes the chart lifecycle's archive (item 3).
 7. **Finish chord parsing** for modifiers and additions (FR-2.8).
 8. **Build transposition** on top of `Scale` (FR-2.7).
 9. **Define tier entitlements** (Q1) and enforce them at the API boundary (FR-6.3).
