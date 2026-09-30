@@ -1,11 +1,15 @@
 export * as Addition from './Addition';
 export * as BandID from './BandID';
 export { Chord, type ChordImput, ChordTransform } from './Chord';
+export * as ContactChannel from './ContactChannel';
+export * as CountryCode from './CountryCode';
+export * as Email from './Email';
 export * as Extension from './Extension';
 export * as Modifier from './Modifier';
 export * as MusicianRole from './MusicianRole';
 export * as MusicStyle from './MusicStyle';
 export * as Note from './Note';
+export * as PhoneNumber from './PhoneNumber';
 export * as Quality from './Quality';
 export * as Scale from './Scale';
 export * as Section from './Section';

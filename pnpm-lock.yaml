@@ -218,7 +218,7 @@ importers:
         version: 0.7.9
       '@effect/language-service':
         specifier: latest
-        version: 0.87.2
+        version: 0.87.3
       '@effect/schema':
         specifier: ^0.75.5
         version: 0.75.5(effect@3.19.12)
@@ -581,6 +581,9 @@ importers:
       effect:
         specifier: ^3.19.12
         version: 3.19.12
+      libphonenumber-js:
+        specifier: ^1.13.14
+        version: 1.13.14
     devDependencies:
       '@effect/vitest':
         specifier: ^0.27.0
@@ -1164,8 +1167,8 @@ packages:
     engines: {node: '>=16.17.1'}
     hasBin: true
 
-  '@effect/language-service@0.87.2':
-    resolution: {integrity: sha512-CfiSoaVQO8pZgaMZGw5VvMvRGybsJ2LaSDoLYaqiVGvo/YYPYVR2GzUKY0h1NtIweq/+SQ5XLrvtzPIttWQ0GQ==}
+  '@effect/language-service@0.87.3':
+    resolution: {integrity: sha512-g1OmRBZF5chbW9QMNoirPo5Bb4zzU2HfP88tR7/VSZEUxHJ1/qVb8AQ0kUh2ggctLH1I715yCwP4gkw56PTjpQ==}
     hasBin: true
 
   '@effect/schema@0.75.5':
@@ -5617,6 +5620,9 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
+  libphonenumber-js@1.13.14:
+    resolution: {integrity: sha512-llihgCcx0BFLksecLP+x1J+6JDE1GsXS1RN/LoPF6qcwpeQcnjj0lcvZxY8AzbEpYwyZWPZW/nDuqkqzm3amiw==}
+
   lie@3.3.0:
     resolution: {integrity: sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==}
 
@@ -8611,7 +8617,7 @@ snapshots:
 
   '@effect/build-utils@0.7.9': {}
 
-  '@effect/language-service@0.87.2': {}
+  '@effect/language-service@0.87.3': {}
 
   '@effect/schema@0.75.5(effect@3.19.12)':
     dependencies:
@@ -13512,6 +13518,8 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
+  libphonenumber-js@1.13.14: {}
+
   lie@3.3.0:
     dependencies:
       immediate: 3.0.6
@@ -14902,7 +14910,7 @@ snapshots:
   tsx@4.21.0:
     dependencies:
       esbuild: 0.27.1
-      get-tsconfig: 4.13.0
+      get-tsconfig: 4.14.3
     optionalDependencies:
       fsevents: 2.3.3
 
