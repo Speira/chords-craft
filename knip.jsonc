@@ -43,7 +43,6 @@
     "@chordcraft/context-chart",
     "@aws-sdk/client-dynamodb", // context-user: used once its DynamoDB infrastructure lands
     "@aws-sdk/lib-dynamodb",
-    "ulid",
     "@clerk/themes",
     "@hookform/resolvers",
     "zod",
