@@ -47,4 +47,19 @@ describe('runResolver', () => {
     );
     error.mockRestore();
   });
+
+  it('keeps personal data out of the logs while naming the failing path', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const program = Schema.decodeUnknown(Schema.Struct({ phone: Schema.Number }))({
+      phone: '+33612345678',
+    });
+
+    await expect(runResolver('test', program)).rejects.toMatchObject({ errorType: 'VALIDATION' });
+
+    expect(warn).toHaveBeenCalled();
+    const logged = warn.mock.calls.flat().map((arg) => JSON.stringify(arg));
+    expect(logged.some((entry) => entry.includes('+33612345678'))).toBe(false);
+    expect(logged.some((entry) => entry.includes('phone'))).toBe(true);
+    warn.mockRestore();
+  });
 });
