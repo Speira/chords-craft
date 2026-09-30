@@ -24,6 +24,7 @@
       "#context-user/*": ["./packages/context-user/src/*"],
       "#api-auth/*": ["./packages/api-auth/src/*"],
       "#api-chart/*": ["./packages/api-chart/src/*"],
+      "#api-user/*": ["./packages/api-user/src/*"],
       "#client-web/*": ["./packages/client-web/src/*"],
       "#deployment/*": ["./packages/deployment/src/*"]
     },
