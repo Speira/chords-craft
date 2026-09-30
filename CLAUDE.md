@@ -139,8 +139,9 @@ Tests should verify **behavior**, not implementation details:
 - Files run in parallel; tests inside a file run in order. Opt into `describe.concurrent` only
   for I/O-bound suites without shared state
 - Integration tests (`test/infrastructure/**`) need a local DynamoDB (`docker compose up`)
-  and run via `pnpm test:integration`. They are their own vitest project named `integration`,
-  which the default run excludes with `--project '!integration'`
+  and run via `pnpm test:integration`. Each context has its own vitest project named
+  `integration-<context>` (`integration-chart`, `integration-user`); the default run excludes
+  them with `--project '!integration-*'`
 
 ## gstack
 

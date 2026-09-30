@@ -10,7 +10,7 @@
     "ci": "pnpm clean && pnpm install --frozen-lockfile && pnpm build",
     "clean": "node scripts/clean.mjs",
     "codegen": "pnpm -r --parallel --if-present run codegen",
-    "coverage": "vitest run --coverage --project '!integration'",
+    "coverage": "vitest run --coverage --project '!integration-*'",
     "dev": "pnpm --parallel --filter \"./packages/{api,client}-*\" run dev",
     "dev:web": "pnpm --filter @chordcraft/client-web dev",
     "format": "prettier --write . && pnpm lint:fix",
@@ -19,9 +19,9 @@
     "lint": "eslint --cache --cache-location node_modules/.cache/eslint/ .",
     "lint:fix": "pnpm lint --fix",
     "prepare": "lefthook install",
-    "test": "vitest --project '!integration'",
-    "test:integration": "vitest run --project integration",
-    "test:run": "vitest run --project '!integration'",
+    "test": "vitest --project '!integration-*'",
+    "test:integration": "vitest run --project 'integration-*'",
+    "test:run": "vitest run --project '!integration-*'",
     "typecheck": "pnpm -r --parallel --if-present run typecheck"
   },
   "devDependencies": {
