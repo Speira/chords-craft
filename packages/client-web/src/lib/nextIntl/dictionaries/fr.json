@@ -194,6 +194,7 @@
       "CONFLICT": "Votre profil a changé dans un autre onglet. Rechargez et réessayez.",
       "INTERNAL": "Une erreur est survenue. Réessayez.",
       "NETWORK": "Impossible de joindre le serveur.",
+      "NOT_FOUND": "Cet élément n'existe plus. Rechargez la page.",
       "VALIDATION": "Vérifiez les champs indiqués."
     },
     "from": "Du",

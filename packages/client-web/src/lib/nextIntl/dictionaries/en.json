@@ -194,6 +194,7 @@
       "CONFLICT": "Your profile changed in another tab. Reload and try again.",
       "INTERNAL": "Something went wrong. Please try again.",
       "NETWORK": "Could not reach the server.",
+      "NOT_FOUND": "This entry no longer exists. Reload the page.",
       "VALIDATION": "Please check the highlighted fields."
     },
     "from": "From",
