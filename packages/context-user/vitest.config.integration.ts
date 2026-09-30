@@ -11,8 +11,8 @@ const config: ViteUserConfig = {
   resolve: { alias: workspaceAliases },
   test: {
     setupFiles: ['./setupTests.ts'],
-    include: ['test/**/*.test.ts'],
-    exclude: ['test/infrastructure/**/*.test.ts'],
+    include: ['test/infrastructure/**/*.test.ts'],
+    sequence: { concurrent: false },
   },
 };
 

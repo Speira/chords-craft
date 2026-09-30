@@ -528,16 +528,28 @@ importers:
 
   packages/context-user:
     dependencies:
+      '@aws-sdk/client-dynamodb':
+        specifier: ^3.948.0
+        version: 3.948.0
+      '@aws-sdk/lib-dynamodb':
+        specifier: ^3.948.0
+        version: 3.948.0(@aws-sdk/client-dynamodb@3.948.0)
+      '@chordcraft/shared':
+        specifier: workspace:*
+        version: link:../shared
       effect:
         specifier: ^3.19.12
         version: 3.19.12
+      ulid:
+        specifier: ^3.0.2
+        version: 3.0.2
     devDependencies:
-      '@effect/vitest':
-        specifier: ^0.27.0
-        version: 0.27.0(effect@3.19.12)(vitest@4.0.16(@types/node@24.10.4)(jiti@2.7.0)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.9.1))
+      '@types/node':
+        specifier: ^22.19.2
+        version: 22.19.2
       vitest:
-        specifier: ^4.0.16
-        version: 4.0.16(@types/node@24.10.4)(jiti@2.7.0)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.9.1)
+        specifier: ^4.0.9
+        version: 4.0.16(@types/node@22.19.2)(jiti@2.7.0)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.9.1)
 
   packages/deployment:
     dependencies:
@@ -8628,11 +8640,6 @@ snapshots:
     dependencies:
       effect: 3.19.12
       vitest: 3.2.4(@types/debug@4.1.12)(@types/node@24.10.4)(jiti@2.7.0)(lightningcss@1.30.2)(supports-color@8.1.1)(tsx@4.21.0)(yaml@2.9.1)
-
-  '@effect/vitest@0.27.0(effect@3.19.12)(vitest@4.0.16(@types/node@24.10.4)(jiti@2.7.0)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.9.1))':
-    dependencies:
-      effect: 3.19.12
-      vitest: 4.0.16(@types/node@24.10.4)(jiti@2.7.0)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.9.1)
 
   '@effect/vitest@0.30.0(effect@3.19.12)(vitest@5.0.1)':
     dependencies:

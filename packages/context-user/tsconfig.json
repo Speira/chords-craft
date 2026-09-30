@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["src", "setupTests.ts", "vitest.config.ts"],
+  "include": ["src", "test", "setupTests.ts", "vitest.config.ts", "vitest.config.integration.ts"],
   "compilerOptions": {
     "noEmit": true,
     "types": ["node"]
