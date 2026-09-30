@@ -109,5 +109,7 @@ Suggested order, one PR per package:
   `Unexpected input(s) 'require-lockfile'` and ignores it, so a stale `pnpm-lock.yaml` passes.
   Making the intent real means another mechanism (`pnpm install --frozen-lockfile`, which `pnpm ci`
   already uses).
+- **Lambda runtimes**: `AuthFunction` and `ChartFunction` still run on Node 18, which AWS has
+  deprecated. They must move to the same runtime as `UserFunction` (Node 22).
 - **`pnpm-workspace.yaml` catalog**: dependency versions are still per package; the template
   centralises them under `catalog:`.
