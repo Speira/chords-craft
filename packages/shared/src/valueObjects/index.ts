@@ -1,4 +1,5 @@
 export * as Addition from './Addition';
+export * as BandID from './BandID';
 export { Chord, type ChordImput, ChordTransform } from './Chord';
 export * as Extension from './Extension';
 export * as Modifier from './Modifier';
@@ -11,3 +12,4 @@ export * as Section from './Section';
 export * as SkillLevel from './SkillLevel';
 export * as Structure from './Structure';
 export * as TenantID from './TenantID';
+export * as UserID from './UserID';
