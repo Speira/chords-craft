@@ -31,10 +31,10 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "effect": "^3.19.12"
+    "effect": "^3.22.2"
   },
   "devDependencies": {
-    "@effect/vitest": "^0.27.0",
+    "@effect/vitest": "^0.30.0",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   },
