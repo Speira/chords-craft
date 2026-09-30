@@ -132,17 +132,12 @@ describe('DynamoDBUserRepository', () => {
     ).toEqual([id]);
   });
 
-  it("deletes an entry, and never lists another user's entries", async () => {
-    const ana = unavailability('user_ana', '2026-08-10', '2026-08-12');
-    const bob = unavailability('user_bob', '2026-08-10', '2026-08-12');
+  it("never finds or lists another user's entries", async () => {
+    const ana = unavailability('user_isoana', '2026-08-10', '2026-08-12');
+    const bob = unavailability('user_isobob', '2026-08-10', '2026-08-12');
     await Effect.runPromise(repository.saveUnavailability(ana));
     await Effect.runPromise(repository.saveUnavailability(bob));
 
-    await Effect.runPromise(repository.deleteUnavailability(ana));
-
-    expect(await Effect.runPromise(repository.findUnavailability(ana.userId, ana.id))).toEqual(
-      Option.none(),
-    );
     expect(
       (
         await Effect.runPromise(
@@ -150,5 +145,24 @@ describe('DynamoDBUserRepository', () => {
         )
       ).map((item) => item.id),
     ).toEqual([bob.id]);
+    expect(await Effect.runPromise(repository.findUnavailability(bob.userId, ana.id))).toEqual(
+      Option.none(),
+    );
+  });
+
+  it('deletes an entry', async () => {
+    const entry = unavailability('user_delete', '2026-08-10', '2026-08-12');
+    await Effect.runPromise(repository.saveUnavailability(entry));
+
+    await Effect.runPromise(repository.deleteUnavailability(entry));
+
+    expect(await Effect.runPromise(repository.findUnavailability(entry.userId, entry.id))).toEqual(
+      Option.none(),
+    );
+    expect(
+      await Effect.runPromise(
+        repository.listUnavailability(entry.userId, range('2026-08-01', '2026-08-31')),
+      ),
+    ).toEqual([]);
   });
 });
