@@ -2,6 +2,7 @@ const ERROR_KEYS = {
   CONFLICT: 'profile.errors.CONFLICT',
   INTERNAL: 'profile.errors.INTERNAL',
   NETWORK: 'profile.errors.NETWORK',
+  NOT_FOUND: 'profile.errors.NOT_FOUND',
   VALIDATION: 'profile.errors.VALIDATION',
 } as const;
 
