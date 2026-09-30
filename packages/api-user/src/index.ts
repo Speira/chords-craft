@@ -4,11 +4,12 @@ import type { AppSyncResolverEvent } from 'aws-lambda';
 interface ResolverContext {
   userId?: string;
   email?: string;
+  emailVerified?: string;
 }
 
 /**
  * AppSync entry point for musician profiles. The caller is always the authenticated user: `userId`
- * and `email` from the authorizer overwrite anything the client sent.
+ * and the verified `email` from the authorizer overwrite anything the client sent.
  */
 export async function handler(
   event: AppSyncResolverEvent<Record<string, unknown>>,
@@ -23,7 +24,9 @@ export async function handler(
     throw new Error('Unauthorized: No user');
   }
 
-  const input = { ...event.arguments, userId: context.userId, email: context.email ?? '' };
+  // An unverified address is treated as missing: saveMyProfile then fails VALIDATION on `email`.
+  const email = context.emailVerified === 'true' ? (context.email ?? '') : '';
+  const input = { ...event.arguments, userId: context.userId, email };
   const { resolvers } = UserInterface.graphql;
 
   switch (fieldName) {
