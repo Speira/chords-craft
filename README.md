@@ -48,7 +48,7 @@ Built with event sourcing, DDD, and serverless architecture.
 ```
 
 `context-band` holds only its build setup and a value-object stub; it is parked in
-`knip.jsonc` until it is built. Their design is in the
+`knip.jsonc` until it is built. Its design is in the
 [band management spec](documentation/specs/2026-09-29-band-management-design.md).
 
 ## Key Patterns
