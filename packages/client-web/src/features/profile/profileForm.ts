@@ -1,3 +1,5 @@
+import { MusicianRole, MusicStyle } from '@chordcraft/shared/valueObjects';
+
 import type { ProfileView, SaveProfileInput } from './types';
 
 /** The form edits strings; an empty string means "not set". */
@@ -39,13 +41,13 @@ export function toSaveInput(values: ProfileFormValues): SaveProfileInput {
     region: country === null ? null : { country, area: orNull(values.area) },
     roles: values.roles.map((tag) => ({
       role: tag.role as SaveProfileInput['roles'][number]['role'],
-      detail: orNull(tag.detail),
+      detail: tag.role === MusicianRole.OTHER ? orNull(tag.detail) : null,
       isPrimary: tag.isPrimary,
       level: (orNull(tag.level) as SaveProfileInput['roles'][number]['level']) ?? null,
     })),
     styles: values.styles.map((tag) => ({
       style: tag.style as SaveProfileInput['styles'][number]['style'],
-      detail: orNull(tag.detail),
+      detail: tag.style === MusicStyle.OTHER ? orNull(tag.detail) : null,
     })),
   };
 }
