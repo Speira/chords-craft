@@ -13,7 +13,7 @@
 >
 > **Revision 1.2** adds the band and user contexts from the
 > [band management spec](./specs/2026-09-29-band-management-design.md): the tenancy model
-> (§3.2) and the `bands` and `users` tables (§4.3). All of it is _Planned_.
+> (§3.2) and the `bands` and `users` tables (§4.3). The `api-user` Lambda and the `users` table are built but not deployed; the rest is _Planned_.
 
 ---
 
@@ -79,7 +79,8 @@ authorizer, whose 300 s TTL would let a removed member keep access. Tenant isola
 property of the projection key (`TENANT#<TenantID>`).
 
 Two new Lambdas, `api-user` and `api-band`, sit next to `api-chart` behind the same
-authorizer. The authorizer additionally passes the user's verified email (a custom Clerk
+authorizer. `api-user` is _Built_ (not deployed): it routes the six musician profile and
+unavailability fields and takes `userId` and `email` from the authorizer; `api-band` is _Planned_. The authorizer additionally passes the user's verified email (a custom Clerk
 session claim), which accepting a band invitation requires.
 
 ---
@@ -116,7 +117,7 @@ tenant isolation a property of the key rather than of a filter.
 charts newest first. The index projects every attribute because a full `Chart` is rebuilt
 from it. `findAllByTenant` reads the base table when archived charts must be included.
 
-### 4.3 Bands and users — _Planned_
+### 4.3 Bands and users — _Partial_
 
 Designed in the [band management spec](./specs/2026-09-29-band-management-design.md) (§5).
 Unlike charts, bands and profiles are **state-stored**: their history is not part of the
@@ -138,7 +139,7 @@ conditional writes (optimistic concurrency).
 - **GSI2** (my invitations): `EMAIL#<Email>` → `BAND#<BandID>`, on the invitation.
 - **LSI1** (calendar): `GIGAT#<StartsAtUtc>#<GigID>`, queried by range, strongly consistent.
 
-**`{stack}-users`**
+**`{stack}-users`** — _Built_ (not deployed)
 
 | Entity             | PK              | SK             | Access Pattern                                  |
 | :----------------- | :-------------- | :------------- | :---------------------------------------------- |
