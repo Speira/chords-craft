@@ -118,7 +118,7 @@ export class LambdasConstruct extends Construct {
         removalPolicy: cdk.RemovalPolicy.DESTROY,
       }),
       memorySize: 512,
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_22_X,
       timeout: cdk.Duration.seconds(10),
       tracing: lambda.Tracing.ACTIVE,
     });
