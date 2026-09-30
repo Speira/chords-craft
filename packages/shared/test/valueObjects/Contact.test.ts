@@ -59,6 +59,38 @@ describe('CountryCode', () => {
     expect(CountryCode.ALL).toContain('FR');
   });
 
+  // Stored `region.country` values must keep decoding: a libphonenumber-js upgrade that drops one
+  // of these codes would make those stored items fail to decode.
+  it('keeps the common codes users have stored', () => {
+    expect(CountryCode.ALL).toEqual(
+      expect.arrayContaining([
+        'FR',
+        'BE',
+        'CH',
+        'LU',
+        'MC',
+        'CA',
+        'GB',
+        'IE',
+        'DE',
+        'ES',
+        'IT',
+        'PT',
+        'NL',
+        'US',
+        'MA',
+        'DZ',
+        'TN',
+        'SN',
+        'CI',
+        'CM',
+        'RE',
+        'GP',
+        'MQ',
+      ]),
+    );
+  });
+
   it('rejects lowercase, unknown and three-letter codes', () => {
     expect(decode('fr')._tag).toBe('Left');
     expect(decode('XX')._tag).toBe('Left');
