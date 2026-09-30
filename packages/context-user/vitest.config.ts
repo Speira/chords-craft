@@ -1,21 +1,18 @@
-import * as path from 'node:path';
+import tsconfigPaths from 'vite-tsconfig-paths';
 import type { ViteUserConfig } from 'vitest/config';
 
+import { workspaceAliases } from '../../vitest.shared';
+
 const config: ViteUserConfig = {
+  plugins: [tsconfigPaths()],
   esbuild: {
     target: 'es2020',
   },
-  resolve: {
-    alias: {
-      '~': path.resolve(__dirname, 'src'),
-    },
-  },
+  resolve: { alias: workspaceAliases },
   test: {
-    setupFiles: [path.join(__dirname, 'setupTests.ts')],
-    sequence: {
-      concurrent: true,
-    },
+    setupFiles: ['./setupTests.ts'],
     include: ['test/**/*.test.ts'],
+    exclude: ['test/infrastructure/**/*.test.ts'],
   },
 };
 

@@ -47,6 +47,7 @@ const config: ViteUserConfig = {
       project('api-auth'),
       project('api-chart'),
       project('context-chart'),
+      project('context-user'),
       project('shared'),
       integrationProject,
     ],
