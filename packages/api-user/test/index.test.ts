@@ -76,6 +76,22 @@ describe('api-user handler', { concurrent: false }, () => {
   });
 
   it.each([
+    ['unverified', { emailVerified: 'false' }],
+    ['missing', {}],
+  ])('passes an empty email when the verification claim is %s', async (_label, claim) => {
+    await handler(
+      makeEvent({
+        fieldName: 'saveMyProfile',
+        identity: { resolverContext: { userId: 'user_1', email: 'a@b.co', ...claim } },
+      }),
+    );
+
+    expect(resolvers.saveMyProfile).toHaveBeenCalledWith(
+      expect.objectContaining({ userId: 'user_1', email: '' }),
+    );
+  });
+
+  it.each([
     'myProfile',
     'myUnavailability',
     'saveMyProfile',

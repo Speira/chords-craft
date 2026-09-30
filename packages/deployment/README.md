@@ -60,5 +60,5 @@ Customize session token**, and set:
 ```
 
 Check the preview shows `email_verified` as a boolean. If it shows `null`, every user is
-treated as unverified: profiles still work, but accepting a band invitation (phase 5) is
-refused. Without `email`, saving a profile fails with a `VALIDATION` error on `email`.
+treated as unverified and saving a profile fails with a `VALIDATION` error on `email` until the
+claim resolves to `true`. Accepting a band invitation (phase 5) also requires a verified email.
