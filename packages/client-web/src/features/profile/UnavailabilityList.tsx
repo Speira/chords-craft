@@ -23,13 +23,22 @@ export function UnavailabilityList() {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [reason, setReason] = useState('');
+  const [isAdding, setIsAdding] = useState(false);
 
   const onAdd = async (event: React.FormEvent) => {
     event.preventDefault();
-    await add({ from, to: to || from, reason: reason.trim() === '' ? null : reason.trim() });
-    setFrom('');
-    setTo('');
-    setReason('');
+    setIsAdding(true);
+    const isAdded = await add({
+      from,
+      to: to || from,
+      reason: reason.trim() === '' ? null : reason.trim(),
+    });
+    setIsAdding(false);
+    if (isAdded) {
+      setFrom('');
+      setTo('');
+      setReason('');
+    }
   };
 
   return (
@@ -53,17 +62,32 @@ export function UnavailabilityList() {
       <form onSubmit={onAdd} className="grid grid-cols-[1fr_1fr_2fr_auto] items-end gap-2">
         <Label>
           {t('profile.from')}
-          <Input type="date" required value={from} onChange={(e) => setFrom(e.target.value)} />
+          <Input
+            type="date"
+            required
+            min={period.from}
+            max={period.to}
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+          />
         </Label>
         <Label>
           {t('profile.to')}
-          <Input type="date" min={from} value={to} onChange={(e) => setTo(e.target.value)} />
+          <Input
+            type="date"
+            min={from || period.from}
+            max={period.to}
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+          />
         </Label>
         <Label>
           {t('profile.reason')}
           <Input maxLength={100} value={reason} onChange={(e) => setReason(e.target.value)} />
         </Label>
-        <Button type="submit">{t('profile.addUnavailability')}</Button>
+        <Button type="submit" disabled={isAdding}>
+          {t('profile.addUnavailability')}
+        </Button>
       </form>
       {error && (
         <p className="text-destructive" role="alert">

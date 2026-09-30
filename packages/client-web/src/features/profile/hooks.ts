@@ -109,13 +109,15 @@ export function useMyUnavailability(range: { from: string; to: string }) {
     void reload();
   }, [reload]);
 
-  const add = async (input: UnavailabilityInput) => {
+  const add = async (input: UnavailabilityInput): Promise<boolean> => {
     setError(null);
     try {
       await request(queries.ADD_UNAVAILABILITY, { input });
       await reload();
+      return true;
     } catch (err) {
       setError(readGraphQLFailure(err));
+      return false;
     }
   };
 
