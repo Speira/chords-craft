@@ -9,6 +9,7 @@ import K from '../constants';
 
 export interface AppSyncApiProps {
   readonly chartFunction: lambda.IFunction;
+  readonly userFunction: lambda.IFunction;
   readonly authorizerFunction: lambda.IFunction;
   readonly isProduction: boolean;
 }
@@ -62,5 +63,22 @@ export class AppSynConstruct extends Construct {
       typeName: 'Mutation',
       fieldName: 'createChart',
     });
+
+    const userDataSource = this.graphqlApi.addLambdaDataSource(
+      'UserDataSource',
+      props.userFunction,
+    );
+
+    for (const fieldName of ['myProfile', 'myUnavailability']) {
+      userDataSource.createResolver(`${fieldName}Resolver`, { typeName: 'Query', fieldName });
+    }
+    for (const fieldName of [
+      'saveMyProfile',
+      'addUnavailability',
+      'updateUnavailability',
+      'removeUnavailability',
+    ]) {
+      userDataSource.createResolver(`${fieldName}Resolver`, { typeName: 'Mutation', fieldName });
+    }
   }
 }

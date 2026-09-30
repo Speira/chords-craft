@@ -40,6 +40,7 @@
     "effect", // re-exported types only, in api-auth and api-chart
     "@chordcraft/shared",
     "@chordcraft/api-chart", // deployment bundles them as Lambda assets
+    "@chordcraft/api-user",
     "@chordcraft/context-chart",
     "@clerk/themes",
     "@hookform/resolvers",

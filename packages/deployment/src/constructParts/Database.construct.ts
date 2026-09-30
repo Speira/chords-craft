@@ -10,6 +10,7 @@ export interface DatabaseProps {
 export class DatabaseConstruct extends Construct {
   public readonly eventsTable: dynamodb.Table;
   public readonly projectionTable: dynamodb.Table;
+  public readonly usersTable: dynamodb.Table;
 
   constructor(scope: Construct, id: string, props: DatabaseProps) {
     super(scope, id);
@@ -45,6 +46,23 @@ export class DatabaseConstruct extends Construct {
       sortKey: { name: 'GSI1SK', type: dynamodb.AttributeType.STRING },
     });
 
+    this.usersTable = new dynamodb.Table(this, 'UsersTable', {
+      tableName: `${stackName}-users`,
+      partitionKey: { name: 'PK', type: dynamodb.AttributeType.STRING },
+      sortKey: { name: 'SK', type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy,
+      pointInTimeRecoverySpecification: {
+        pointInTimeRecoveryEnabled: true,
+      },
+    });
+
+    // Unavailability by start date; a local index keeps range reads strongly consistent.
+    this.usersTable.addLocalSecondaryIndex({
+      indexName: 'LSI1',
+      sortKey: { name: 'LSI1SK', type: dynamodb.AttributeType.STRING },
+    });
+
     // Outputs
     new cdk.CfnOutput(this, 'EventsTableName', {
       value: this.eventsTable.tableName,
@@ -53,5 +71,7 @@ export class DatabaseConstruct extends Construct {
     new cdk.CfnOutput(this, 'ProjectionTableName', {
       value: this.projectionTable.tableName,
     });
+
+    new cdk.CfnOutput(this, 'UsersTableName', { value: this.usersTable.tableName });
   }
 }
