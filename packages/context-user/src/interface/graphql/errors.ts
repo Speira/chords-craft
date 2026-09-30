@@ -45,11 +45,44 @@ export function toGraphQLError(error: ResolverError): GraphQLDomainError {
   }
 }
 
+function parseErrorPaths(error: ParseResult.ParseError): Array<string> {
+  return ParseResult.ArrayFormatter.formatErrorSync(error).map((issue) => issue.path.join('.'));
+}
+
+/**
+ * What is safe to log: tags and failing paths only. A ParseError's messages and a UserParseError's
+ * reason carry user input or a whole stored item, so they never reach the logs (spec 8.2).
+ */
+function describeFailure(error: ResolverError): Record<string, unknown> {
+  if (error instanceof ParseResult.ParseError) {
+    return { tag: 'ParseError', paths: parseErrorPaths(error) };
+  }
+  switch (error._tag) {
+    case 'UserParseError':
+      return {
+        tag: error._tag,
+        ...(error.reason instanceof ParseResult.ParseError
+          ? { paths: parseErrorPaths(error.reason) }
+          : {}),
+      };
+    case 'UserReadError':
+    case 'UserWriteError':
+      return {
+        tag: error._tag,
+        ...(error.reason instanceof Error
+          ? { cause: { name: error.reason.name, message: error.reason.message } }
+          : {}),
+      };
+    default:
+      return { tag: error._tag };
+  }
+}
+
 function logFailure(label: string, error: ResolverError, errorType: ErrorType): void {
-  if (errorType === 'INTERNAL') console.error(`${label} failed`, error);
+  if (errorType === 'INTERNAL') console.error(`${label} failed`, describeFailure(error));
   // Invalid client input is a 400-class mistake, not a server fault.
   else if (errorType === 'VALIDATION' || errorType === 'FORBIDDEN')
-    console.warn(`${label} rejected`, error);
+    console.warn(`${label} rejected`, describeFailure(error));
 }
 
 /** Runs a resolver program and throws what AppSync should show; never leaks a store error. */
