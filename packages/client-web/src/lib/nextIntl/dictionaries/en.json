@@ -205,6 +205,7 @@
     "primary": "Main role",
     "reason": "Reason (optional)",
     "remove": "Remove",
+    "retry": "Retry",
     "roles": "What I play",
     "rules": {
       "DETAIL_ONLY_FOR_OTHER": "Only \"Other\" takes a description.",

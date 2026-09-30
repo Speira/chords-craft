@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Button, Input, Label, Typography } from '#client-web/components';
 import { useAppTranslations } from '#client-web/lib/nextIntl/useAppTranslation';
 
+import { errorMessageKey } from './errorMessages';
 import { useMyUnavailability } from './hooks';
 
 /** Today and the following 365 days: the widest window one query allows (366 days). */
@@ -66,7 +67,8 @@ export function UnavailabilityList() {
       </form>
       {error && (
         <p className="text-destructive" role="alert">
-          {error.message}
+          {t(errorMessageKey(error.errorType))}
+          {error.errorType === 'VALIDATION' ? ` (${error.message})` : null}
         </p>
       )}
     </section>

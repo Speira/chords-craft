@@ -15,6 +15,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { Button, Input, Label, Typography } from '#client-web/components';
 import { useAppTranslations } from '#client-web/lib/nextIntl/useAppTranslation';
 
+import { errorMessageKey } from './errorMessages';
 import { useSaveMyProfile } from './hooks';
 import { type ProfileFormValues, toFormValues, toSaveInput } from './profileForm';
 import type { ProfileView } from './types';
@@ -166,8 +167,7 @@ export function ProfileForm({ email, profile }: { email: string; profile: Profil
 
       {error && (
         <p className="text-destructive" role="alert">
-          {ruleMessage ??
-            t(ERROR_KEYS[error.errorType as keyof typeof ERROR_KEYS] ?? ERROR_KEYS.INTERNAL)}
+          {ruleMessage ?? t(errorMessageKey(error.errorType))}
           {error.errorType === 'VALIDATION' && ruleMessage === null ? ` (${error.message})` : null}
         </p>
       )}
@@ -187,11 +187,4 @@ const RULE_KEYS = {
   DUPLICATE_STYLE: 'profile.rules.DUPLICATE_STYLE',
   PHONE_REQUIRED_FOR_CHANNEL: 'profile.rules.PHONE_REQUIRED_FOR_CHANNEL',
   SINGLE_PRIMARY_ROLE: 'profile.rules.SINGLE_PRIMARY_ROLE',
-} as const;
-
-const ERROR_KEYS = {
-  CONFLICT: 'profile.errors.CONFLICT',
-  INTERNAL: 'profile.errors.INTERNAL',
-  NETWORK: 'profile.errors.NETWORK',
-  VALIDATION: 'profile.errors.VALIDATION',
 } as const;
