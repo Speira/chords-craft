@@ -2,6 +2,8 @@ export * as Addition from './Addition';
 export { Chord, type ChordImput, ChordTransform } from './Chord';
 export * as Extension from './Extension';
 export * as Modifier from './Modifier';
+export * as MusicianRole from './MusicianRole';
+export * as MusicStyle from './MusicStyle';
 export * as Note from './Note';
 export * as Quality from './Quality';
 export * as Scale from './Scale';
