@@ -45,3 +45,20 @@ The CDK ships `packages/api-*/build` directly as the Lambda code asset
 (`lambda.Code.fromAsset`, no bundler), so `pnpm build` at the root is part of the deploy
 path. Making the packages source-first would mean bundling the lambdas first — tracked as a
 deliberate deviation in [MIGRATION.md](../../MIGRATION.md).
+
+## Clerk configuration
+
+The authorizer reads two custom claims that Clerk's default session token does not carry. In
+the Clerk dashboard (both the development and the production instance): **Sessions →
+Customize session token**, and set:
+
+```json
+{
+  "email": "{{user.primary_email_address}}",
+  "email_verified": "{{user.email_verified}}"
+}
+```
+
+Check the preview shows `email_verified` as a boolean. If it shows `null`, every user is
+treated as unverified: profiles still work, but accepting a band invitation (phase 5) is
+refused. Without `email`, saving a profile fails with a `VALIDATION` error on `email`.
