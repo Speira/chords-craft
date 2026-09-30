@@ -4,5 +4,6 @@ export default {
     GRAPHQL_SCHEMAS: 'generated/schema.graphql',
     PACKAGES_API_AUTH: '../../api-auth',
     PACKAGES_API_CHART: '../../api-chart',
+    PACKAGES_API_USER: '../../api-user',
   },
 };

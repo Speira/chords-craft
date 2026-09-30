@@ -8,7 +8,7 @@ AppSync GraphQL API, the Lambda functions and their roles, the S3 buckets and th
 ```bash
 bin/
   ├── app.ts              # CDK entry point (see cdk.json)
-  └── mergeSchemas.ts     # Concatenates each context's schema into src/generated
+  └── mergeSchemas.ts     # Merges each context's schema into src/generated
 src/
   ├── ChordsChartStack.ts # The stack, composed from the constructs below
   ├── constants.ts
@@ -19,7 +19,7 @@ src/
 ## The generated schema
 
 `src/generated/schema.graphql` is **build output**, not a source file: `mergeSchemas.ts`
-concatenates `packages/*/src/interface/graphql/schema.graphql` for every context listed in
+merges (with `@graphql-tools/merge`, so each root type is declared once) `packages/*/src/interface/graphql/schema.graphql` for every context listed in
 its `CONTEXTS_PATHS`. Edit the context's schema, then regenerate:
 
 ```sh
