@@ -184,16 +184,16 @@ answers Q4 and Q5: **a band is a tenant and owns its charts**. Nothing is implem
 | FR-4.9  | Booking a musician who is unavailable that day is allowed, with a warning.                                                                    | **Specified**       |
 | FR-4.10 | An admin can contact a musician through their preferred channel, and announce a gig to the band's group chat, through deep links and sharing. | **Specified**       |
 
-### 5.4.1 Musician profile — _Specified_
+### 5.4.1 Musician profile — _Partial_
 
-| ID     | Requirement                                                                                                                         | Status        |
-| :----- | :---------------------------------------------------------------------------------------------------------------------------------- | :------------ |
-| FR-8.1 | A user keeps a musician profile: name, email, optional phone, preferred contact channel, optional region.                           | **Specified** |
-| FR-8.2 | A profile lists 1–10 roles from a shared catalogue, one of them primary, each with an optional self-assessed level of 1 to 5 stars. | **Specified** |
-| FR-8.3 | A profile lists preferred styles from a shared catalogue.                                                                           | **Specified** |
-| FR-8.4 | A user records unavailability as whole-day ranges, applying to all their bands or to chosen ones.                                   | **Specified** |
-| FR-8.5 | Contact details are visible only to members of a band the user belongs to.                                                          | **Specified** |
-| FR-8.6 | Deleting an account deletes the profile and removes the user from every band.                                                       | **Specified** |
+| ID     | Requirement                                                                                                                                                                             | Status                            |
+| :----- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------- |
+| FR-8.1 | A user keeps a musician profile: name, email, optional phone, preferred contact channel, optional region.                                                                               | **Partial** — built, not deployed |
+| FR-8.2 | A profile lists 1–10 roles from a shared catalogue, one of them primary, each with an optional self-assessed level of 1 to 5 stars.                                                     | **Partial** — built, not deployed |
+| FR-8.3 | A profile lists preferred styles from a shared catalogue.                                                                                                                               | **Partial** — built, not deployed |
+| FR-8.4 | A user records unavailability as whole-day ranges, applying to all their bands or to chosen ones. Whole-day ranges for all bands; scoping to chosen bands arrives with bands (phase 2). | **Partial**                       |
+| FR-8.5 | Contact details are visible only to members of a band the user belongs to.                                                                                                              | **Specified**                     |
+| FR-8.6 | Deleting an account deletes the profile and removes the user from every band.                                                                                                           | **Specified**                     |
 
 Roles and styles are stable slugs rather than free text, so that a future musician search
 ("guitarist, France, 3 stars or more") works on canonical values. The search itself, and its
@@ -262,7 +262,25 @@ type Mutation {
 }
 ```
 
-No update, archive, delete, share or search operation is exposed.
+No update, archive, delete, share or search operation is exposed for charts.
+
+The `context-user` API (musician profiles, built, not deployed) adds, for the caller only:
+
+```graphql
+type Query {
+  myProfile: MusicianProfile
+  myUnavailability(from: AWSDate!, to: AWSDate!): [Unavailability!]!
+}
+
+type Mutation {
+  saveMyProfile(input: SaveProfileInput!): MusicianProfile!
+  addUnavailability(input: UnavailabilityInput!): Unavailability!
+  updateUnavailability(id: ID!, input: UnavailabilityInput!): Unavailability!
+  removeUnavailability(id: ID!): Boolean!
+}
+```
+
+Errors carry an `errorType` of `VALIDATION`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT` or `INTERNAL`.
 
 ---
 
