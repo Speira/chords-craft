@@ -140,10 +140,13 @@ conditional writes (optimistic concurrency).
 
 **`{stack}-users`**
 
-| Entity             | PK              | SK                    | Access Pattern                                             |
-| :----------------- | :-------------- | :-------------------- | :--------------------------------------------------------- |
-| **Profile**        | `USER#<UserID>` | `PROFILE`             | A musician's profile, roles, levels and styles.            |
-| **Unavailability** | `USER#<UserID>` | `UNAVAIL#<From>#<ID>` | Range query from `D − 366 days` to `D` (spans are capped). |
+| Entity             | PK              | SK             | Access Pattern                                  |
+| :----------------- | :-------------- | :------------- | :---------------------------------------------- |
+| **Profile**        | `USER#<UserID>` | `PROFILE`      | A musician's profile, roles, levels and styles. |
+| **Unavailability** | `USER#<UserID>` | `UNAVAIL#<ID>` | One entry, edited with a single `Put`.          |
+
+- **LSI1** (unavailability by date): `UNAVAIL#<From>#<ID>`, queried from `D − 365 days` to `D`
+  (a range spans at most 366 days), strongly consistent.
 
 Identities still live in Clerk; the profile holds only what the product needs beyond it.
 Organisation boards (v1.0) remain deferred.

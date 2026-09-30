@@ -137,8 +137,8 @@ changes once published; its label comes from `next-intl`, so stored data carries
 `gospel`, `latin`, `reggae`, `hip-hop`, `electronic`, `classical`, `folk`, `metal`, `world`,
 `other` (+ `detail`).
 
-**`SkillLevel`** — optional, per role, displayed as stars. Stored as the slug plus its `rank`,
-so "rank ≥ 3" is a range condition. Absent means _not specified_; there is no zero.
+**`SkillLevel`** — optional, per role, displayed as stars. Stored as the slug; `rankOf` gives its
+rank (1–5), which a future search index stores so that "rank ≥ 3" is a range condition. Absent means _not specified_; there is no zero.
 
 | Rank | Slug           | Shown as                              |
 | :--: | :------------- | :------------------------------------ |
@@ -266,17 +266,19 @@ not contend on the band record.
 
 ### 4.5 Ports between contexts
 
-Dependencies go one way. Each is an Effect `Context.Tag` declared in the consuming domain and
-implemented in its infrastructure by calling the other package's public API. Tests supply
-in-memory layers.
+A `context-*` package never imports another `context-*` package; the ESLint module
+boundaries enforce it. So a port is an Effect `Context.Tag` **declared in the consuming
+domain**, and its adapter lives in the **`api-*` package** that wires the Lambda, which may
+depend on several contexts. Tests supply in-memory layers.
 
 ```
-api-chart     ──► context-band   BandAccess            (who may act in a band tenant)
-context-band  ──► context-user   MusicianDirectory     (names, contacts, unavailability)
-context-band  ──► context-chart  RepertoireReader      (is this chart active in the band tenant?)
-context-user  ──► shared
-context-chart ──► shared         (never imports band or user)
+port (declared in)                    adapter (lives in)   calls
+BandAccess        (context-band)      api-chart            context-band's public API
+MusicianDirectory (context-band)      api-band             context-user's public API
+RepertoireReader  (context-band)      api-band             context-chart's public API
 ```
+
+`context-user` and `context-chart` depend only on `shared`.
 
 ---
 
@@ -319,15 +321,19 @@ the chart tables.
 
 ### 5.2 `{stack}-users`
 
-| Item           | PK              | SK                    | Attributes                                                           |
-| :------------- | :-------------- | :-------------------- | :------------------------------------------------------------------- |
-| Profile        | `USER#<userId>` | `PROFILE`             | name, email, phone, preferredChannel, region, roles, styles, version |
-| Unavailability | `USER#<userId>` | `UNAVAIL#<from>#<id>` | to, reason, scope (`ALL` or a `bandIds` string set)                  |
+| Item           | PK              | SK             | Attributes                                                                                |
+| :------------- | :-------------- | :------------- | :---------------------------------------------------------------------------------------- |
+| Profile        | `USER#<userId>` | `PROFILE`      | name, email, phone, preferredChannel, region, roles, styles, version                      |
+| Unavailability | `USER#<userId>` | `UNAVAIL#<id>` | range, reason, scope (`ALL` or a `bandIds` list). **LSI1** `LSI1SK = UNAVAIL#<from>#<id>` |
 
-**"Is this user unavailable on date D for band B?"** An entry covering D starts no earlier than
-`D − 366 days` (the span cap). So:
-`Query PK = USER#u, SK BETWEEN UNAVAIL#<D−366> AND UNAVAIL#<D>~`, then keep entries with
-`to ≥ D` and `appliesTo(B, D)`. For a date range `[F, T]`, the bounds become `F − 366` and `T`.
+Keying the entry by id makes editing a single `Put`, even when its dates move; the local index
+re-sorts it by start date and still allows strongly consistent reads.
+
+**"Is this user unavailable on date D for band B?"** A range spans at most 366 days, so an
+entry covering D starts no earlier than `D − 365 days`. So:
+`Query LSI1, PK = USER#u, LSI1SK BETWEEN UNAVAIL#<D−365> AND UNAVAIL#<D>#~`, then keep
+entries with `to ≥ D` and `appliesTo(B, D)`. For a date range `[F, T]`, the bounds become
+`F − 365` and `T`.
 A line-up (≤ 15 users) costs ≤ 15 parallel queries.
 
 ---
@@ -346,9 +352,10 @@ Every handler takes the caller from the authorizer's `resolverContext` and ignor
 arguments from the client, as `api-chart` does. Each context keeps its `schema.graphql` under
 `interface/graphql/`; `mergeSchemas.ts` merges the new ones.
 
-The authorizer adds `email` and `emailVerified` to the resolver context. They come from a
-custom Clerk session-token claim, because Clerk's default session token does not carry the
-email.
+The authorizer adds `email` and `emailVerified` to the resolver context. They come from
+custom Clerk session-token claims (`email`, `email_verified`), because Clerk's default session
+token carries neither. AppSync's resolver context holds flat strings, so `emailVerified` is
+`'true'` or `'false'`; anything but a boolean `true` claim counts as unverified.
 
 ### 6.2 `context-user`
 
@@ -466,8 +473,9 @@ Tagged errors in each context's `domain/errors/`, returned in the Effect error c
   `DUPLICATE_MEMBER`, `ROLE_NOT_HELD`, `CHART_NOT_IN_REPERTOIRE`, `GIG_CANCELLED`, …),
   `InvitationNotFound`, `InvitationExpired`, `EmailNotVerified`, `ConcurrentModification`,
   `BandReadError`, `BandWriteError`.
-- **user:** `ProfileNotFound`, `ProfileRuleViolation { rule }`, `UnavailabilityNotFound`,
-  `UserReadError`, `UserWriteError`.
+- **user:** `ProfileRuleViolation { rule }`, `UnavailabilityNotFound`,
+  `ConcurrentModification`, `UserReadError`, `UserWriteError`, `UserParseError`. A missing
+  profile is not an error: `myProfile` returns `null`.
 
 `AvailabilityWarning` is data, not an error.
 
