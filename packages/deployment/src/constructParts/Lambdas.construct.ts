@@ -13,6 +13,7 @@ import K from '../constants';
 export interface LambdasConstructProps {
   readonly eventsTable: dynamodb.ITable;
   readonly projectionTable: dynamodb.ITable;
+  readonly usersTable: dynamodb.ITable;
   readonly chartBucket: s3.IBucket;
   readonly userBucket: s3.IBucket;
   readonly clerkAuthSecretPath: string;
@@ -22,6 +23,7 @@ export interface LambdasConstructProps {
 export class LambdasConstruct extends Construct {
   public readonly authorizerFunction: lambda.Function;
   public readonly chartFunction: lambda.Function;
+  public readonly userFunction: lambda.Function;
   public readonly chartsDLQ: sqs.Queue;
 
   constructor(scope: Construct, id: string, props: LambdasConstructProps) {
@@ -98,5 +100,29 @@ export class LambdasConstruct extends Construct {
     // Grant S3 permissions
     props.chartBucket.grantReadWrite(this.chartFunction);
     props.userBucket.grantReadWrite(this.chartFunction);
+
+    this.userFunction = new lambda.Function(this, 'UserFunction', {
+      code: lambda.Code.fromAsset(
+        path.join(__dirname, `../${K.PATHS_FROM_SRC.PACKAGES_API_USER}/build`),
+      ),
+      handler: 'index.handler',
+      environment: {
+        LOG_LEVEL: 'INFO',
+        NODE_OPTIONS: '--enable-source-maps',
+        NODE_ENV: props.isProduction ? 'production' : 'development',
+        USERS_TABLE: props.usersTable.tableName,
+      },
+      logGroup: new logs.LogGroup(this, `UserFunctionLogGroup-${stackName}`, {
+        logGroupName: `/aws/lambda/user-function-${stackName}`,
+        retention: logs.RetentionDays.ONE_WEEK,
+        removalPolicy: cdk.RemovalPolicy.DESTROY,
+      }),
+      memorySize: 512,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      timeout: cdk.Duration.seconds(10),
+      tracing: lambda.Tracing.ACTIVE,
+    });
+
+    props.usersTable.grantReadWriteData(this.userFunction);
   }
 }

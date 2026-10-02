@@ -1,0 +1,27 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "incremental": true,
+    "outDir": "./build",
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": false,
+    "rootDir": "./src"
+  },
+  "exclude": [
+    "**/*.test.ts",
+    "setupTests.ts",
+    "test",
+    "vitest.config.integration.ts",
+    "vitest.config.ts"
+  ],
+  "references": [
+    {
+      "path": "../shared/tsconfig.build.json"
+    },
+    {
+      "path": "../context-user/tsconfig.build.json"
+    }
+  ]
+}

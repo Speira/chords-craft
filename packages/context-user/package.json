@@ -1,23 +1,38 @@
 {
   "name": "@chordcraft/context-user",
   "version": "1.0.0",
-  "description": "",
+  "description": "The User bounded context: musician profiles and unavailability",
   "keywords": [],
   "license": "ISC",
   "author": "Speira",
   "imports": {
     "#context-user/*": "./src/*"
   },
-  "main": "index.js",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.js",
+      "require": "./build/index.js"
+    }
+  },
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p tsconfig.build.json",
+    "check": "tsc -b tsconfig.json --noEmit",
+    "test": "vitest",
+    "test:integration": "vitest --config vitest.config.integration.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "effect": "^3.19.12"
+    "@aws-sdk/client-dynamodb": "^3.948.0",
+    "@aws-sdk/lib-dynamodb": "^3.948.0",
+    "@chordcraft/shared": "workspace:*",
+    "effect": "^3.19.12",
+    "ulid": "^3.0.2"
   },
   "devDependencies": {
-    "@effect/vitest": "^0.27.0",
-    "vitest": "^4.0.16"
+    "@types/node": "^22.19.2",
+    "vitest": "^4.0.9"
   }
 }

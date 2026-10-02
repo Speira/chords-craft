@@ -44,19 +44,20 @@ pnpm clean
 
 ### Package Map
 
-| Package         | Role                                                |
-| --------------- | --------------------------------------------------- |
-| `shared`        | Cross-cutting value objects, utilities              |
-| `context-chart` | Core DDD bounded context for charts                 |
-| `context-band`  | Bounded context for bands — scaffolded, not started |
-| `context-user`  | Bounded context for users — scaffolded, not started |
-| `api-chart`     | AWS Lambda handler wrapping chart GraphQL resolvers |
-| `api-auth`      | Lambda authorizer (Clerk integration)               |
-| `client-web`    | Next.js 16 + React 19 web app                       |
-| `deployment`    | AWS CDK infrastructure stack                        |
+| Package         | Role                                                                            |
+| --------------- | ------------------------------------------------------------------------------- |
+| `shared`        | Cross-cutting value objects, utilities                                          |
+| `context-chart` | Core DDD bounded context for charts                                             |
+| `context-band`  | Bounded context for bands — scaffolded, not started                             |
+| `context-user`  | Bounded context for users — musician profiles and unavailability (state-stored) |
+| `api-user`      | AWS Lambda handler wrapping user GraphQL resolvers                              |
+| `api-chart`     | AWS Lambda handler wrapping chart GraphQL resolvers                             |
+| `api-auth`      | Lambda authorizer (Clerk integration)                                           |
+| `client-web`    | Next.js 16 + React 19 web app                                                   |
+| `deployment`    | AWS CDK infrastructure stack                                                    |
 
-`context-band` and `context-user` contain only their build setup and a single value-object
-stub. They are listed in `knip.jsonc` as known-unused until the contexts are designed.
+`context-band` is scaffolded only: its build setup and a single value-object stub. It is
+listed in `knip.jsonc` as known-unused until the context is designed.
 
 ### Domain Architecture (`context-chart`)
 
@@ -139,8 +140,9 @@ Tests should verify **behavior**, not implementation details:
 - Files run in parallel; tests inside a file run in order. Opt into `describe.concurrent` only
   for I/O-bound suites without shared state
 - Integration tests (`test/infrastructure/**`) need a local DynamoDB (`docker compose up`)
-  and run via `pnpm test:integration`. They are their own vitest project named `integration`,
-  which the default run excludes with `--project '!integration'`
+  and run via `pnpm test:integration`. Each context has its own vitest project named
+  `integration-<context>` (`integration-chart`, `integration-user`); the default run excludes
+  them with `--project '!integration-*'`
 
 ## gstack
 

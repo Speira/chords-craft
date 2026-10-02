@@ -218,7 +218,7 @@ importers:
         version: 0.7.9
       '@effect/language-service':
         specifier: latest
-        version: 0.87.2
+        version: 0.87.3
       '@effect/schema':
         specifier: ^0.75.5
         version: 0.75.5(effect@3.19.12)
@@ -340,6 +340,25 @@ importers:
       '@chordcraft/context-chart':
         specifier: workspace:*
         version: link:../context-chart
+      '@chordcraft/shared':
+        specifier: workspace:*
+        version: link:../shared
+      effect:
+        specifier: ^3.19.12
+        version: 3.19.12
+    devDependencies:
+      '@types/aws-lambda':
+        specifier: ^8.10.159
+        version: 8.10.159
+      vitest:
+        specifier: ^4.0.16
+        version: 4.0.16(@types/node@24.10.4)(jiti@2.7.0)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.9.1)
+
+  packages/api-user:
+    dependencies:
+      '@chordcraft/context-user':
+        specifier: workspace:*
+        version: link:../context-user
       '@chordcraft/shared':
         specifier: workspace:*
         version: link:../shared
@@ -528,22 +547,37 @@ importers:
 
   packages/context-user:
     dependencies:
+      '@aws-sdk/client-dynamodb':
+        specifier: ^3.948.0
+        version: 3.948.0
+      '@aws-sdk/lib-dynamodb':
+        specifier: ^3.948.0
+        version: 3.948.0(@aws-sdk/client-dynamodb@3.948.0)
+      '@chordcraft/shared':
+        specifier: workspace:*
+        version: link:../shared
       effect:
         specifier: ^3.19.12
         version: 3.19.12
+      ulid:
+        specifier: ^3.0.2
+        version: 3.0.2
     devDependencies:
-      '@effect/vitest':
-        specifier: ^0.27.0
-        version: 0.27.0(effect@3.19.12)(vitest@4.0.16(@types/node@24.10.4)(jiti@2.7.0)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.9.1))
+      '@types/node':
+        specifier: ^22.19.2
+        version: 22.19.2
       vitest:
-        specifier: ^4.0.16
-        version: 4.0.16(@types/node@24.10.4)(jiti@2.7.0)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.9.1)
+        specifier: ^4.0.9
+        version: 4.0.16(@types/node@22.19.2)(jiti@2.7.0)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.9.1)
 
   packages/deployment:
     dependencies:
       '@chordcraft/api-chart':
         specifier: workspace:*
         version: link:../api-chart
+      '@chordcraft/api-user':
+        specifier: workspace:*
+        version: link:../api-user
       '@chordcraft/context-chart':
         specifier: workspace:*
         version: link:../context-chart
@@ -554,6 +588,9 @@ importers:
         specifier: ^10.0.0
         version: 10.4.4
     devDependencies:
+      '@graphql-tools/merge':
+        specifier: ^9.2.4
+        version: 9.2.4(graphql@16.12.0)
       '@types/jest':
         specifier: ^29.5.14
         version: 29.5.14
@@ -563,6 +600,9 @@ importers:
       aws-cdk:
         specifier: 2.1033.0
         version: 2.1033.0
+      graphql:
+        specifier: ^16.12.0
+        version: 16.12.0
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@24.10.4)(supports-color@8.1.1)(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.23))(@types/node@24.10.4)(typescript@5.9.3))
@@ -581,6 +621,9 @@ importers:
       effect:
         specifier: ^3.19.12
         version: 3.19.12
+      libphonenumber-js:
+        specifier: ^1.13.14
+        version: 1.13.14
     devDependencies:
       '@effect/vitest':
         specifier: ^0.27.0
@@ -1164,8 +1207,8 @@ packages:
     engines: {node: '>=16.17.1'}
     hasBin: true
 
-  '@effect/language-service@0.87.2':
-    resolution: {integrity: sha512-CfiSoaVQO8pZgaMZGw5VvMvRGybsJ2LaSDoLYaqiVGvo/YYPYVR2GzUKY0h1NtIweq/+SQ5XLrvtzPIttWQ0GQ==}
+  '@effect/language-service@0.87.3':
+    resolution: {integrity: sha512-g1OmRBZF5chbW9QMNoirPo5Bb4zzU2HfP88tR7/VSZEUxHJ1/qVb8AQ0kUh2ggctLH1I715yCwP4gkw56PTjpQ==}
     hasBin: true
 
   '@effect/schema@0.75.5':
@@ -1683,6 +1726,18 @@ packages:
 
   '@formatjs/intl-localematcher@0.6.2':
     resolution: {integrity: sha512-XOMO2Hupl0wdd172Y06h6kLpBz6Dv+J4okPLl4LPtzbr8f66WbIoy4ev98EBuZ6ZK4h5ydTN6XneT4QVpD7cdA==}
+
+  '@graphql-tools/merge@9.2.4':
+    resolution: {integrity: sha512-vV+8uWNWn0+OsqT0r22lZuoT0cTe6fBqBtpLHre2rriLjI/ZTrsOHmabLPTUOyzgFnRrS2PzFSYGL3zKL1Wj4Q==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+
+  '@graphql-tools/utils@12.0.1':
+    resolution: {integrity: sha512-8YC6jn4xYDS6YTY6xDAgQAs/nGgvzRaIGHS8GeSfVItQzNK7Ms24CQtE3EJY+amvR+tBnhRSX0N83aGj+V/RIg==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
   '@graphql-typed-document-node/core@3.2.0':
     resolution: {integrity: sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==}
@@ -3842,6 +3897,10 @@ packages:
   '@webgpu/types@0.1.68':
     resolution: {integrity: sha512-3ab1B59Ojb6RwjOspYLsTpCzbNB3ZaamIAxBMmvnNkiDoLTZUOBXZ9p5nAYVEkQlDdf6qAZWi1pqj9+ypiqznA==}
 
+  '@whatwg-node/promise-helpers@1.3.2':
+    resolution: {integrity: sha512-Nst5JdK47VIl9UcGwtv2Rcgyn5lWtZ0/mhRQ4G8NN2isxpq2TO30iqHzmwoJycjWuyUfg3GFXqP/gFHXeV57IA==}
+    engines: {node: '>=16.0.0'}
+
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -4268,6 +4327,10 @@ packages:
     resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
     engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
     hasBin: true
+
+  cross-inspect@1.0.1:
+    resolution: {integrity: sha512-Pcw1JTvZLSJH83iiGWt6fRcT+BjZlCDRVwYLbUcHzv/CRpB7r0MlSrGbIyQvVSNyGnbt7G4AXuyCiDR3POvZ1A==}
+    engines: {node: '>=16.0.0'}
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
@@ -5621,6 +5684,9 @@ packages:
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
+
+  libphonenumber-js@1.13.14:
+    resolution: {integrity: sha512-llihgCcx0BFLksecLP+x1J+6JDE1GsXS1RN/LoPF6qcwpeQcnjj0lcvZxY8AzbEpYwyZWPZW/nDuqkqzm3amiw==}
 
   lie@3.3.0:
     resolution: {integrity: sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==}
@@ -8626,7 +8692,7 @@ snapshots:
 
   '@effect/build-utils@0.7.9': {}
 
-  '@effect/language-service@0.87.2': {}
+  '@effect/language-service@0.87.3': {}
 
   '@effect/schema@0.75.5(effect@3.19.12)':
     dependencies:
@@ -8637,11 +8703,6 @@ snapshots:
     dependencies:
       effect: 3.19.12
       vitest: 3.2.4(@types/debug@4.1.12)(@types/node@24.10.4)(jiti@2.7.0)(lightningcss@1.30.2)(supports-color@8.1.1)(tsx@4.21.0)(yaml@2.9.1)
-
-  '@effect/vitest@0.27.0(effect@3.19.12)(vitest@4.0.16(@types/node@24.10.4)(jiti@2.7.0)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.9.1))':
-    dependencies:
-      effect: 3.19.12
-      vitest: 4.0.16(@types/node@24.10.4)(jiti@2.7.0)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.9.1)
 
   '@effect/vitest@0.30.0(effect@3.19.12)(vitest@5.0.1)':
     dependencies:
@@ -9071,6 +9132,20 @@ snapshots:
 
   '@formatjs/intl-localematcher@0.6.2':
     dependencies:
+      tslib: 2.8.1
+
+  '@graphql-tools/merge@9.2.4(graphql@16.12.0)':
+    dependencies:
+      '@graphql-tools/utils': 12.0.1(graphql@16.12.0)
+      graphql: 16.12.0
+      tslib: 2.8.1
+
+  '@graphql-tools/utils@12.0.1(graphql@16.12.0)':
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.12.0)
+      '@whatwg-node/promise-helpers': 1.3.2
+      cross-inspect: 1.0.1
+      graphql: 16.12.0
       tslib: 2.8.1
 
   '@graphql-typed-document-node/core@3.2.0(graphql@16.12.0)':
@@ -11231,6 +11306,10 @@ snapshots:
 
   '@webgpu/types@0.1.68': {}
 
+  '@whatwg-node/promise-helpers@1.3.2':
+    dependencies:
+      tslib: 2.8.1
+
   acorn-jsx@5.3.2(acorn@8.15.0):
     dependencies:
       acorn: 8.15.0
@@ -11670,6 +11749,10 @@ snapshots:
   cross-env@7.0.3:
     dependencies:
       cross-spawn: 7.0.6
+
+  cross-inspect@1.0.1:
+    dependencies:
+      tslib: 2.8.1
 
   cross-spawn@7.0.6:
     dependencies:
@@ -13539,6 +13622,8 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
+  libphonenumber-js@1.13.14: {}
+
   lie@3.3.0:
     dependencies:
       immediate: 3.0.6
@@ -14934,7 +15019,7 @@ snapshots:
   tsx@4.21.0:
     dependencies:
       esbuild: 0.27.1
-      get-tsconfig: 4.13.0
+      get-tsconfig: 4.14.3
     optionalDependencies:
       fsevents: 2.3.3
 

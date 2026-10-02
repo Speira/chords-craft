@@ -1,8 +1,11 @@
 import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 
+/** AppSync's resolverContext is a flat map of strings, hence `emailVerified` as a string. */
 export interface AuthContextObject {
   userId: string;
   tenantId: string;
+  email: string;
+  emailVerified: 'true' | 'false';
 }
 
 export interface AuthResponseObject {

@@ -1,0 +1,35 @@
+{
+  "name": "@chordcraft/api-user",
+  "version": "1.0.0",
+  "description": "AppSync Lambda resolver for musician profiles",
+  "keywords": [],
+  "license": "ISC",
+  "author": "Speira",
+  "imports": {
+    "#api-user/*": "./src/*"
+  },
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.js",
+      "require": "./build/index.js"
+    }
+  },
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "check": "tsc -b tsconfig.json --noEmit",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@chordcraft/context-user": "workspace:*",
+    "@chordcraft/shared": "workspace:*",
+    "effect": "^3.19.12"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.159",
+    "vitest": "^4.0.16"
+  }
+}

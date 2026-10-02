@@ -1,8 +1,8 @@
 # High-Level Design (HLD): Musical Chord Chart Platform (MVP)
 
 **Author:** Speira
-**Version:** 1.1
-**Date:** September 2026 (v1.0: December 2025)
+**Version:** 1.2
+**Date:** September 2026 (v1.1: September 2026, v1.0: December 2025)
 **Region:** `eu-west-3`
 **Status:** Approved for Implementation
 
@@ -10,6 +10,10 @@
 > built: the identity provider (§3.1, §5) and the data model (§4). Nothing else in the design
 > changed. Components that are designed but not yet built are marked _Planned_; the
 > [PRD](./PRD.md) is the authority on what is shipped.
+>
+> **Revision 1.2** adds the band and user contexts from the
+> [band management spec](./specs/2026-09-29-band-management-design.md): the tenancy model
+> (§3.2) and the `bands` and `users` tables (§4.3). The `api-user` Lambda and the `users` table are built but not deployed; the rest is _Planned_.
 
 ---
 
@@ -27,6 +31,8 @@ This document describes the high-level architecture for a scalable, cloud-native
 - **Chord Chart Editor:** Creation and modification of musical grids with metadata (tags, titles).
 - **Access Control:** Ability to toggle charts between Public and Private (Private reserved for Premium).
 - **Multi-Tenancy:** Support for Groups (max 15 users) and Organizations (max 100 users).
+- **Band Management:** Band line-up, repertoire and a calendar of performances and rehearsals
+  with line-ups, RSVP and setlists; musician profiles with roles, levels and unavailability.
 - **Advanced Search:** Global search by chart name, tags, and popularity metrics.
 
 ### 2.2 Non-Functional Requirements (NFR)
@@ -63,12 +69,27 @@ coordinated via a managed GraphQL gateway.
 `@clerk/backend`, returning `userId` and `tenantId` as the resolver context. Cognito is no
 longer part of the design.
 
+### 3.2 Tenancy — _Planned_
+
+A tenant is either a **user** (the Clerk user id, as today) or a **band** (`band_<uuid>`).
+Chart operations take an optional `tenantId`; without one they run in the caller's personal
+tenant. A band tenant is authorised by the API handler on every request, with one strongly
+consistent read of the caller's access pointer (§4.3). The check is not cached in the
+authorizer, whose 300 s TTL would let a removed member keep access. Tenant isolation remains a
+property of the projection key (`TENANT#<TenantID>`).
+
+Two new Lambdas, `api-user` and `api-band`, sit next to `api-chart` behind the same
+authorizer. `api-user` is _Built_ (not deployed): it routes the six musician profile and
+unavailability fields and takes `userId` and `email` from the authorizer; `api-band` is _Planned_. The authorizer additionally passes the user's verified email (a custom Clerk
+session claim), which accepting a band invitation requires.
+
 ---
 
 ## 4. Data Modeling
 
-The system is event-sourced: writes append to an immutable event log, and reads are served
-from a denormalized projection. This replaces the single `AppTable` described in v1.0.
+Charts are event-sourced: writes append to an immutable event log, and reads are served
+from a denormalized projection. This replaces the single `AppTable` described in v1.0. Bands
+and user profiles are state-stored (§4.3).
 
 ### 4.1 Event Store — `{stack}-charts_events`
 
@@ -96,13 +117,40 @@ tenant isolation a property of the key rather than of a filter.
 charts newest first. The index projects every attribute because a full `Chart` is rebuilt
 from it. `findAllByTenant` reads the base table when archived charts must be included.
 
-### 4.3 Users, memberships and boards — _Planned_
+### 4.3 Bands and users — _Partial_
 
-Users live in Clerk, so no `USER#` item exists in DynamoDB today. Memberships, group boards
-and organisation boards (v1.0's GSI1/GSI2) are deferred with the band and organisation
-features, and depend on the tenancy decision tracked as **Q5** in the [PRD](./PRD.md#10-open-questions):
-today the authorizer sets `tenantId = userId`, which keeps the system single-tenant per user
-and defers the choice rather than making it.
+Designed in the [band management spec](./specs/2026-09-29-band-management-design.md) (§5).
+Unlike charts, bands and profiles are **state-stored**: their history is not part of the
+product, and their access patterns (calendar ranges, "which bands am I in", "who is free on
+the 14th") map directly onto keys. Aggregates carry a `version` and are written with
+conditional writes (optimistic concurrency).
+
+**`{stack}-bands`**
+
+| Entity             | PK              | SK                  | Access Pattern                                                 |
+| :----------------- | :-------------- | :------------------ | :------------------------------------------------------------- |
+| **Band**           | `BAND#<BandID>` | `META`              | Load the band aggregate (with its members).                    |
+| **Membership**     | `BAND#<BandID>` | `MEMBER#<MemberID>` | Load the band aggregate.                                       |
+| **Access pointer** | `BAND#<BandID>` | `USER#<UserID>`     | Authorise a band tenant: one consistent `GetItem` per request. |
+| **Invitation**     | `BAND#<BandID>` | `INVITE#<MemberID>` | Claim a contact slot; expires through DynamoDB TTL.            |
+| **Gig**            | `BAND#<BandID>` | `GIG#<GigID>`       | One calendar event, line-up and setlist embedded.              |
+
+- **GSI1** (my bands): `USER#<UserID>` → `BAND#<BandID>`, on the access pointer.
+- **GSI2** (my invitations): `EMAIL#<Email>` → `BAND#<BandID>`, on the invitation.
+- **LSI1** (calendar): `GIGAT#<StartsAtUtc>#<GigID>`, queried by range, strongly consistent.
+
+**`{stack}-users`** — _Built_ (not deployed)
+
+| Entity             | PK              | SK             | Access Pattern                                  |
+| :----------------- | :-------------- | :------------- | :---------------------------------------------- |
+| **Profile**        | `USER#<UserID>` | `PROFILE`      | A musician's profile, roles, levels and styles. |
+| **Unavailability** | `USER#<UserID>` | `UNAVAIL#<ID>` | One entry, edited with a single `Put`.          |
+
+- **LSI1** (unavailability by date): `UNAVAIL#<From>#<ID>`, queried from `D − 365 days` to `D`
+  (a range spans at most 366 days), strongly consistent.
+
+Identities still live in Clerk; the profile holds only what the product needs beyond it.
+Organisation boards (v1.0) remain deferred.
 
 ---
 

@@ -1,6 +1,7 @@
 import { verifyToken } from '@clerk/backend';
 import type { AppSyncAuthorizerEvent, AppSyncAuthorizerResult } from 'aws-lambda';
 
+import { readEmailClaims } from './claims';
 import { type AuthContextObject, type AuthResponseObject, getClerkSecret } from './utils';
 
 const defaultResponse: AuthResponseObject = {
@@ -26,6 +27,7 @@ export const handler = async (
     const context: AuthContextObject = {
       userId: verified.sub,
       tenantId: verified.sub,
+      ...readEmailClaims(verified),
     };
 
     const fullResponse: AuthResponseObject = {

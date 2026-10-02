@@ -26,8 +26,7 @@
     // Delete the entry and the code, or wire it up.
     "packages/client-web/src/components/three/**", // 3D scene, never mounted
     "packages/client-web/src/types.ts",
-    "packages/context-band/src/domain/valueObjects/BandMember.ts", // context not started
-    "packages/context-user/src/application/**" // context not started
+    "packages/context-band/src/domain/valueObjects/BandMember.ts" // context not started
   ],
 
   // MIGRATION DEBT: dependencies of the unused code above, plus tooling knip cannot see.
@@ -41,6 +40,7 @@
     "effect", // re-exported types only, in api-auth and api-chart
     "@chordcraft/shared",
     "@chordcraft/api-chart", // deployment bundles them as Lambda assets
+    "@chordcraft/api-user",
     "@chordcraft/context-chart",
     "@clerk/themes",
     "@hookform/resolvers",

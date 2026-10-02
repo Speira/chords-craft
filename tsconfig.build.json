@@ -4,7 +4,9 @@
   "references": [
     { "path": "packages/api-auth/tsconfig.build.json" },
     { "path": "packages/api-chart/tsconfig.build.json" },
+    { "path": "packages/api-user/tsconfig.build.json" },
     { "path": "packages/context-chart/tsconfig.build.json" },
+    { "path": "packages/context-user/tsconfig.build.json" },
     { "path": "packages/shared/tsconfig.build.json" }
   ]
 }

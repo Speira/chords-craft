@@ -8,6 +8,7 @@ import { Construct } from 'constructs';
 export interface MonitoringProps {
   readonly authorizerFunction: lambda.IFunction;
   readonly chartFunction: lambda.IFunction;
+  readonly userFunction: lambda.IFunction;
   readonly stackName: string;
   readonly isProduction: boolean;
   readonly apiId: string;
@@ -70,6 +71,15 @@ export class MonitoringConstruct extends Construct {
               FunctionName: props.chartFunction.functionName,
             },
           }),
+          new cloudwatch.Metric({
+            namespace: 'AWS/Lambda',
+            metricName: 'Errors',
+            statistic: 'Sum',
+            period: cdk.Duration.minutes(5),
+            dimensionsMap: {
+              FunctionName: props.userFunction.functionName,
+            },
+          }),
         ],
       }),
     );
@@ -109,6 +119,18 @@ export class MonitoringConstruct extends Construct {
       alarmName: `${props.stackName.toLowerCase()}-charts-lambda-errors`,
     });
     errorAlarm.addAlarmAction(new cloudwatchActions.SnsAction(this.alertTopic));
+
+    const usersAlarm = new cloudwatch.Alarm(this, 'UsersErrorAlarm', {
+      metric: props.userFunction.metricErrors({
+        statistic: 'Sum',
+        period: cdk.Duration.minutes(5),
+      }),
+      threshold: 10,
+      evaluationPeriods: 2,
+      alarmDescription: 'Alert when users Lambda has high error rate',
+      alarmName: `${props.stackName.toLowerCase()}-users-lambda-errors`,
+    });
+    usersAlarm.addAlarmAction(new cloudwatchActions.SnsAction(this.alertTopic));
 
     // Alert on high throttles
     const throttleAlarm = new cloudwatch.Alarm(this, 'ChartsThrottleAlarm', {

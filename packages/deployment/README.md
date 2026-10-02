@@ -8,7 +8,7 @@ AppSync GraphQL API, the Lambda functions and their roles, the S3 buckets and th
 ```bash
 bin/
   ├── app.ts              # CDK entry point (see cdk.json)
-  └── mergeSchemas.ts     # Concatenates each context's schema into src/generated
+  └── mergeSchemas.ts     # Merges each context's schema into src/generated
 src/
   ├── ChordsChartStack.ts # The stack, composed from the constructs below
   ├── constants.ts
@@ -19,7 +19,7 @@ src/
 ## The generated schema
 
 `src/generated/schema.graphql` is **build output**, not a source file: `mergeSchemas.ts`
-concatenates `packages/*/src/interface/graphql/schema.graphql` for every context listed in
+merges (with `@graphql-tools/merge`, so each root type is declared once) `packages/*/src/interface/graphql/schema.graphql` for every context listed in
 its `CONTEXTS_PATHS`. Edit the context's schema, then regenerate:
 
 ```sh
@@ -45,3 +45,20 @@ The CDK ships `packages/api-*/build` directly as the Lambda code asset
 (`lambda.Code.fromAsset`, no bundler), so `pnpm build` at the root is part of the deploy
 path. Making the packages source-first would mean bundling the lambdas first — tracked as a
 deliberate deviation in [MIGRATION.md](../../MIGRATION.md).
+
+## Clerk configuration
+
+The authorizer reads two custom claims that Clerk's default session token does not carry. In
+the Clerk dashboard (both the development and the production instance): **Sessions →
+Customize session token**, and set:
+
+```json
+{
+  "email": "{{user.primary_email_address}}",
+  "email_verified": "{{user.email_verified}}"
+}
+```
+
+Check the preview shows `email_verified` as a boolean. If it shows `null`, every user is
+treated as unverified and saving a profile fails with a `VALIDATION` error on `email` until the
+claim resolves to `true`. Accepting a band invitation (phase 5) also requires a verified email.
