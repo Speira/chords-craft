@@ -27,7 +27,7 @@
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.29.0",
-    "@effect/build-utils": "^0.7.7",
+    "@effect/build-utils": "^0.8.9",
     "@effect/language-service": "latest",
     "@effect/schema": "^0.75.5",
     "@effect/vitest": "latest",
@@ -37,7 +37,7 @@
     "@types/node": "^24.0.0",
     "@vitest/coverage-v8": "^5.0.1",
     "@vitest/eslint-plugin": "^1.6.27",
-    "effect": "^3.19.12",
+    "effect": "^3.22.2",
     "eslint": "^10.11.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.5",

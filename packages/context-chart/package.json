@@ -33,7 +33,7 @@
     "@aws-sdk/client-dynamodb": "^3.948.0",
     "@aws-sdk/lib-dynamodb": "^3.948.0",
     "@chordcraft/shared": "workspace:*",
-    "effect": "^3.19.12",
+    "effect": "^3.22.2",
     "ulid": "^3.0.2"
   },
   "devDependencies": {
