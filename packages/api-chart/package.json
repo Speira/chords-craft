@@ -29,7 +29,7 @@
     "effect": "^3.19.12"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.159",
+    "@types/aws-lambda": "^8.10.164",
     "vitest": "^4.0.16"
   },
   "packageManager": "pnpm@10.14.0"
