@@ -1,0 +1,100 @@
+enum ContactChannel {
+  WHATSAPP
+  SMS
+  EMAIL
+  PHONE_CALL
+}
+
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  PROFESSIONAL
+  MASTER
+}
+
+type Region {
+  country: String!
+  area: String
+}
+
+type RoleTag {
+  role: String!
+  detail: String
+  isPrimary: Boolean!
+  level: SkillLevel
+}
+
+type StyleTag {
+  style: String!
+  detail: String
+}
+
+type MusicianProfile {
+  userId: ID!
+  name: String!
+  email: String!
+  phone: String
+  preferredChannel: ContactChannel!
+  region: Region
+  roles: [RoleTag!]!
+  styles: [StyleTag!]!
+  version: Int!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Unavailability {
+  id: ID!
+  from: AWSDate!
+  to: AWSDate!
+  reason: String
+  appliesToAllBands: Boolean!
+  bandIds: [ID!]!
+}
+
+input RegionInput {
+  country: String!
+  area: String
+}
+
+input RoleTagInput {
+  role: String!
+  detail: String
+  isPrimary: Boolean!
+  level: SkillLevel
+}
+
+input StyleTagInput {
+  style: String!
+  detail: String
+}
+
+input SaveProfileInput {
+  name: String!
+  phone: String
+  preferredChannel: ContactChannel!
+  region: RegionInput
+  roles: [RoleTagInput!]!
+  styles: [StyleTagInput!]!
+}
+
+"No bandIds (or an empty list) means the entry applies to every band."
+input UnavailabilityInput {
+  from: AWSDate!
+  to: AWSDate!
+  reason: String
+  bandIds: [ID!]
+}
+
+type Query {
+  myProfile: MusicianProfile
+  myUnavailability(from: AWSDate!, to: AWSDate!): [Unavailability!]!
+}
+
+type Mutation {
+  saveMyProfile(input: SaveProfileInput!): MusicianProfile!
+  addUnavailability(input: UnavailabilityInput!): Unavailability!
+  updateUnavailability(id: ID!, input: UnavailabilityInput!): Unavailability!
+  removeUnavailability(id: ID!): Boolean!
+}

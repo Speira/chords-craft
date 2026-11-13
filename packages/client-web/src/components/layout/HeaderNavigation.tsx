@@ -10,6 +10,7 @@ export async function HeaderNavigation() {
   const navItems: Array<{ href: string; label: AppTranslation }> = [
     { href: '/', label: 'home.title' },
     { href: '/charts', label: 'chart.myMusicalCharts' },
+    { href: '/profile', label: 'profile.title' },
   ];
 
   return (

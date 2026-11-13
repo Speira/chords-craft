@@ -39,8 +39,28 @@ describe('api-auth handler', { concurrent: false }, () => {
     const result = await handler(makeEvent('Bearer good.jwt.token'));
 
     expect(result.isAuthorized).toBe(true);
-    expect(result.resolverContext).toEqual({ userId: 'user_123', tenantId: 'user_123' });
+    expect(result.resolverContext).toEqual({
+      userId: 'user_123',
+      tenantId: 'user_123',
+      email: '',
+      emailVerified: 'false',
+    });
     expect(result.ttlOverride).toBe(300);
+  });
+
+  it('passes the email claims through to the resolver context', async () => {
+    vi.mocked(verifyToken).mockResolvedValue({
+      sub: 'user_123',
+      email: 'Ana@Example.com',
+      email_verified: true,
+    } as never);
+
+    const result = await handler(makeEvent('Bearer good.jwt.token'));
+
+    expect(result.resolverContext).toMatchObject({
+      email: 'ana@example.com',
+      emailVerified: 'true',
+    });
   });
 
   it('denies (does not throw) when token verification fails', async () => {

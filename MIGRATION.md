@@ -37,10 +37,10 @@ What is left is tracked, not hidden:
 
 ## Deviations from the template (deliberate)
 
-- **Packages are not source-first.** `exports` still point at `./build`, because the CDK ships
-  `packages/api-*/build` as the Lambda code asset (`lambda.Code.fromAsset`, no bundler). Going
-  source-first means bundling the lambdas first (esbuild/`NodejsFunction`), which is its own
-  task. `pnpm build` stays part of the deploy path.
+- **Packages are not source-first.** `exports` still point at `./build`. The lambdas are now
+  bundled with esbuild (`NodejsFunction`, entry `packages/api-*/src/index.ts`), but esbuild
+  resolves the workspace packages through those `exports`, so `pnpm build` stays part of the
+  deploy path until the packages switch to source-first, which bundling no longer blocks.
 - **`noUncheckedIndexedAccess` is `false`** in `tsconfig.base.json` (the template has it on).
   Turning it on surfaces ~30 "possibly undefined" errors, mostly in the chart aggregate.
 - **React packages** relax `exactOptionalPropertyTypes` and `noUncheckedSideEffectImports`
@@ -93,7 +93,7 @@ Suggested order, one PR per package:
 
 ## Not done, decide separately
 
-- **Source-first packages + bundled lambdas** (see deviations above).
+- **Source-first packages** (see deviations above; the lambdas are already bundled).
 - **CI**: `check.yml` and `pr-title.yml` pass on PR #1. `snapshot.yml` was deleted: it published
   per-PR previews through pkg-pr-new, whose GitHub App is not installed on the repo, and every
   package here is private. `deploy.yml` is untouched.

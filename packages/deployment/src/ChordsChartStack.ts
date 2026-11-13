@@ -9,13 +9,12 @@ import {
   SecurityConstruct,
   StorageConstruct,
 } from './constructParts';
+import { resolveEnvironment } from './environment';
 
 export class ChordsChartStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-    const environment = this.node.tryGetContext('env') || 'dev';
-    console.log({ environment_stack: environment });
-    const IS_PRODUCTION = environment === 'prod';
+    const IS_PRODUCTION = resolveEnvironment(this.node) === 'prod';
 
     const removalPolicy = IS_PRODUCTION ? cdk.RemovalPolicy.RETAIN : cdk.RemovalPolicy.DESTROY;
 
@@ -38,6 +37,7 @@ export class ChordsChartStack extends cdk.Stack {
     const lambdas = new LambdasConstruct(this, 'Lambdas', {
       projectionTable: database.projectionTable,
       eventsTable: database.eventsTable,
+      usersTable: database.usersTable,
       chartBucket: storage.chartBucket,
       userBucket: storage.userBucket,
       isProduction: IS_PRODUCTION,
@@ -47,6 +47,7 @@ export class ChordsChartStack extends cdk.Stack {
     const appSyncApi = new AppSynConstruct(this, 'AppSync', {
       authorizerFunction: lambdas.authorizerFunction,
       chartFunction: lambdas.chartFunction,
+      userFunction: lambdas.userFunction,
       isProduction: IS_PRODUCTION,
     });
 
@@ -54,6 +55,7 @@ export class ChordsChartStack extends cdk.Stack {
       stackName: this.stackName,
       authorizerFunction: lambdas.authorizerFunction,
       chartFunction: lambdas.chartFunction,
+      userFunction: lambdas.userFunction,
       isProduction: IS_PRODUCTION,
       apiId: appSyncApi.graphqlApi.apiId,
     });
@@ -98,6 +100,12 @@ export class ChordsChartStack extends cdk.Stack {
       value: database.projectionTable.tableName,
       description: 'DynamoDB Projection table name',
       exportName: `${this.stackName}-projection-table`,
+    });
+
+    new cdk.CfnOutput(this, 'UsersTableName', {
+      value: database.usersTable.tableName,
+      description: 'DynamoDB Users table name',
+      exportName: `${this.stackName}-users-table`,
     });
 
     new cdk.CfnOutput(this, 'chartsDLQName', {

@@ -9,6 +9,7 @@ Built with event sourcing, DDD, and serverless architecture.
 
 - [Product Requirements Document](documentation/PRD.md) — what the product does, and what is built versus specified.
 - [High Level Design](documentation/HIGH_LEVEL_DESIGN.md) — architecture design details.
+- [Band management spec](documentation/specs/2026-09-29-band-management-design.md) — the approved design for bands, musician profiles and the gig calendar.
 
 ## Overview
 
@@ -32,6 +33,7 @@ Built with event sourcing, DDD, and serverless architecture.
 ```bash
 ./packages/
   ├── api-chart/            # A dedicated AWS lambda api
+  ├── api-user/             # AWS Lambda API for musician profiles
   ├── api-auth/             # AppSync Lambda authorizer, verifying Clerk tokens
   ├── client-web/           # browser app using Next.js
   ├── context-chart/        # Bounded contexts for Chart
@@ -40,13 +42,14 @@ Built with event sourcing, DDD, and serverless architecture.
   │   ├── infrastructure/   # DynamoDB repos, projections, layers
   │   └── interface/        # GraphQL/Lambda adapters
   ├── context-band/         # Bounded context for Band — scaffolded, not started
-  ├── context-user/         # Bounded context for User — scaffolded, not started
+  ├── context-user/         # Bounded context for User — musician profiles and unavailability
   ├── deployment/           # Deployment via AWS CDK with Appsync
   └── shared/               # Common types, value objects
 ```
 
-`context-band` and `context-user` hold only their build setup and a value-object stub; they
-are parked in `knip.jsonc` until the contexts are designed (see the PRD backlog).
+`context-band` holds only its build setup and a value-object stub; it is parked in
+`knip.jsonc` until it is built. Its design is in the
+[band management spec](documentation/specs/2026-09-29-band-management-design.md).
 
 ## Key Patterns
 
