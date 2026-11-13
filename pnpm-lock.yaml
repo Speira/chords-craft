@@ -600,6 +600,9 @@ importers:
       aws-cdk:
         specifier: 2.1033.0
         version: 2.1033.0
+      esbuild:
+        specifier: 0.27.1
+        version: 0.27.1
       graphql:
         specifier: ^16.12.0
         version: 16.12.0

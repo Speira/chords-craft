@@ -2,6 +2,7 @@ import path from 'node:path';
 import * as cdk from 'aws-cdk-lib';
 import type * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as nodejs from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import type * as s3 from 'aws-cdk-lib/aws-s3';
 import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
@@ -18,6 +19,36 @@ export interface LambdasConstructProps {
   readonly userBucket: s3.IBucket;
   readonly clerkAuthSecretPath: string;
   readonly isProduction: boolean;
+}
+
+/** Every function runs on the same runtime; esbuild targets the matching Node version. */
+const RUNTIME = lambda.Runtime.NODEJS_22_X;
+
+/**
+ * Bundles an API package's handler with esbuild, so the asset carries its workspace packages
+ * (`@chordcraft/*`) and npm dependencies instead of the bare `build/` folder, which has none. The
+ * AWS SDK v3 is bundled too (`externalModules: []`) rather than taken from the runtime, so the
+ * deployed version is the one in the lockfile and a bundle runs on its own.
+ */
+function bundledHandler(
+  apiPackage: string,
+): Pick<
+  nodejs.NodejsFunctionProps,
+  'bundling' | 'depsLockFilePath' | 'entry' | 'handler' | 'projectRoot' | 'runtime'
+> {
+  return {
+    entry: path.join(__dirname, `../${apiPackage}/src/index.ts`),
+    handler: 'handler',
+    projectRoot: path.join(__dirname, `../${K.PATHS_FROM_SRC.REPO_ROOT}`),
+    depsLockFilePath: path.join(__dirname, `../${K.PATHS_FROM_SRC.REPO_ROOT}/pnpm-lock.yaml`),
+    runtime: RUNTIME,
+    bundling: {
+      format: nodejs.OutputFormat.CJS,
+      sourceMap: true,
+      target: 'node22',
+      externalModules: [],
+    },
+  };
 }
 
 export class LambdasConstruct extends Construct {
@@ -38,21 +69,17 @@ export class LambdasConstruct extends Construct {
 
     const stackName = cdk.Stack.of(this).stackName.toLowerCase();
 
-    this.authorizerFunction = new lambda.Function(this, 'AuthFunction', {
-      code: lambda.Code.fromAsset(
-        path.join(__dirname, `../${K.PATHS_FROM_SRC.PACKAGES_API_AUTH}/build`),
-      ),
+    this.authorizerFunction = new nodejs.NodejsFunction(this, 'AuthFunction', {
+      ...bundledHandler(K.PATHS_FROM_SRC.PACKAGES_API_AUTH),
       environment: {
         CLERK_SECRET_NAME: clerkSecret.secretName,
       },
-      handler: 'index.handler',
       logGroup: new logs.LogGroup(this, 'ChordsChartAuthLogGroup', {
         logGroupName: `/aws/lambda/auth-function-${stackName}`,
         retention: logs.RetentionDays.ONE_WEEK,
         removalPolicy: cdk.RemovalPolicy.DESTROY,
       }),
       memorySize: 256,
-      runtime: lambda.Runtime.NODEJS_18_X,
       timeout: cdk.Duration.seconds(5),
     });
 
@@ -65,11 +92,8 @@ export class LambdasConstruct extends Construct {
       encryption: sqs.QueueEncryption.KMS_MANAGED,
     });
 
-    this.chartFunction = new lambda.Function(this, 'ChartFunction', {
-      code: lambda.Code.fromAsset(
-        path.join(__dirname, `../${K.PATHS_FROM_SRC.PACKAGES_API_CHART}/build`),
-      ),
-      handler: 'index.handler',
+    this.chartFunction = new nodejs.NodejsFunction(this, 'ChartFunction', {
+      ...bundledHandler(K.PATHS_FROM_SRC.PACKAGES_API_CHART),
       deadLetterQueue: this.chartsDLQ,
       deadLetterQueueEnabled: true,
       retryAttempts: 2,
@@ -88,7 +112,6 @@ export class LambdasConstruct extends Construct {
         removalPolicy: cdk.RemovalPolicy.DESTROY,
       }),
       memorySize: 1024,
-      runtime: lambda.Runtime.NODEJS_18_X,
       timeout: cdk.Duration.seconds(30),
       tracing: lambda.Tracing.ACTIVE,
     });
@@ -101,11 +124,8 @@ export class LambdasConstruct extends Construct {
     props.chartBucket.grantReadWrite(this.chartFunction);
     props.userBucket.grantReadWrite(this.chartFunction);
 
-    this.userFunction = new lambda.Function(this, 'UserFunction', {
-      code: lambda.Code.fromAsset(
-        path.join(__dirname, `../${K.PATHS_FROM_SRC.PACKAGES_API_USER}/build`),
-      ),
-      handler: 'index.handler',
+    this.userFunction = new nodejs.NodejsFunction(this, 'UserFunction', {
+      ...bundledHandler(K.PATHS_FROM_SRC.PACKAGES_API_USER),
       environment: {
         LOG_LEVEL: 'INFO',
         NODE_OPTIONS: '--enable-source-maps',
@@ -118,7 +138,6 @@ export class LambdasConstruct extends Construct {
         removalPolicy: cdk.RemovalPolicy.DESTROY,
       }),
       memorySize: 512,
-      runtime: lambda.Runtime.NODEJS_22_X,
       timeout: cdk.Duration.seconds(10),
       tracing: lambda.Tracing.ACTIVE,
     });

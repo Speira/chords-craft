@@ -25,7 +25,7 @@ export function UnavailabilityList() {
   const [reason, setReason] = useState('');
   const [isAdding, setIsAdding] = useState(false);
 
-  const onAdd = async (event: React.FormEvent) => {
+  const onAdd = async (event: React.SubmitEvent) => {
     event.preventDefault();
     setIsAdding(true);
     const isAdded = await add({

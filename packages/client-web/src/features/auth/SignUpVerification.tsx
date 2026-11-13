@@ -18,7 +18,7 @@ export function SignUpVerification() {
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleVerification = async (e: React.FormEvent) => {
+  const handleVerification = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError('');
     if (!signUp) return;
