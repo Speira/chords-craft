@@ -9,13 +9,12 @@ import {
   SecurityConstruct,
   StorageConstruct,
 } from './constructParts';
+import { resolveEnvironment } from './environment';
 
 export class ChordsChartStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-    const environment = this.node.tryGetContext('env') || 'dev';
-    console.log({ environment_stack: environment });
-    const IS_PRODUCTION = environment === 'prod';
+    const IS_PRODUCTION = resolveEnvironment(this.node) === 'prod';
 
     const removalPolicy = IS_PRODUCTION ? cdk.RemovalPolicy.RETAIN : cdk.RemovalPolicy.DESTROY;
 

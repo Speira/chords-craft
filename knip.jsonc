@@ -42,6 +42,7 @@
     "@chordcraft/api-chart", // deployment bundles them as Lambda assets
     "@chordcraft/api-user",
     "@chordcraft/context-chart",
+    "esbuild", // resolved by the CDK's NodejsFunction at synth time, never imported
     "@clerk/themes",
     "@hookform/resolvers",
     "zod",

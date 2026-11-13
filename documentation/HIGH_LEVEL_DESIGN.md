@@ -162,7 +162,7 @@ Organisation boards (v1.0) remain deferred.
 - **Strategy:** **AWS CodeDeploy (Canary/Linear)**.
 - **Logic:** Traffic shifts 10% to the new Lambda version. Automated rollback triggers if CloudWatch error metrics exceed 0.5% during the "Bake Period."
 
-The CDK stack ships `packages/api-*/build` as the Lambda code asset; the canary deployment
+The CDK stack bundles each `packages/api-*` handler with esbuild (`NodejsFunction`, Node 22); the canary deployment
 group is not configured yet.
 
 ### 5.2 Data Lifecycle & Archiving — _Planned_
