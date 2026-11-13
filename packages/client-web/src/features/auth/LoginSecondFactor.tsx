@@ -33,7 +33,7 @@ export function LoginSecondFactor({ strategy }: LoginSecondFactorProps) {
   const [error, setError] = useState<AppTranslation | ''>('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError('');
     if (!signIn || isLoading) return;

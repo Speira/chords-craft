@@ -29,7 +29,7 @@ export function SignUpPage(props: { locale: string }) {
 
   const [pendingVerification, setPendingVerification] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError('');
     if (password !== confirmPassword) {

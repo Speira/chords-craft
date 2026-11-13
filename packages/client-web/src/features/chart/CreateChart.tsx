@@ -13,7 +13,7 @@ export function CreateChart() {
   const { createChart, error, loading } = useCreateChart();
   const [title, setTitle] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     try {
       const chart = await createChart({
