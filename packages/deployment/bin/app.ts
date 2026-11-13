@@ -2,13 +2,14 @@
 import * as cdk from 'aws-cdk-lib/core';
 
 import { ChordsChartStack } from '../src/ChordsChartStack';
+import { resolveEnvironment } from '../src/environment';
 
 const app = new cdk.App();
 const env = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
   region: 'eu-west-3',
 };
-const environment = app.node.tryGetContext('env') || 'dev';
+const environment = resolveEnvironment(app.node);
 const stackName = `ChordsChart-${environment}`; // ChordsChart-dev
 new ChordsChartStack(app, stackName, {
   env,

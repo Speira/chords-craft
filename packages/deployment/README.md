@@ -36,15 +36,23 @@ pnpm merge-schemas
   vitest; it is not part of the root vitest projects)
 - `pnpm merge-schemas` — regenerate `src/generated/schema.graphql`
 - `pnpm synth` — merge schemas, then emit the CloudFormation template
-- `pnpm deploy:dev` / `pnpm deploy:prod` — merge schemas, then `cdk deploy`
+- `pnpm deploy:dev` / `pnpm deploy:prod` — merge schemas, then `cdk deploy`. The target comes
+  from the `env` CDK context: absent → `dev` (stack `ChordsChart-dev`), `--context env=prod` →
+  `ChordsChart-prod`. Any other value fails the synth (`src/environment.ts`), so a typo cannot
+  deploy a dev-configured stack under another name.
 - `pnpm cdk diff` — compare the deployed stack with the current state
 
 ## Lambda code assets
 
-The CDK ships `packages/api-*/build` directly as the Lambda code asset
-(`lambda.Code.fromAsset`, no bundler), so `pnpm build` at the root is part of the deploy
-path. Making the packages source-first would mean bundling the lambdas first — tracked as a
-deliberate deviation in [MIGRATION.md](../../MIGRATION.md).
+Each function is a `NodejsFunction`: at synth time the CDK bundles
+`packages/api-*/src/index.ts` with esbuild (the `esbuild` devDependency, no Docker) into one
+CommonJS file with a source map. The bundle carries the workspace packages and every npm
+dependency, the AWS SDK v3 included (`externalModules: []`), so the deployed SDK is the one in
+the lockfile rather than whatever the runtime ships. All three functions run on Node 22.
+
+The workspace packages are resolved through their `exports`, which still point at `./build`,
+so run `pnpm build` at the root before `synth` or `deploy` (the deploy workflow does). Making
+them source-first is tracked as a deliberate deviation in [MIGRATION.md](../../MIGRATION.md).
 
 ## Clerk configuration
 

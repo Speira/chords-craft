@@ -5,5 +5,6 @@ export default {
     PACKAGES_API_AUTH: '../../api-auth',
     PACKAGES_API_CHART: '../../api-chart',
     PACKAGES_API_USER: '../../api-user',
+    REPO_ROOT: '../../..',
   },
 };
