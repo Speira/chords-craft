@@ -37,8 +37,8 @@
     "ulid": "^3.0.2"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.159",
-    "@types/node": "^22.19.2",
+    "@types/aws-lambda": "^8.10.164",
+    "@types/node": "^20.19.43",
     "tsup": "^8.5.1",
     "vitest": "^4.0.9"
   },
