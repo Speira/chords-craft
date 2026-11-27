@@ -48,7 +48,8 @@ Each function is a `NodejsFunction`: at synth time the CDK bundles
 `packages/api-*/src/index.ts` with esbuild (the `esbuild` devDependency, no Docker) into one
 CommonJS file with a source map. The bundle carries the workspace packages and every npm
 dependency, the AWS SDK v3 included (`externalModules: []`), so the deployed SDK is the one in
-the lockfile rather than whatever the runtime ships. All three functions run on Node 22.
+the lockfile rather than whatever the runtime ships. All three functions run on Node 24, the
+same major as CI (`node@24`) and as `@types/node` (`^24`) in every package.
 
 The workspace packages are resolved through their `exports`, which still point at `./build`,
 so run `pnpm build` at the root before `synth` or `deploy` (the deploy workflow does). Making

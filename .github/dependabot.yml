@@ -35,7 +35,9 @@ updates:
       # typescript-eslint 8 supports TypeScript <6.1: bump manually once it supports more.
       - dependency-name: typescript
         versions: ['>=6.1.0']
-      # Types must match the Node.js major pinned in CI (node@24).
+      # Types must match the Node.js major of CI (node@24) and of the Lambda runtime
+      # (nodejs24.x). Keep one `@types/node` major in every package: with several, Dependabot
+      # applies a single version to all of them and can downgrade some (seen in PR #23).
       - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
     # Grouped by package name, not `dependency-type`: Dependabot counts every catalog entry as a
