@@ -46,6 +46,13 @@ What is left is tracked, not hidden:
 - **React packages** relax `exactOptionalPropertyTypes` and `noUncheckedSideEffectImports`
   (Radix/React optional props, CSS side-effect imports). This is also the template's default
   for `tsconfig.react.json` / `tsconfig.next.json`.
+- **`@effect/vitest` is pinned to `~0.30.0`**, never `latest`. From 4.0 it requires Effect 4
+  (`effect ^4`), and this repo is on Effect 3: with `latest`, any lockfile regeneration (every
+  Dependabot PR) resolved 4.x and no test file loaded (`'./testing/TestClock' is not defined by
+"exports"`). 0.30.x is the last Effect 3 line. Its peers say Vitest 3/4 and `effect ^3.22`
+  while the repo runs Vitest 5 and `effect 3.19`, so pnpm warns; the suite passes. Lift the pin
+  with the move to Effect 4. `@effect/language-service` is pinned (`^0.87.5`) for the same
+  reproducibility.
 
 ## Remaining work (252 warnings)
 
