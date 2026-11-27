@@ -26,7 +26,7 @@ const TABLE_NAME = process.env.EVENTS_TABLE ?? 'charts_events';
 
 export class DynamoDBChartRepository implements ChartRepository {
   private readonly tableName = TABLE_NAME;
-  private readonly client: DynamoDBClient;
+  private readonly client: DynamoDBDocument;
   private readonly withChartKey = (str: string) => `CHART#${str}`;
   private readonly withVersionKey = (num: number) => `VERSION#${num}`;
 

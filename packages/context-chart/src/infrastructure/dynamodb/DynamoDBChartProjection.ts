@@ -25,7 +25,7 @@ const TABLE_NAME = process.env.PROJECTION_TABLE ?? 'charts_projection';
 const ACTIVE_INDEX = 'GSI1';
 
 export class DynamoDBChartProjection implements ChartProjection {
-  private readonly client: DynamoDBClient;
+  private readonly client: DynamoDBDocument;
   private readonly tableName = TABLE_NAME;
   private readonly withTenantKey = (str: string) => `TENANT#${str}`;
   private readonly withChartKey = (str: string) => `CHART#${str}`;

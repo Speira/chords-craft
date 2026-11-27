@@ -77,6 +77,12 @@ updates:
           - effect
           - '@effect/*'
         update-types: [minor, patch]
+      # The @aws-sdk/* clients share internal types: lib-dynamodb wraps client-dynamodb, so
+      # bumping one alone breaks typing (PR #36/#42). They release in lockstep; move them together.
+      aws-sdk:
+        patterns:
+          - '@aws-sdk/*'
+        update-types: [minor, patch]
       tooling:
         patterns:
           - typescript
