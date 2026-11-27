@@ -97,6 +97,11 @@ Suggested order, one PR per package:
 - Unused dependencies worth a look: `@clerk/themes`, `@hookform/resolvers`, `zod` and
   `framer-motion` in `client-web`, and `eslint-config-next`, now that the client has no ESLint
   config of its own.
+- Package aliases nothing imports through (`ignoreIssues` → `subpaths`): `#context-band/*`
+  (context not started) and `#deployment/*`. `deployment` has a standalone `tsconfig.json` and
+  the CDK runs `bin/app.ts` through ts-node, neither of which resolves the alias, so `bin/`
+  still imports `../src/`. Using the alias there means moving `deployment` onto the shared
+  tsconfig setup first.
 
 ## Not done, decide separately
 

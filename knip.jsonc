@@ -29,6 +29,14 @@
     "packages/context-band/src/domain/valueObjects/BandMember.ts" // context not started
   ],
 
+  // MIGRATION DEBT: package aliases (`package.json#imports`) declared but not imported through.
+  // context-band: the context is not started. deployment: its standalone tsconfig and ts-node
+  // (the CDK app runner) cannot resolve `#deployment/*`, so `bin/` imports `../src/` for now.
+  "ignoreIssues": {
+    "packages/context-band/package.json": ["subpaths"],
+    "packages/deployment/package.json": ["subpaths"]
+  },
+
   // MIGRATION DEBT: dependencies of the unused code above, plus tooling knip cannot see.
   "ignoreDependencies": [
     "tailwindcss", // used through the PostCSS config
