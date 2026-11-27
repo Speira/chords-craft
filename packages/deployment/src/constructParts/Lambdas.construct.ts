@@ -22,7 +22,7 @@ export interface LambdasConstructProps {
 }
 
 /** Every function runs on the same runtime; esbuild targets the matching Node version. */
-const RUNTIME = lambda.Runtime.NODEJS_22_X;
+const RUNTIME = lambda.Runtime.NODEJS_24_X;
 
 /**
  * Bundles an API package's handler with esbuild, so the asset carries its workspace packages
@@ -45,7 +45,7 @@ function bundledHandler(
     bundling: {
       format: nodejs.OutputFormat.CJS,
       sourceMap: true,
-      target: 'node22',
+      target: 'node24',
       externalModules: [],
     },
   };
